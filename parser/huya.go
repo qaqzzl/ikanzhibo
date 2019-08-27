@@ -14,10 +14,6 @@ import (
 	"time"
 )
 
-//抓取列表 chan
-
-//直播数据 chan
-
 //huya直播间的json数据
 type hyPlayerConfig struct {
 	WEBYYFROM string `json:"WEBYYFROM"`

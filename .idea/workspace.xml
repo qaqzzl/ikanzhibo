@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36f3c8b-0858-4b5f-950b-c5e55b67dc28" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/unique.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/write.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/db.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/mysql/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/mysql/mysql.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/downloader.go" beforeDir="false" afterPath="$PROJECT_DIR$/downloader.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ikanzhibo.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ikanzhibo.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master.go" beforeDir="false" afterPath="$PROJECT_DIR$/master.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/parser/huya.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser/huya.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parser/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser/parser.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +25,11 @@
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectId" id="1PxFmLwRctPbySCAHxA8uIdPDZe" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -117,5 +115,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
