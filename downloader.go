@@ -13,7 +13,8 @@ import (
 )
 
 func Downloader()  {
-	//go DownloaderFollowOffline()
+	go DownloaderFollowOffline()
+	go DownloaderOnline()
 	go DownloaderTotalPlatform()
 }
 
@@ -46,6 +47,35 @@ func DownloaderFollowOffline() {
 	}
 }
 
+//在线直播间
+func DownloaderOnline() {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	var queue db.Queue
+	for {
+		v, err := rconn.Do("RPOP", db.RedisOnlineList)
+		if err != nil {
+			log.Panicln(err.Error())
+			continue
+		}
+		if v == nil {
+			//暂停 5 秒
+			<-time.Tick(time.Second * 5)
+			continue
+		}
+		body, err := downloaders(v, &queue)
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		parser.ChanParsers <- &parser.Parser{
+			Body:body,
+			Queue:queue,
+		}
+
+	}
+}
+
 //全平台任务发现下载
 func DownloaderTotalPlatform()  {
 	rconn := redis.GetConn()
@@ -67,7 +97,6 @@ func DownloaderTotalPlatform()  {
 		if err != nil {
 			log.Println(err.Error())
 		}
-		fmt.Println(queue.Uri)
 		parser.ChanParsers <- &parser.Parser{
 			Body:body,
 			Queue:queue,
@@ -77,6 +106,7 @@ func DownloaderTotalPlatform()  {
 }
 
 func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
+	fmt.Println(queue.Uri)
 	if err = json.Unmarshal(v.([]byte), &queue); err != nil {
 		return body, err
 	}

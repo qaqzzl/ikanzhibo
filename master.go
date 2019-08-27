@@ -13,13 +13,20 @@ import (
 func Master()  {
 	go HandlerTotalPlatforms()
 
-	go HandlerFollowOffline()			//关注&&不在线
+	//go HandlerFollowOffline()				//关注&&不在线直播间
 
-	go Downloader()						//下载器
+	//go HandlerOnline()					//在线直播间
+	for i := 0; i < 5; i++ {
+		go Downloader()						//下载器
+	}
 
-	parser.Parsers()					//解析器
+	go parser.Parsers()					//解析器
 
-	<-time.Tick(time.Second * 50)
+	go UniqueList()						//去重器
+
+	go WriteLiveInfo()					//写入器
+
+	<-time.Tick(time.Second * 50000)
 }
 
 //被关注&&不在线
@@ -35,7 +42,6 @@ func HandlerFollowOffline() {
 			if queueCounts.(int64) != 0 {
 				continue
 			}
-			rconn.Do("DEL", db.RedisListListOnce)	//清空已经爬取的任务
 		} else {
 			log.Println(err.Error())
 			continue
@@ -80,6 +86,7 @@ func HandlerTotalPlatforms() {
 			if queueCounts.(int64) != 0 {
 				continue
 			}
+			rconn.Do("del", db.RedisListOnceSet)	//清空已经爬取的任务
 		} else {
 			log.Println(err.Error())
 			continue
@@ -97,6 +104,7 @@ func HandlerTotalPlatforms() {
 				Uri:      v.PullUrl,
 				Type:     "live_list",
 			}
+			rconn.Do("SADD", db.RedisListOnceSet, vs.Uri)
 			str,_ := json.Marshal(vs)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisListList, str); err != nil {

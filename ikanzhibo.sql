@@ -80,10 +80,10 @@ create table if not exists `live`(
 	`live_play_end_time` int not null default 0 comment '最近关播时间',
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
-    `queueid` varchar(64) not null default '' comment '队列ID',
+--     `queueid` varchar(64) not null default '' comment '队列ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
-    UNIQUE KEY `queueid` (`queueid`),
+--     UNIQUE KEY `queueid` (`queueid`),
     UNIQUE KEY `live_uri_live_platform` (`live_uri`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
 --

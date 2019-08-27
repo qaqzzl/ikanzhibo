@@ -129,10 +129,8 @@ func huYaParser(p *Parser)  {
 }
 
 func huYaLiveInfo(p *Parser) {
-	fmt.Println("huYaLiveInfo",p.Queue.Uri)
 	hyPlayerConfig := hyPlayerConfig{}
 	Live := db.TableLive{}
-
 	//哎呀，虎牙君找不到这个主播，要不搜索看看？
 	if strings.Contains(string(p.Body),"哎呀，虎牙君找不到这个主播，要不搜索看看？") {
 		Live.Live_uri = urlGetUri(p.Queue.Uri)
@@ -144,8 +142,10 @@ func huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		//ParserUniqueDetail <- &Live
-		//fmt.Println(Live)
+		ChanProduceLiveInfo <- &ProduceLiveInfo{
+			TableLive:Live,
+			Queue: p.Queue,
+		}
 		return
 	}
 	//该主播涉嫌违规，正在整改中……
@@ -159,8 +159,10 @@ func huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		//ParserUniqueDetail <- &Live
-		//fmt.Println(Live)
+		ChanProduceLiveInfo <- &ProduceLiveInfo{
+			TableLive:Live,
+			Queue: p.Queue,
+		}
 		return
 	}
 
@@ -271,8 +273,10 @@ func huYaLiveInfo(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	//ParserUniqueDetail <- &Live
-	//fmt.Println(Live)
+	ChanProduceLiveInfo <- &ProduceLiveInfo{
+		TableLive:Live,
+		Queue: p.Queue,
+	}
 	return
 }
 
@@ -371,8 +375,10 @@ func huyaLive_is_online_no(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	//ParserUniqueDetail <- &Live
-	//fmt.Println(Live)
+	ChanProduceLiveInfo <- &ProduceLiveInfo{
+		TableLive:Live,
+		Queue: p.Queue,
+	}
 	return
 }
 
@@ -389,7 +395,7 @@ type huYaLiveListStruct struct {
 			GameFullName string `json:"gameFullName"`					//分类名称
 			GameHostName string `json:"gameHostName"`					//分类url名称
 			BoxDataInfo interface{} `json:"boxDataInfo"`				//
-			TotalCount string `json:"totalCount"`						//总数?
+			TotalCount string `json:"totalCount"`						//直播间人数?
 			RoomName string `json:"roomName"`							//直播间标题
 			BussType string `json:"bussType"`							//当前页位置?
 			Screenshot string `json:"screenshot"`						//直播间封面
@@ -410,7 +416,7 @@ type huYaLiveListStruct struct {
 			ImgRecInfo interface{} `json:"imgRecInfo"`					//
 			AliveNum string `json:"aliveNum"`
 			Attribute interface{} `json:"attribute"`					//属性
-			ProfileRoom string `json:"profileRoom"`
+			ProfileRoom string `json:"profileRoom"`						//房间号
 			IsRoomPay int `json:"isRoomPay"`
 			RoomPayTag string `json:"roomPayTag"`
 		} `json:"datas"`
@@ -435,34 +441,24 @@ func huYaLiveList(p *Parser)  {
 
 	//更多列表
 	for i:=1; i<=huYaLiveListStruct.Data.TotalPage; i++ {
-		list := db.Queue{
+		ChanProduceList <- &db.Queue{
 			Queueid:  "",
 			Platform: p.Queue.Platform,
 			Uri:      "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
-			Type:     p.Queue.Type,
+			Type:     "live_list",
 			Event:    p.Queue.Event,
 		}
-		fmt.Println(list)
-
-		////加入任务到redis队列
-		//str,_ := json.Marshal(list)
-		//if _, err := rconn.Do("RPUSH", db.RedisListList, str); err != nil {
-		//	log.Println(err.Error())
-		//}
 	}
 
-	//for _, v := range huYaLiveListStruct.Data.Datas {
-	//	liveinfolist := db.Queue{
-	//		Queueid:  "",
-	//		Platform: p.Queue.Platform,
-	//		Uri:      "",
-	//		Type:     "live_info",
-	//		Event:    "",
-	//	}
-	//	fmt.Println(liveinfolist)
-	//	//l = append(l, v)
-	//}
-	//fmt.Println(huYaLiveListStruct)
+	for _, v := range huYaLiveListStruct.Data.Datas {
+		ChanProduceList <- &db.Queue{
+			Queueid:  "",
+			Platform: p.Queue.Platform,
+			Uri:      "https://www.huya.com/"+v.ProfileRoom,
+			Type:     "live_info",
+			Event:    "",
+		}
+	}
 }
 
 

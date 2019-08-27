@@ -8,12 +8,17 @@ import (
 
 //redis表名
 var (
-	RedisFollowOffLine		= "live_follow_offline_list"		//关注不在线直播间队列
-	RedisFollowOffSet		= "live_follow_offline_set"			//关注不在线直播间集合
+	RedisFollowOffLine		= "live_follow_offline_list"		//被关注&&不在线直播间队列
+	RedisFollowOffSet		= "live_follow_offline_set"			//被关注&&不在线直播间集合,定时跟数据库做一致性同步
+
+	RedisNotFollowOffLine	= "live_not_follow_offline_list"	//未关注&&不在线直播间队列
+	RedisNotFollowOffSet	= "live_not_follow_offline_set"		//未关注&&不在线直播间集合,定时跟数据库做一致性同步
+
+	RedisOnlineList			= "live_online_list"				//在线直播间队列
+	RedisOnlineSet			= "live_online_set"					//在线直播间集合
 
 	RedisListList		 	= "live_list_list"					//生产任务队列 - 未爬取
-	RedisListListOnce		= "live_list_list_once"				//生产任务队列 - 已爬取
-
+	RedisListOnceSet		= "live_list_once_set"				//生产任务集合 - 已爬取
 )
 
 //平台表结构体

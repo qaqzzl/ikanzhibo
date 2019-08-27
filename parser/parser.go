@@ -13,8 +13,15 @@ type Parser struct {
 var ChanParsers = make(chan *Parser, 1000)
 
 //抓取列表 chan
+var ChanProduceList = make(chan *db.Queue, 1000)
 
-//直播数据 chan
+//直播间数据 chan
+type ProduceLiveInfo struct {
+	TableLive	db.TableLive
+	Queue		db.Queue
+}
+var ChanProduceLiveInfo = make(chan *ProduceLiveInfo, 1000)
+
 
 func Parsers()  {
 	for v := range ChanParsers {
@@ -24,7 +31,7 @@ func Parsers()  {
 		case "douyu":
 			douYuParser(v)
 		default:
-			log.Panicln("未知平台")
+			log.Println("未知平台")
 		}
 	}
 }
