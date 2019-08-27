@@ -3,6 +3,7 @@ package parser
 import (
 	"encoding/json"
 	"fmt"
+	//uuid "github.com/satori/go.uuid"
 	"ikanzhibo/db"
 	"ikanzhibo/db/mysql"
 	"log"
@@ -12,6 +13,10 @@ import (
 	"strings"
 	"time"
 )
+
+//抓取列表 chan
+
+//直播数据 chan
 
 //huya直播间的json数据
 type hyPlayerConfig struct {
@@ -123,7 +128,7 @@ func huYaParser(p *Parser)  {
 	case "live_info":
 		huYaLiveInfo(p)
 	case "live_list":
-		huYaLiveInfo(p)
+		huYaLiveList(p)
 	}
 }
 
@@ -144,7 +149,7 @@ func huYaLiveInfo(p *Parser) {
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 		//ParserUniqueDetail <- &Live
-		fmt.Println(Live)
+		//fmt.Println(Live)
 		return
 	}
 	//该主播涉嫌违规，正在整改中……
@@ -159,7 +164,7 @@ func huYaLiveInfo(p *Parser) {
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 		//ParserUniqueDetail <- &Live
-		fmt.Println(Live)
+		//fmt.Println(Live)
 		return
 	}
 
@@ -271,7 +276,7 @@ func huYaLiveInfo(p *Parser) {
 	Live.Live_pull_url= p.Queue.Uri
 
 	//ParserUniqueDetail <- &Live
-	fmt.Println(Live)
+	//fmt.Println(Live)
 	return
 }
 
@@ -371,8 +376,97 @@ func huyaLive_is_online_no(p *Parser) {
 	Live.Live_pull_url= p.Queue.Uri
 
 	//ParserUniqueDetail <- &Live
-	fmt.Println(Live)
+	//fmt.Println(Live)
 	return
+}
+
+
+type huYaLiveListStruct struct {
+	Status int `json:"status"`
+	Message string `json:"message"`
+	Data struct {
+		Page int `json:"page"`				//当前页
+		PageSize int `json:"pageSize"`		//每页数量
+		TotalPage int `json:"totalPage"`	//总页数
+		TotalCount int `json:"totalCount"`	//总数据
+		Datas []struct {
+			GameFullName string `json:"gameFullName"`					//分类名称
+			GameHostName string `json:"gameHostName"`					//分类url名称
+			BoxDataInfo interface{} `json:"boxDataInfo"`				//
+			TotalCount string `json:"totalCount"`						//总数?
+			RoomName string `json:"roomName"`							//直播间标题
+			BussType string `json:"bussType"`							//当前页位置?
+			Screenshot string `json:"screenshot"`						//直播间封面
+			PrivateHost string `json:"privateHost"`						//直播间URI
+			Nick string `json:"nick"`									//主播昵称
+			Avatar180 string `json:"avatar180"`							//主播头像
+			Gid string `json:"gid"`										//
+			Introduction string `json:"introduction"`					//直播间简介
+			RecommendStatus string `json:"recommendStatus"`				//推荐状态?
+			RecommendTagName string `json:"recommendTagName"`			//推荐TAG标签
+			IsBluRay string `json:"isBluRay"`							//
+			BluRayMBitRate string `json:"bluRayMBitRate"`				//清晰度,如10M
+			ScreenType string `json:"screenType"`						//屏幕类型
+			LiveSourceType string `json:"liveSourceType"`				//直播屏幕类型
+			UID string `json:"uid"`										//用户ID
+			Channel string `json:"channel"`								//渠道?
+			LiveChannel string `json:"liveChannel"`						//直播渠道?
+			ImgRecInfo interface{} `json:"imgRecInfo"`					//
+			AliveNum string `json:"aliveNum"`
+			Attribute interface{} `json:"attribute"`					//属性
+			ProfileRoom string `json:"profileRoom"`
+			IsRoomPay int `json:"isRoomPay"`
+			RoomPayTag string `json:"roomPayTag"`
+		} `json:"datas"`
+		Time int `json:"time"`
+	} `json:"data"`
+}
+func huYaLiveList(p *Parser)  {
+	huYaLiveListStruct := huYaLiveListStruct{}
+	if err := json.Unmarshal(p.Body, &huYaLiveListStruct); err != nil {
+		log.Panicln(err.Error())
+		return
+	}
+
+	if huYaLiveListStruct.Status != 200 {
+		return
+	}
+
+	//判断当前页是否大于总页数
+	if huYaLiveListStruct.Data.Page > huYaLiveListStruct.Data.TotalPage {
+		return
+	}
+
+	//更多列表
+	for i:=1; i<=huYaLiveListStruct.Data.TotalPage; i++ {
+		list := db.Queue{
+			Queueid:  "",
+			Platform: p.Queue.Platform,
+			Uri:      "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
+			Type:     p.Queue.Type,
+			Event:    p.Queue.Event,
+		}
+		fmt.Println(list)
+
+		////加入任务到redis队列
+		//str,_ := json.Marshal(list)
+		//if _, err := rconn.Do("RPUSH", db.RedisListList, str); err != nil {
+		//	log.Println(err.Error())
+		//}
+	}
+
+	//for _, v := range huYaLiveListStruct.Data.Datas {
+	//	liveinfolist := db.Queue{
+	//		Queueid:  "",
+	//		Platform: p.Queue.Platform,
+	//		Uri:      "",
+	//		Type:     "live_info",
+	//		Event:    "",
+	//	}
+	//	fmt.Println(liveinfolist)
+	//	//l = append(l, v)
+	//}
+	//fmt.Println(huYaLiveListStruct)
 }
 
 

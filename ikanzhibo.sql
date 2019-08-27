@@ -66,12 +66,12 @@ create table if not exists `live`(
     `live_cover` varchar(255) not null DEFAULT '' comment '直播封面',
     `live_play` varchar(255) not null DEFAULT '' comment '播放地址,json格式?',
     `live_class` varchar(255) not null DEFAULT '' comment '平台直播类型',
-    `live_type_id` int not null DEFAULT '' comment '直播类型ID-自定义',
+    `live_type_id` int not null DEFAULT 0 comment '直播类型ID-自定义',
     `live_type_name` char(50) not null DEFAULT '' comment '直播类型NAME-自定义',
     `live_tag` varchar(50) not null DEFAULT '' comment '直播标签.多个 #号分割',
     `live_introduction` varchar(250) COLLATE utf8mb4_unicode_ci not null DEFAULT '' comment '直播间简介',
-    `live_online_user` int not null DEFAULT '' comment '直播间人数',
-    `live_follow` int not null DEFAULT '' comment '直播间关注人数',
+    `live_online_user` int not null DEFAULT 0 comment '直播间人数',
+    `live_follow` int not null DEFAULT 0 comment '直播间关注人数',
     `live_uri` varchar(255) not null DEFAULT '' comment '直播间地址',
     `live_is_online` char(5) not null DEFAULT 'no' comment '直播间是否在播 ,yes|no',
     `live_platform` char(20) not null DEFAULT '' comment '所属平台',
@@ -80,18 +80,19 @@ create table if not exists `live`(
 	`live_play_end_time` int not null default 0 comment '最近关播时间',
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
+    `queueid` varchar(64) not null default '' comment '队列ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
---     UNIQUE KEY `live_uri` (`live_uri`)
-    UNIQUE KEY `liveUri_livePlatform` (`live_uri`,`live_platform`) USING BTREE
+    UNIQUE KEY `queueid` (`queueid`),
+    UNIQUE KEY `live_uri_live_platform` (`live_uri`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
-ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-ALTER TABLE `live` MODIFY COLUMN `live_introduction` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
-SET NAMES utf8mb4
-
-ALTER TABLE `live` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+--
+-- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- ALTER TABLE `live` MODIFY COLUMN `live_introduction` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- SET NAMES utf8mb4
+-- ALTER TABLE `live` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+--
 
 -- 分类表
 create table if not exists `live_type`(

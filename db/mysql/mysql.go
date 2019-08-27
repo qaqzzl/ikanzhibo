@@ -38,6 +38,7 @@ func Table(table string) *Db {
 	tdb := Db{}
 	DB := tdb.MysqlConnect()
 	DB.tables = table
+	DB.selects = "*"
 	return DB
 }
 
