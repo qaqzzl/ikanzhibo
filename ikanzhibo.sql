@@ -23,9 +23,9 @@ create table if not exists `user_member`(
 create table if not exists `user_auths`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
-    `identity_type` char(10) not null comment '类型,wx,qq,wb,phone,number,email',
-    `identifier` varchar(64) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
-    `credential` varchar(64) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
+    `identity_type` char(20) not null comment '类型,wechat_applet,qq,wb,phone,number,email',
+    `identifier` varchar(255) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
+    `credential` varchar(255) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
     KEY `member_id` (`member_id`),
     UNIQUE KEY `identity_type_identifier` (`identity_type`,`identifier`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '会员授权账号表';
@@ -35,7 +35,7 @@ create table if not exists `user_auths_token`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
     `token` varchar(255) not null default '' comment 'token',
-    `client` char(10) not null comment 'app,web,wxapplet',
+    `client` char(20) not null comment 'app,web,wechat_applet',
     `last_time` int not null comment '上次刷新时间',
     `status` tinyint(1) not null default 0 comment '1-其他设备强制下线',
     `created_at` int not null default 0 comment '添加时间',
@@ -43,8 +43,8 @@ create table if not exists `user_auths_token`(
 )engine=innodb default charset=utf8 comment '用户授权 token 表';
 
 
--- 用户关注直播表
-create table if not exists `user_follow_live`(
+-- 直播用户关注表
+create table if not exists `live_user_follow`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
     `live_id` int not null comment '直播ID',
@@ -54,7 +54,7 @@ create table if not exists `user_follow_live`(
     `created_at` int not null default 0 comment '添加时间',
     `updated_at` int not null default 0 comment '修改时间',
     UNIQUE KEY `member_id` (`member_id`)
-)engine=innodb default charset=utf8 comment '用户关注直播表';
+)engine=innodb default charset=utf8 comment '直播用户关注表';
 
 -- 直播表(主播表)
 create table if not exists `live`(
