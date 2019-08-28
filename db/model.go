@@ -4,6 +4,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"ikanzhibo/db/mysql"
 	"strconv"
+	"time"
 )
 
 //redis表名
@@ -143,4 +144,13 @@ func GetPlatforms() (p []Platform, err error) {
 
 	platforms = p
 	return p,err
+}
+var Tests int
+func Test()  {
+	go func() {
+		for true  {
+			<-time.Tick(time.Second * 1)
+			Tests++
+		}
+	}()
 }

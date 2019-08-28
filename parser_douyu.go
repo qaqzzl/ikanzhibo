@@ -1,6 +1,8 @@
-package parser
+package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func douYuLiveInfo(p *Parser) (l interface{}, err error) {
 	fmt.Println("进入huya")

@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+type Conn redis.Conn
+
 func newPool(server, password string) *redis.Pool {
 	return &redis.Pool{
 		// 最大的激活连接数，表示同时最多有N个连接 ，为0事表示没有限制

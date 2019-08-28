@@ -4,18 +4,17 @@ import (
 	"ikanzhibo/db"
 	"ikanzhibo/db/mysql"
 	"ikanzhibo/db/redis"
-	"ikanzhibo/parser"
 	"log"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func WriteLiveInfo()  {
+func (spider *Spider) WriteLiveInfo()  {
 	data := []*db.TableLive{}
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 30;
-	for v := range parser.ChanProduceLiveInfo {
+	for v := range spider.WriteInfo {
 		//30秒 || 大于10 -> 更新数据
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime <= currentTime || len(data) > 10 {

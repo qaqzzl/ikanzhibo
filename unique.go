@@ -4,26 +4,24 @@ import (
 	"encoding/json"
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
-	"ikanzhibo/parser"
 	"log"
 )
 
 //发现任务列表去除重复
-func UniqueList()  {
-	for v := range parser.ChanProduceList {
+func (spider *Spider) UniqueList()  {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	for v := range spider.ChanProduceList {
 		switch v.Type {
 		case "live_list":
-			uniqueLiveList(v)
+			spider.uniqueLiveList(v, rconn)
 		case "live_info":
-			uniqueLiveInfo(v)
+			spider.uniqueLiveInfo(v, rconn)
 		}
-
 	}
 }
 
-func uniqueLiveList(v *db.Queue) {
-	rconn := redis.GetConn()
-	defer rconn.Close()
+func (spider *Spider) uniqueLiveList(v *db.Queue, rconn redis.Conn) {
 	//加入已爬取集合(set) 如果存在会返回 0 ,加入成功返回 1
 	set, err := rconn.Do("SADD", db.RedisListOnceSet, v.Uri)
 	if err != nil {
@@ -41,12 +39,18 @@ func uniqueLiveList(v *db.Queue) {
 	}
 }
 
-func uniqueLiveInfo(v *db.Queue)  {
-	rconn := redis.GetConn()
-	defer rconn.Close()
+func (spider *Spider) uniqueLiveInfo(v *db.Queue, rconn redis.Conn)  {
 	//查看在线直播间, 被关注&&不在线, 未关注&&不在线 集合是否存在
 	OnlineSet, err := rconn.Do("SISMEMBER", db.RedisOnlineSet, v.Uri)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 	FollowOffSet, err := rconn.Do("SISMEMBER", db.RedisFollowOffSet, v.Uri)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 	NotFollowOffSet, err := rconn.Do("SISMEMBER", db.RedisNotFollowOffSet, v.Uri)
 	if err != nil {
 		log.Println(err.Error())

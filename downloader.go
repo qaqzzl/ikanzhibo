@@ -5,21 +5,20 @@ import (
 	"fmt"
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
-	"ikanzhibo/parser"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
 )
 
-func Downloader()  {
-	go DownloaderFollowOffline()
-	go DownloaderOnline()
-	go DownloaderTotalPlatform()
+func (spider *Spider) Downloader()  {
+	go spider.downloaderFollowOffline()
+	go spider.downloaderOnline()
+	go spider.downloaderTotalPlatform()
 }
 
 //被关注&&不在线 下载器
-func DownloaderFollowOffline() {
+func (spider *Spider) downloaderFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
@@ -38,8 +37,8 @@ func DownloaderFollowOffline() {
 		if err != nil {
 			log.Println(err.Error())
 		}
-		
-		parser.ChanParsers <- &parser.Parser{
+
+		spider.ChanParsers <- &Parser{
 			Body:body,
 			Queue:queue,
 		}
@@ -48,7 +47,7 @@ func DownloaderFollowOffline() {
 }
 
 //在线直播间
-func DownloaderOnline() {
+func (spider *Spider) downloaderOnline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
@@ -68,7 +67,7 @@ func DownloaderOnline() {
 			log.Println(err.Error())
 		}
 
-		parser.ChanParsers <- &parser.Parser{
+		spider.ChanParsers <- &Parser{
 			Body:body,
 			Queue:queue,
 		}
@@ -77,14 +76,14 @@ func DownloaderOnline() {
 }
 
 //全平台任务发现下载
-func DownloaderTotalPlatform()  {
+func (spider *Spider) downloaderTotalPlatform()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
 	for {
 		v, err := rconn.Do("RPOP", db.RedisListList)
 		if err != nil {
-			log.Panicln(err.Error())
+			log.Println(err.Error())
 			continue
 		}
 		if v == nil {
@@ -96,11 +95,15 @@ func DownloaderTotalPlatform()  {
 		body, err := downloaders(v, &queue)
 		if err != nil {
 			log.Println(err.Error())
+			continue
 		}
-		parser.ChanParsers <- &parser.Parser{
+		spider.ChanParsers <- &Parser{
 			Body:body,
 			Queue:queue,
 		}
+		fmt.Println(len(spider.ChanParsers))
+		fmt.Println(len(spider.ChanProduceList))
+		fmt.Println(len(spider.WriteInfo))
 
 	}
 }

@@ -1,8 +1,9 @@
-package parser
+package main
 
 import (
 	"encoding/json"
 	"fmt"
+
 	//uuid "github.com/satori/go.uuid"
 	"ikanzhibo/db"
 	"ikanzhibo/db/mysql"
@@ -119,16 +120,16 @@ type tT_PROFILE_INFO struct {
 
 
 //huya解析方法
-func huYaParser(p *Parser)  {
+func (spider *Spider) huYaParser(p *Parser)  {
 	switch p.Queue.Type {
 	case "live_info":
-		huYaLiveInfo(p)
+		spider.huYaLiveInfo(p)
 	case "live_list":
-		huYaLiveList(p)
+		spider.huYaLiveList(p)
 	}
 }
 
-func huYaLiveInfo(p *Parser) {
+func (spider *Spider) huYaLiveInfo(p *Parser) {
 	hyPlayerConfig := hyPlayerConfig{}
 	Live := db.TableLive{}
 	//哎呀，虎牙君找不到这个主播，要不搜索看看？
@@ -142,7 +143,7 @@ func huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		ChanProduceLiveInfo <- &ProduceLiveInfo{
+		spider.WriteInfo <- &WriteInfo{
 			TableLive:Live,
 			Queue: p.Queue,
 		}
@@ -159,7 +160,7 @@ func huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		ChanProduceLiveInfo <- &ProduceLiveInfo{
+		spider.WriteInfo <- &WriteInfo{
 			TableLive:Live,
 			Queue: p.Queue,
 		}
@@ -183,7 +184,7 @@ func huYaLiveInfo(p *Parser) {
 	}
 	//.Live_is_online - 判断是在播 . 如果不再播 . 使用新策略爬取直播间基本数据
 	if len(hyPlayerConfig.Stream.Data) == 0 {
-		huyaLive_is_online_no(p)
+		spider.huyaLive_is_online_no(p)
 		return
 	} else {
 		Live.Live_is_online = "yes"
@@ -273,7 +274,7 @@ func huYaLiveInfo(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	ChanProduceLiveInfo <- &ProduceLiveInfo{
+	spider.WriteInfo <- &WriteInfo{
 		TableLive:Live,
 		Queue: p.Queue,
 	}
@@ -281,7 +282,7 @@ func huYaLiveInfo(p *Parser) {
 }
 
 //huya不在播抓取策略
-func huyaLive_is_online_no(p *Parser) {
+func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	TT_PROFILE_INFO := tT_PROFILE_INFO{}
 	Live := db.TableLive{}
 
@@ -375,7 +376,7 @@ func huyaLive_is_online_no(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	ChanProduceLiveInfo <- &ProduceLiveInfo{
+	spider.WriteInfo <- &WriteInfo{
 		TableLive:Live,
 		Queue: p.Queue,
 	}
@@ -423,13 +424,12 @@ type huYaLiveListStruct struct {
 		Time int `json:"time"`
 	} `json:"data"`
 }
-func huYaLiveList(p *Parser)  {
+func (spider *Spider) huYaLiveList(p *Parser)  {
 	huYaLiveListStruct := huYaLiveListStruct{}
 	if err := json.Unmarshal(p.Body, &huYaLiveListStruct); err != nil {
 		log.Panicln(err.Error())
 		return
 	}
-
 	if huYaLiveListStruct.Status != 200 {
 		return
 	}
@@ -438,20 +438,20 @@ func huYaLiveList(p *Parser)  {
 	if huYaLiveListStruct.Data.Page > huYaLiveListStruct.Data.TotalPage {
 		return
 	}
-
 	//更多列表
 	for i:=1; i<=huYaLiveListStruct.Data.TotalPage; i++ {
-		ChanProduceList <- &db.Queue{
+		spider.ChanProduceList <- &db.Queue{
 			Queueid:  "",
 			Platform: p.Queue.Platform,
 			Uri:      "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
 			Type:     "live_list",
 			Event:    p.Queue.Event,
 		}
+
 	}
 
 	for _, v := range huYaLiveListStruct.Data.Datas {
-		ChanProduceList <- &db.Queue{
+		spider.ChanProduceList <- &db.Queue{
 			Queueid:  "",
 			Platform: p.Queue.Platform,
 			Uri:      "https://www.huya.com/"+v.ProfileRoom,
