@@ -179,7 +179,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 		}
 	} else {
 		log.Println("解析josn_hyPlayerConfig 为空.")
-		log.Println(string(p.Body))
+		//log.Println(string(p.Body))
 		return
 	}
 	//.Live_is_online - 判断是在播 . 如果不再播 . 使用新策略爬取直播间基本数据
@@ -441,7 +441,6 @@ func (spider *Spider) huYaLiveList(p *Parser)  {
 	//更多列表
 	for i:=1; i<=huYaLiveListStruct.Data.TotalPage; i++ {
 		spider.ChanProduceList <- &db.Queue{
-			Queueid:  "",
 			Platform: p.Queue.Platform,
 			Uri:      "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
 			Type:     "live_list",
@@ -452,7 +451,6 @@ func (spider *Spider) huYaLiveList(p *Parser)  {
 
 	for _, v := range huYaLiveListStruct.Data.Datas {
 		spider.ChanProduceList <- &db.Queue{
-			Queueid:  "",
 			Platform: p.Queue.Platform,
 			Uri:      "https://www.huya.com/"+v.ProfileRoom,
 			Type:     "live_info",

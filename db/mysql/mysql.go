@@ -238,6 +238,38 @@ func (DB *Db) _DoExec()  {
 
 }
 
+//原始查询Sql 查询多条
+func (DB *Db) QueryAll(sql string) ([]map[string]string,error) {
+	var data []map[string]string
+	select_rows,err := MysqlConn.Query(sql)
+	if err != nil {
+		log.Println("MySql执行错误 [error:"+err.Error()+"]")
+		return data,err
+	}
+	for select_rows.Next() {
+		columns, _ := select_rows.Columns()
+
+		scanArgs := make([]interface{}, len(columns))
+		values := make([]interface{}, len(columns))
+
+		for i := range values {
+			scanArgs[i] = &values[i]
+		}
+
+		//将数据保存到 record 字典
+		err = select_rows.Scan(scanArgs...)
+		record := make(map[string]string)
+		for i, col := range values {
+			if col != nil {
+				record[columns[i]] = string(col.([]byte))
+			}
+		}
+		data = append(data, record)
+	}
+	select_rows.Close()
+	return data,err
+}
+
 
 /**
  * 启动事务

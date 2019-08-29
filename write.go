@@ -11,13 +11,16 @@ import (
 )
 
 func (spider *Spider) WriteLiveInfo()  {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+
 	data := []*db.TableLive{}
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-	endTime := initTime + 30;
+	endTime := initTime + 30;	//控制更新数据库写入频率
 	for v := range spider.WriteInfo {
-		//30秒 || 大于10 -> 更新数据
+		//30秒 || 数据大于20 -> 更新数据
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		if endTime <= currentTime || len(data) > 10 {
+		if endTime <= currentTime || len(data) > 20 {
 			//写入 code ...
 			if len(data) > 0 {
 				writeLiveInfos(data)
@@ -31,6 +34,20 @@ func (spider *Spider) WriteLiveInfo()  {
 		} else {
 			data = append(data,&v.TableLive)
 		}
+
+		//事件i
+		event := strings.Split(v.Queue.Event, ",")
+		for i:=0; i<len(event); i++ {
+			if event[i] == "online_notice" {		//发送开播通知
+				spider.EventOnlineNotice(v, rconn)
+			}
+			if event[i] == "send_barrage" {			//发送弹幕
+			}
+			if event[i] == "listener_barrage" {		//监听弹幕
+			}
+		}
+
+
 	}
 }
 

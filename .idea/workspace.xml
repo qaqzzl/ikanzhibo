@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36f3c8b-0858-4b5f-950b-c5e55b67dc28" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/demo_xuexi.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/redis/redis.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/redis/redis.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/downloader.go" beforeDir="false" afterPath="$PROJECT_DIR$/downloader.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/mysql/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/mysql/mysql.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master.go" beforeDir="false" afterPath="$PROJECT_DIR$/master.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/douyin.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser_douyin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/douyu.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser_douyu.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/huya.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser_huya.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parser_huya.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser_huya.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unique.go" beforeDir="false" afterPath="$PROJECT_DIR$/unique.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/write.go" beforeDir="false" afterPath="$PROJECT_DIR$/write.go" afterDir="false" />
     </list>

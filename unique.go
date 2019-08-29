@@ -40,23 +40,15 @@ func (spider *Spider) uniqueLiveList(v *db.Queue, rconn redis.Conn) {
 }
 
 func (spider *Spider) uniqueLiveInfo(v *db.Queue, rconn redis.Conn)  {
-	//查看在线直播间, 被关注&&不在线, 未关注&&不在线 集合是否存在
-	OnlineSet, err := rconn.Do("SISMEMBER", db.RedisOnlineSet, v.Uri)
+	setStr,_ := json.Marshal(v)
+	//查看info总集合是否已经存在
+	set, err := rconn.Do("SISMEMBER", db.RedisInfoOnceSet, v.Uri)
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
-	FollowOffSet, err := rconn.Do("SISMEMBER", db.RedisFollowOffSet, v.Uri)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-	NotFollowOffSet, err := rconn.Do("SISMEMBER", db.RedisNotFollowOffSet, v.Uri)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-	if FollowOffSet.(int64) == int64(1) || OnlineSet.(int64) == int64(1) || NotFollowOffSet.(int64) == int64(1) { //存在
+
+	if set.(int64) == int64(1) { //存在
 		return
 	}
 	//加入 在线直播间队列(list)
@@ -66,5 +58,5 @@ func (spider *Spider) uniqueLiveInfo(v *db.Queue, rconn redis.Conn)  {
 		log.Println(err.Error())
 	}
 	//加入 在线直播间集合(set)
-	rconn.Do("SADD", db.RedisOnlineSet, v.Uri)
+	rconn.Do("SADD", db.RedisOnlineSet, setStr)
 }

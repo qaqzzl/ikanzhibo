@@ -1,18 +1,21 @@
 package db
 
 import (
-	uuid "github.com/satori/go.uuid"
+	"encoding/json"
 	"ikanzhibo/db/mysql"
+	"ikanzhibo/db/redis"
+	"log"
+	"reflect"
 	"strconv"
 	"time"
 )
 
 //redis表名
 var (
-	RedisFollowOffLine		= "live_follow_offline_list"		//被关注&&不在线直播间队列
-	RedisFollowOffSet		= "live_follow_offline_set"			//被关注&&不在线直播间集合,定时跟数据库做一致性同步
+	RedisFollowOffLine			= "live_follow_offline_list"				//被关注&&不在线直播间队列
+	RedisModelFollowOffSet		= "live_model_follow_offline_set"			//被关注&&不在线直播间集合,定时跟数据库做一致性同步	model
 
-	RedisNotFollowOffLine	= "live_not_follow_offline_list"	//未关注&&不在线直播间队列
+	RedisNotFollowOffLine	= "live_not_follow_offline_list"				//未关注&&不在线直播间队列
 	RedisNotFollowOffSet	= "live_not_follow_offline_set"		//未关注&&不在线直播间集合,定时跟数据库做一致性同步
 
 	RedisOnlineList			= "live_online_list"				//在线直播间队列
@@ -20,6 +23,12 @@ var (
 
 	RedisListList		 	= "live_list_list"					//生产任务队列 - 未爬取
 	RedisListOnceSet		= "live_list_once_set"				//生产任务集合 - 已爬取
+
+	RedisInfoOnceSet			= "live_info_once_set"					//被关注&&不在线直播间集合,定时跟数据库做一致性同步
+
+
+	RedisOnlineNotice		= "event_online_notice_list"		//事件 - 开播通知
+
 )
 
 //平台表结构体
@@ -39,11 +48,11 @@ var platforms []Platform
 
 //任务队列结构体
 type Queue struct {
-	Queueid 	string		//队列ID
+	LiveId	 	string		//直播ID
 	Platform 	string		//所属平台
 	Uri 		string
 	Type 		string		//任务类型 , live_info:直播间数据, live_list:直播列表
-	Event		string		//触发事件, online_notice:开播通知, send_barrage:发送弹幕 , 多个事件用逗号隔开
+	Event		string		//触发事件, online_notice:开播通知, send_barrage:发送弹幕 , listener_barrage:监听弹幕 多个事件用逗号隔开
 }
 
 // 直播间数据结构体
@@ -96,27 +105,74 @@ func GetPlatformAll() (l []map[string]string, err error) {
 
 //获取所有未开播但有人订阅的直播间地址
 func GetFollowOffline() (l []Queue, err error) {
-	list := [...]Queue{
-		{
-			Platform: "huya",
-			Uri: "https://www.huya.com/xinghen",
-			Type: "live_info",
-			Event: "online_notice",
-		},
-		{
-			Platform: "huya",
-			Uri: "https://www.huya.com/613587",
-			Type: "live_info",
-			Event: "online_notice",
-		},
+	rconn := redis.GetConn()
+	defer rconn.Close()
+
+	rlist, err := rconn.Do("SMEMBERS", RedisModelFollowOffSet)
+	if err != nil {
+		log.Println("Redis SMEMBERS error",RedisModelFollowOffSet)
+		return l, err
+	}
+	v := reflect.ValueOf(rlist)
+	if v.Kind() != reflect.Slice {
+		panic("toslice arr not slice")
+	}
+	len := v.Len()
+	if len != 0 {
+		for i := 0; i < len; i++ {
+			queue := Queue{}
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
+			vo := Queue{
+				LiveId: queue.LiveId,
+				Platform: queue.Platform,
+				Uri:      queue.Uri,
+			}
+			l = append(l, vo)
+		}
+		return l,err
 	}
 
+	list, err := mysql.Conn().QueryAll("select l.live_id,l.live_uri,l.live_platform from live as l JOIN live_user_follow as luf ON luf.live_id = l.live_id WHERE luf.`status`=1 AND luf.is_notice=1 AND l.live_is_online='no'")
+	if err != nil {
+		log.Println("MySql error", RedisModelFollowOffSet)
+		return l, err
+	}
 	for _, v := range list {
-		if v.Queueid == "" {
-			uuidstring ,_ := uuid.NewV4()
-			v.Queueid = uuidstring.String()
+		vo := Queue{
+			LiveId: v["live_id"],
+			Platform: v["live_platform"],
+			Uri:      "https://www.huya.com/"+v["live_uri"],
 		}
-		l = append(l, v)
+		l = append(l, vo)
+
+		str,_ := json.Marshal(vo)
+		rconn.Do("SADD", RedisModelFollowOffSet, str)
+	}
+	return l,err
+}
+
+func GetOnline() (l []Queue, err error)  {
+	rlist, err := rconn.Do("SMEMBERS", RedisOnlineSet)
+	if err != nil {
+		log.Println("Redis SMEMBERS error",RedisOnlineSet)
+		return l, err
+	}
+	v := reflect.ValueOf(rlist)
+	if v.Kind() != reflect.Slice {
+		panic("toslice arr not slice")
+	}
+	len := v.Len()
+	if len != 0 {
+		for i := 0; i < len; i++ {
+			queue := Queue{}
+			//json.Unmarshal(.([]byte), &queue)
+			vo := Queue{
+				LiveId: "",
+				Platform: queue.Platform,
+				Uri:      v.Index(i).String(),
+			}
+			l = append(l, vo)
+		}
 	}
 	return l,err
 }

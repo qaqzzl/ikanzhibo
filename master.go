@@ -6,6 +6,7 @@ import (
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -38,9 +39,9 @@ func Master()  {
 		ChanProduceList: make(chan *db.Queue, 1000),
 		WriteInfo: make(chan *WriteInfo, 1000),
 	}
-	go spider.handlerTotalPlatforms()				//发现任务
+	//go spider.handlerTotalPlatforms()				//发现任务
 
-	//go HandlerFollowOffline()				//关注&&不在线直播间
+	go spider.handlerFollowOffline()				//关注&&不在线直播间
 
 	//go HandlerOnline()					//在线直播间
 	for i := 0; i < 5; i++ {
@@ -53,6 +54,8 @@ func Master()  {
 
 	go spider.WriteLiveInfo()					//写入器
 
+	go Crontab()
+
 	<-time.Tick(time.Second * 50000)
 }
 
@@ -60,9 +63,16 @@ func Master()  {
 func (spider *Spider) handlerFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
-	myChan := time.NewTicker(time.Second * 5) 	//抓取频率控制, 单位 / 秒
 	for {
-		<-myChan.C	//程序等待
+		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
+
+		//控制抓取频率
+		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime := initTime + 5;
+		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		if endTime > currentTime {
+			continue
+		}
 
 		//判断队列是否空
 		if queueCounts, err := rconn.Do("LLEN", db.RedisFollowOffLine); err == nil {
@@ -73,6 +83,10 @@ func (spider *Spider) handlerFollowOffline() {
 			log.Println(err.Error())
 			continue
 		}
+		//初始化抓取频率时间
+		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime = currentTime + 300;	//300秒-> 5分
+
 		//获取被关注过但不在线的直播间
 		l, err := db.GetFollowOffline();
 		if err != nil {
@@ -80,6 +94,8 @@ func (spider *Spider) handlerFollowOffline() {
 		}
 
 		for _, v := range l {
+			v.Type = "live_info"
+			v.Event = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisFollowOffLine, str); err != nil {
@@ -98,17 +114,66 @@ func (Spider *Spider) handlerNotFollowOffline() {
 
 //在线
 func (Spider *Spider) handlerOnline() {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	for {
+		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
 
+		//控制抓取频率
+		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime := initTime + 5;
+		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		if endTime > currentTime {
+			continue
+		}
+
+		//判断队列是否空
+		if queueCounts, err := rconn.Do("LLEN", db.RedisOnlineList); err == nil {
+			if queueCounts.(int64) != 0 {
+				continue
+			}
+		} else {
+			log.Println(err.Error())
+			continue
+		}
+		//初始化抓取频率时间
+		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime = currentTime + 600;	//600秒-> 10分
+
+		//获取在线直播间
+		l, err := db.GetOnline();
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		for _, v := range l {
+			v.Type = "live_info"
+			v.Event = "online_notice"
+			str,_ := json.Marshal(v)
+			//加入任务到redis队列
+			if _, err := rconn.Do("RPUSH", db.RedisFollowOffLine, str); err != nil {
+				log.Println(err.Error())
+			}
+
+		}
+	}
 }
 
 //全平台任务发现
 func (spider *Spider) handlerTotalPlatforms() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
-	myChan := time.NewTicker(time.Second * 10) 	//抓取频率控制, 单位 / 秒
-	i := 0
 	for {
-		<- myChan.C
+		<-time.Tick(time.Second * 1)	//暂停, 单位 / 秒
+
+		//控制抓取频率
+		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime := initTime + 5;
+		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		if endTime > currentTime {
+			continue
+		}
+
 		//判断队列是否空
 		if queueCounts, err := rconn.Do("LLEN", db.RedisListList); err == nil {
 			if queueCounts.(int64) != int64(0) {
@@ -116,17 +181,14 @@ func (spider *Spider) handlerTotalPlatforms() {
 				fmt.Println("判断队列是否空")
 				continue
 			}
-			fmt.Println("I",i)
-			if i == 1 {
-				log.Fatalln("结束")
-				continue
-			}
-			i++
-			rconn.Do("del", db.RedisListOnceSet)	//清空已经爬取的任务
 		} else {
 			log.Println(err.Error())
 			continue
 		}
+		rconn.Do("del", db.RedisListOnceSet)	//清空已经爬取的任务
+		//初始化时间
+		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime = currentTime + 1800;	//1800秒-> 30分
 
 		//获取任务数据
 		p, err := db.GetPlatforms()
@@ -150,4 +212,18 @@ func (spider *Spider) handlerTotalPlatforms() {
 		}
 	}
 
+}
+
+
+//定时任务
+func Crontab()  {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	go func() {
+		for true {
+			<-time.Tick(time.Second * 60)	//60秒清除一次 被关注&&不在线直播间集合,定时跟数据库做一致性同步
+
+			rconn.Do("del", db.RedisModelFollowOffSet)	//清空
+		}
+	}()
 }
