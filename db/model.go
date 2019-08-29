@@ -24,7 +24,7 @@ var (
 	RedisListList		 	= "live_list_list"					//生产任务队列 - 未爬取
 	RedisListOnceSet		= "live_list_once_set"				//生产任务集合 - 已爬取
 
-	RedisInfoOnceSet			= "live_info_once_set"					//被关注&&不在线直播间集合,定时跟数据库做一致性同步
+	RedisInfoOnceSet			= "live_info_once_set"					//总info set
 
 
 	RedisOnlineNotice		= "event_online_notice_list"		//事件 - 开播通知
@@ -152,6 +152,7 @@ func GetFollowOffline() (l []Queue, err error) {
 }
 
 func GetOnline() (l []Queue, err error)  {
+	rconn := redis.GetConn()
 	rlist, err := rconn.Do("SMEMBERS", RedisOnlineSet)
 	if err != nil {
 		log.Println("Redis SMEMBERS error",RedisOnlineSet)

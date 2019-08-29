@@ -39,7 +39,7 @@ func Master()  {
 		ChanProduceList: make(chan *db.Queue, 1000),
 		WriteInfo: make(chan *WriteInfo, 1000),
 	}
-	//go spider.handlerTotalPlatforms()				//发现任务
+	go spider.handlerTotalPlatforms()				//发现任务
 
 	go spider.handlerFollowOffline()				//关注&&不在线直播间
 
@@ -63,12 +63,12 @@ func Master()  {
 func (spider *Spider) handlerFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
+	//控制抓取频率
+	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+	endTime := initTime + 5;
 	for {
 		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
 
-		//控制抓取频率
-		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime := initTime + 5;
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
@@ -116,12 +116,12 @@ func (Spider *Spider) handlerNotFollowOffline() {
 func (Spider *Spider) handlerOnline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
+	//控制抓取频率
+	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+	endTime := initTime + 5;
 	for {
 		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
 
-		//控制抓取频率
-		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime := initTime + 5;
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
@@ -163,17 +163,17 @@ func (Spider *Spider) handlerOnline() {
 func (spider *Spider) handlerTotalPlatforms() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
+
+	//控制抓取频率
+	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+	endTime := initTime + 5;
 	for {
 		<-time.Tick(time.Second * 1)	//暂停, 单位 / 秒
 
-		//控制抓取频率
-		initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime := initTime + 5;
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
 		}
-
 		//判断队列是否空
 		if queueCounts, err := rconn.Do("LLEN", db.RedisListList); err == nil {
 			if queueCounts.(int64) != int64(0) {

@@ -59,4 +59,5 @@ func (spider *Spider) uniqueLiveInfo(v *db.Queue, rconn redis.Conn)  {
 	}
 	//加入 在线直播间集合(set)
 	rconn.Do("SADD", db.RedisOnlineSet, setStr)
+	rconn.Do("SADD", db.RedisInfoOnceSet, setStr)
 }
