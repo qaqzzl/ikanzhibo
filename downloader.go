@@ -13,6 +13,7 @@ import (
 
 func (spider *Spider) Downloader()  {
 	go spider.downloaderFollowOffline()
+	go spider.downloaderNotFollowOffline()
 	go spider.downloaderOnline()
 	go spider.downloaderTotalPlatform()
 }
@@ -24,6 +25,35 @@ func (spider *Spider) downloaderFollowOffline() {
 	var queue db.Queue
 	for {
 		v, err := rconn.Do("RPOP", db.RedisFollowOfflineList)
+		if err != nil {
+			log.Panicln(err.Error())
+			continue
+		}
+		if v == nil {
+			//暂停 5 秒
+			<-time.Tick(time.Second * 5)
+			continue
+		}
+		body, err := downloaders(v, &queue)
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		spider.ChanParsers <- &Parser{
+			Body:body,
+			Queue:queue,
+		}
+
+	}
+}
+
+//未关注&&不在线 下载器
+func (spider *Spider) downloaderNotFollowOffline() {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	var queue db.Queue
+	for {
+		v, err := rconn.Do("RPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
 			log.Panicln(err.Error())
 			continue

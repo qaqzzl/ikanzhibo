@@ -80,29 +80,6 @@ type TableLive struct {
 }
 
 
-//获取所有平台数据
-func GetPlatformAll() (l []map[string]string, err error) {
-	list := [...]map[string]string{
-		//{
-		//	"Platform":"huya",
-		//	"Uri":"https://www.huya.com/18130353",	//9点到12点
-		//},
-		{
-			"Platform":"huya",
-			"Uri":"https://www.huya.com/xinghen",
-		},
-		{
-			"Platform":"huya",
-			"Uri":"https://www.huya.com/613587",
-		},
-	}
-
-	for _, v := range list {
-		l = append(l, v)
-	}
-	return l,err
-}
-
 //获取所有未开播但有人订阅的直播间地址
 func GetFollowOffline() (l []Queue, err error) {
 	rconn := redis.GetConn()
@@ -204,7 +181,6 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	}
 	for _, v := range list {
 		vo := Queue{
-			LiveId: v["live_id"],
 			Platform: v["live_platform"],
 			Uri:      "https://www.huya.com/"+v["live_uri"],
 		}
@@ -240,6 +216,7 @@ func GetOnline() (l []Queue, err error)  {
 			l = append(l, vo)
 		}
 	}
+
 	return l,err
 }
 

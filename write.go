@@ -64,9 +64,13 @@ func writeLiveInfos(info []*WriteInfo)  {
 		//redis -> 在播添加 , 不在播删除
 		str,_ := json.Marshal(queue)
 		if data.Live_is_online == "yes" {
-			rconn.Do("SADD", db.RedisOnlineSet, str)
+			rconn.Do("SADD", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
+
+			rconn.Do("SREM", db.RedisNotFollowOffSet, str)	//未关注&&不在线直播间集合
 		} else { //删除
-			rconn.Do("SREM", db.RedisOnlineSet, str)
+			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
+
+			rconn.Do("SADD", db.RedisNotFollowOffSet, str)	//未关注&&不在线直播间集合
 		}
 
 		//sql
