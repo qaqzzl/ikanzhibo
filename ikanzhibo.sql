@@ -23,7 +23,7 @@ create table if not exists `user_member`(
 create table if not exists `user_auths`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
-    `identity_type` char(10) not null comment '类型,wx,qq,wb,phone,number,email',
+    `identity_type` char(20) not null comment '类型,wx,qq,wb,phone,number,email',
     `identifier` varchar(64) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
     `credential` varchar(64) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
     KEY `member_id` (`member_id`),
@@ -35,7 +35,7 @@ create table if not exists `user_auths_token`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
     `token` varchar(255) not null default '' comment 'token',
-    `client` char(10) not null comment 'app,web,wxapplet',
+    `client` char(20) not null comment 'app,web,wxapplet',
     `last_time` int not null comment '上次刷新时间',
     `status` tinyint(1) not null default 0 comment '1-其他设备强制下线',
     `created_at` int not null default 0 comment '添加时间',

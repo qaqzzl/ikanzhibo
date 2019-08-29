@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36f3c8b-0858-4b5f-950b-c5e55b67dc28" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/event.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/mysql/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/mysql/mysql.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master.go" beforeDir="false" afterPath="$PROJECT_DIR$/master.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser_huya.go" beforeDir="false" afterPath="$PROJECT_DIR$/parser_huya.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unique.go" beforeDir="false" afterPath="$PROJECT_DIR$/unique.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/write.go" beforeDir="false" afterPath="$PROJECT_DIR$/write.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ikanzhibo.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ikanzhibo.sql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
