@@ -12,22 +12,22 @@ import (
 
 //redis表名
 var (
-	RedisFollowOffLine			= "live_follow_offline_list"				//被关注&&不在线直播间队列
-	RedisModelFollowOffSet		= "live_model_follow_offline_set"			//被关注&&不在线直播间集合,定时跟数据库做一致性同步	model
+	RedisFollowOfflineList			= "live_follow_offline_list"				//被关注&&不在线直播间队列
+	RedisFollowOffSet				= "live_follow_offline_set"					//被关注&&不在线直播间集合,定时跟数据库做一致性同步	model
 
-	RedisNotFollowOffLine	= "live_not_follow_offline_list"				//未关注&&不在线直播间队列
-	RedisNotFollowOffSet	= "live_not_follow_offline_set"		//未关注&&不在线直播间集合,定时跟数据库做一致性同步
+	RedisNotFollowOfflineList		= "live_not_follow_offline_list"			//未关注&&不在线直播间队列
+	RedisNotFollowOffSet			= "live_not_follow_offline_set"				//未关注&&不在线直播间集合,定时跟数据库做一致性同步
 
-	RedisOnlineList			= "live_online_list"				//在线直播间队列
-	RedisOnlineSet			= "live_online_set"					//在线直播间集合
+	RedisOnlineList					= "live_online_list"						//在线直播间队列
+	RedisOnlineSet					= "live_online_set"							//在线直播间集合
 
-	RedisListList		 	= "live_list_list"					//生产任务队列 - 未爬取
-	RedisListOnceSet		= "live_list_once_set"				//生产任务集合 - 已爬取
+	RedisListList		 			= "live_list_list"							//生产任务队列 - 未爬取
+	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 已爬取
 
-	RedisInfoOnceSet			= "live_info_once_set"					//总info set
+	RedisInfoOnceSet				= "live_info_once_set"						//总info set
 
 
-	RedisOnlineNotice		= "event_online_notice_list"		//事件 - 开播通知
+	RedisOnlineNotice				= "event_online_notice_list"				//事件 - 开播通知
 
 )
 
@@ -108,9 +108,10 @@ func GetFollowOffline() (l []Queue, err error) {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 
-	rlist, err := rconn.Do("SMEMBERS", RedisModelFollowOffSet)
+	//查询redis
+	rlist, err := rconn.Do("SMEMBERS", RedisFollowOffSet)
 	if err != nil {
-		log.Println("Redis SMEMBERS error",RedisModelFollowOffSet)
+		log.Println("Redis SMEMBERS error",RedisFollowOffSet)
 		return l, err
 	}
 	v := reflect.ValueOf(rlist)
@@ -132,9 +133,10 @@ func GetFollowOffline() (l []Queue, err error) {
 		return l,err
 	}
 
+	//redis不存在 , 查询mysql
 	list, err := mysql.Conn().QueryAll("select l.live_id,l.live_uri,l.live_platform from live as l JOIN live_user_follow as luf ON luf.live_id = l.live_id WHERE luf.`status`=1 AND luf.is_notice=1 AND l.live_is_online='no'")
 	if err != nil {
-		log.Println("MySql error", RedisModelFollowOffSet)
+		log.Println("MySql error", RedisFollowOffSet)
 		return l, err
 	}
 	for _, v := range list {
@@ -146,7 +148,70 @@ func GetFollowOffline() (l []Queue, err error) {
 		l = append(l, vo)
 
 		str,_ := json.Marshal(vo)
-		rconn.Do("SADD", RedisModelFollowOffSet, str)
+		rconn.Do("SADD", RedisFollowOffSet, str)
+	}
+	return l,err
+}
+
+//获取未开播 && 未关注
+func GetNotFollowOffline() (l []Queue, err error) {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+
+	rlist, err := rconn.Do("SMEMBERS", RedisNotFollowOffSet)
+	if err != nil {
+		log.Println("Redis SMEMBERS error",RedisNotFollowOffSet)
+		return l, err
+	}
+	v := reflect.ValueOf(rlist)
+	if v.Kind() != reflect.Slice {
+		panic("toslice arr not slice")
+	}
+	len := v.Len()
+	if len != 0 {
+		for i := 0; i < len; i++ {
+			queue := Queue{}
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
+			vo := Queue{
+				LiveId: queue.LiveId,
+				Platform: queue.Platform,
+				Uri:      queue.Uri,
+			}
+			l = append(l, vo)
+		}
+		return l,err
+	}
+
+	//redis不存在 , 查询mysql
+
+	/**
+	select l.live_id,l.live_uri,l.live_platform from live as l
+	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
+	where l.live_is_online = 'no' and  luf.live_id is null
+	*/
+
+	/**
+	select live_id,live_uri,live_platform from live
+	WHERE live_is_online = 'no' and live_id not in ( select live_id from live_user_follow)
+	*/
+
+	list, err := mysql.Conn().QueryAll(`select l.live_id,l.live_uri,l.live_platform from live as l
+	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
+	where l.live_is_online = 'no' and  luf.live_id is null`)
+	if err != nil {
+		log.Println("MySql error", RedisNotFollowOffSet)
+		return l, err
+	}
+	for _, v := range list {
+		vo := Queue{
+			LiveId: v["live_id"],
+			Platform: v["live_platform"],
+			Uri:      "https://www.huya.com/"+v["live_uri"],
+		}
+		l = append(l, vo)
+
+		str,_ := json.Marshal(vo)
+		rconn.Do("SADD", RedisNotFollowOffSet, str)
 	}
 	return l,err
 }

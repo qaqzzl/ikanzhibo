@@ -23,7 +23,7 @@ func (spider *Spider) downloaderFollowOffline() {
 	defer rconn.Close()
 	var queue db.Queue
 	for {
-		v, err := rconn.Do("RPOP", db.RedisFollowOffLine)
+		v, err := rconn.Do("RPOP", db.RedisFollowOfflineList)
 		if err != nil {
 			log.Panicln(err.Error())
 			continue
