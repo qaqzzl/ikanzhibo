@@ -18,7 +18,7 @@ func (spider *Spider) WriteLiveInfo()  {
 	data := []*WriteInfo{}
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 30;	//控制更新数据库写入频率
-	for v := range spider.WriteInfo {
+	for v := range spider.ChanWriteInfo {
 		//30秒 || 数据大于20 -> 更新数据
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime <= currentTime || len(data) > 20 {
@@ -63,14 +63,19 @@ func writeLiveInfos(info []*WriteInfo)  {
 		queue := info[i].Queue
 		//redis -> 在播添加 , 不在播删除
 		str,_ := json.Marshal(queue)
-		if data.Live_is_online == "yes" {
+		switch data.Live_is_online {
+		case "yes":
 			rconn.Do("SADD", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-
-			rconn.Do("SREM", db.RedisNotFollowOffSet, str)	//未关注&&不在线直播间集合
-		} else { //删除
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+		case "no":
 			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-
-			rconn.Do("SADD", db.RedisNotFollowOffSet, str)	//未关注&&不在线直播间集合
+			rconn.Do("SADD", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+		case "vio":
+			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+		case "del":
+			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
 		}
 
 		//sql

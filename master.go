@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"ikanzhibo/db"
+	"ikanzhibo/db/mysql"
 	"ikanzhibo/db/redis"
 	"log"
 	"strconv"
@@ -27,26 +28,24 @@ type SpiderInterface interface {
 }
 
 type Spider struct {
-	ChanParsers 		chan *Parser
-	ChanProduceList 	chan *db.Queue		//待抓取列表 chan
-	WriteInfo			chan *WriteInfo		//吸入数据 chan
+	ChanParsers 		chan *Parser		//解析任务 chan
+	ChanProduceList 	chan *db.Queue		//发现任务列表 chan
+	ChanWriteInfo		chan *WriteInfo		//写入数据 chan
 }
 
 //调度器
-func Master()  {
-	spider := Spider{
-		ChanParsers: make(chan *Parser, 1000),
-		ChanProduceList: make(chan *db.Queue, 1000),
-		WriteInfo: make(chan *WriteInfo, 1000),
-	}
+func Master(spider *Spider)  {
+	InitLive()		//初始化数据
+
 	go spider.handlerTotalPlatforms()				//发现任务
 
 	go spider.handlerFollowOffline()				//关注&&不在线直播间
 
 	go spider.handlerNotFollowOffline()				//未关注&&不在线直播间
 
-	//go HandlerOnline()					//在线直播间
-	for i := 0; i < 5; i++ {
+	go spider.handlerOnline()						//在线直播间
+
+	for i := 0; i < 10; i++ {
 		go spider.Downloader()						//下载器
 	}
 
@@ -57,8 +56,6 @@ func Master()  {
 	go spider.WriteLiveInfo()					//写入器
 
 	go Crontab()
-
-	<-time.Tick(time.Second * 50000)
 }
 
 //被关注&&不在线
@@ -145,7 +142,6 @@ func (Spider *Spider) handlerNotFollowOffline() {
 
 		for _, v := range l {
 			v.Type = "live_info"
-			v.Event = ""
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisNotFollowOfflineList, str); err != nil {
@@ -192,10 +188,9 @@ func (Spider *Spider) handlerOnline() {
 
 		for _, v := range l {
 			v.Type = "live_info"
-			v.Event = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
-			if _, err := rconn.Do("RPUSH", db.RedisFollowOfflineList, str); err != nil {
+			if _, err := rconn.Do("RPUSH", db.RedisOnlineList, str); err != nil {
 				log.Println(err.Error())
 			}
 
@@ -221,8 +216,6 @@ func (spider *Spider) handlerTotalPlatforms() {
 		//判断队列是否空
 		if queueCounts, err := rconn.Do("LLEN", db.RedisListList); err == nil {
 			if queueCounts.(int64) != int64(0) {
-				fmt.Println(queueCounts.(int64))
-				fmt.Println("判断队列是否空")
 				continue
 			}
 		} else {
@@ -266,7 +259,7 @@ func Crontab()  {
 	go func() {		//关注 && 不在线
 		for true {
 			<-time.Tick(time.Second * 60)	//60秒清除一次 被关注&&不在线直播间集合,定时跟数据库做一致性同步
-			rconn.Do("del", db.RedisFollowOffSet)	//清空
+			rconn.Do("del", db.RedisFollowOfflineSet)	//清空
 		}
 	}()
 
@@ -281,4 +274,18 @@ func Crontab()  {
 	go func() {		//全任务发现 3点清除
 
 	}()
+}
+
+func InitLive() {
+	initLiveMyType()
+}
+
+//初始化分类映射数据
+var	LiveMyTypeData []map[string]string
+func initLiveMyType() (err error) {
+	fmt.Println("init type data")
+	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset").Order("`order` asc").Get(); err != nil {
+		panic("初始化失败 . 分类映射数据出错 ,"+err.Error())
+	}
+	return err
 }

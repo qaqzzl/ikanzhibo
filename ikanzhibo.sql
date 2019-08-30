@@ -23,15 +23,9 @@ create table if not exists `user_member`(
 create table if not exists `user_auths`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
-<<<<<<< HEAD
-    `identity_type` char(20) not null comment '类型,wx,qq,wb,phone,number,email',
-    `identifier` varchar(64) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
-    `credential` varchar(64) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
-=======
     `identity_type` char(20) not null comment '类型,wechat_applet,qq,wb,phone,number,email',
     `identifier` varchar(255) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
     `credential` varchar(255) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
->>>>>>> 434b406c18c12233498d8e0c8648e45618ccf5e6
     KEY `member_id` (`member_id`),
     UNIQUE KEY `identity_type_identifier` (`identity_type`,`identifier`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '会员授权账号表';
@@ -41,11 +35,7 @@ create table if not exists `user_auths_token`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
     `token` varchar(255) not null default '' comment 'token',
-<<<<<<< HEAD
-    `client` char(20) not null comment 'app,web,wxapplet',
-=======
     `client` char(20) not null comment 'app,web,wechat_applet',
->>>>>>> 434b406c18c12233498d8e0c8648e45618ccf5e6
     `last_time` int not null comment '上次刷新时间',
     `status` tinyint(1) not null default 0 comment '1-其他设备强制下线',
     `created_at` int not null default 0 comment '添加时间',
@@ -90,12 +80,13 @@ create table if not exists `live`(
 	`live_play_end_time` int not null default 0 comment '最近关播时间',
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
---     `queueid` varchar(64) not null default '' comment '队列ID',
+--    `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
 --     UNIQUE KEY `queueid` (`queueid`),
     UNIQUE KEY `live_uri_live_platform` (`live_uri`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
+alter table live add spider_pull_time int not null default 0 comment '上次抓取时间';
 --
 -- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
