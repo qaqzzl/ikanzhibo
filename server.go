@@ -102,7 +102,7 @@ func (m *Monitor) Start(s *Spider) {
 		writer.Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
 		writer.Header().Set("content-type", "application/json")             //返回数据格式是json
 
-		m.Data.RunTime = time.Now().Sub(m.StartTime).String()
+		m.Data.UptimeInSeconds = time.Now().Sub(m.StartTime).String()
 		if len(m.TpsSli) >= 2 {
 			m.Data.Tps = float64(m.TpsSli[1]-m.TpsSli[0])
 		}
