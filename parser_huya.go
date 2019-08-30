@@ -2,11 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-
 	//uuid "github.com/satori/go.uuid"
 	"ikanzhibo/db"
-	"ikanzhibo/db/mysql"
 	"log"
 	"reflect"
 	"regexp"
@@ -143,7 +140,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		spider.WriteInfo <- &WriteInfo{
+		spider.ChanWriteInfo <- &WriteInfo{
 			TableLive:Live,
 			Queue: p.Queue,
 		}
@@ -160,7 +157,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 		Live.Live_type_id = "0"
 		Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 		Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-		spider.WriteInfo <- &WriteInfo{
+		spider.ChanWriteInfo <- &WriteInfo{
 			TableLive:Live,
 			Queue: p.Queue,
 		}
@@ -179,7 +176,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 		}
 	} else {
 		log.Println("解析josn_hyPlayerConfig 为空.")
-		//log.Println(string(p.Body))
+		log.Println(string(p.Body))
 		return
 	}
 	//.Live_is_online - 判断是在播 . 如果不再播 . 使用新策略爬取直播间基本数据
@@ -274,7 +271,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	spider.WriteInfo <- &WriteInfo{
+	spider.ChanWriteInfo <- &WriteInfo{
 		TableLive:Live,
 		Queue: p.Queue,
 	}
@@ -376,7 +373,7 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Live_pull_url= p.Queue.Uri
 
-	spider.WriteInfo <- &WriteInfo{
+	spider.ChanWriteInfo <- &WriteInfo{
 		TableLive:Live,
 		Queue: p.Queue,
 	}
@@ -500,13 +497,3 @@ func liveGetMyTypeId(live_class string) (live_type_id string,live_type_name stri
 
 	return live_type_id,live_type_name
 }
-
-//初始化分类映射数据
-func InitLiveMyType() (err error) {
-	fmt.Println("init type data")
-	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset").Order("`order` asc").Get(); err != nil {
-		panic("初始化失败 . 分类映射数据出错 ,"+err.Error())
-	}
-	return err
-}
-var	LiveMyTypeData []map[string]string

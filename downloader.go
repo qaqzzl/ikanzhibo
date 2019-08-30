@@ -95,6 +95,7 @@ func (spider *Spider) downloaderOnline() {
 		body, err := downloaders(v, &queue)
 		if err != nil {
 			log.Println(err.Error())
+			return
 		}
 
 		spider.ChanParsers <- &Parser{
@@ -133,7 +134,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 		}
 		fmt.Println(len(spider.ChanParsers))
 		fmt.Println(len(spider.ChanProduceList))
-		fmt.Println(len(spider.WriteInfo))
+		fmt.Println(len(spider.ChanWriteInfo))
 
 	}
 }

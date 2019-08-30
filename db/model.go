@@ -13,18 +13,17 @@ import (
 //redis表名
 var (
 	RedisFollowOfflineList			= "live_follow_offline_list"				//被关注&&不在线直播间队列
-	RedisFollowOffSet				= "live_follow_offline_set"					//被关注&&不在线直播间集合,定时跟数据库做一致性同步	model
+	RedisFollowOfflineSet			= "live_follow_offline_set"					//被关注&&不在线直播间集合, 可能因为解析错误,导致跟数据库不一致 - 策略,定时跟数据库做一致性同步
 
 	RedisNotFollowOfflineList		= "live_not_follow_offline_list"			//未关注&&不在线直播间队列
-	RedisNotFollowOffSet			= "live_not_follow_offline_set"				//未关注&&不在线直播间集合,定时跟数据库做一致性同步
+	RedisNotFollowOfflineSet		= "live_not_follow_offline_set"				//未关注&&不在线直播间集合, 可能因为解析错误,导致跟数据库不一致 - 策略,定时跟数据库做一致性同步
 
 	RedisOnlineList					= "live_online_list"						//在线直播间队列
-	RedisOnlineSet					= "live_online_set"							//在线直播间集合
+	RedisOnlineSet					= "live_online_set"							//在线直播间集合, 定时跟数据库做一次性同步
 
 	RedisListList		 			= "live_list_list"							//生产任务队列 - 未爬取
-	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 已爬取
-
-	RedisInfoOnceSet				= "live_info_once_set"						//总info set
+	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 列表 - 已爬取 , 防止当前启动发现任务抓取重复列表数据
+	RedisInfoOnceSet				= "live_info_once_set"						//生产任务集合 - 直播间详情 - 已爬取 , 防止每次发现任务重复爬取系统已经存在的直播间
 
 
 	RedisOnlineNotice				= "event_online_notice_list"				//事件 - 开播通知
@@ -76,7 +75,6 @@ type TableLive struct {
 	Live_is_online			string			//直播间是否在播 ,yes|no
 	Created_at				string
 	Updated_at				string
-	Queue_id				string			//队列ID
 }
 
 
@@ -86,9 +84,9 @@ func GetFollowOffline() (l []Queue, err error) {
 	defer rconn.Close()
 
 	//查询redis
-	rlist, err := rconn.Do("SMEMBERS", RedisFollowOffSet)
+	rlist, err := rconn.Do("SMEMBERS", RedisFollowOfflineSet)
 	if err != nil {
-		log.Println("Redis SMEMBERS error",RedisFollowOffSet)
+		log.Println("Redis SMEMBERS error",RedisFollowOfflineSet)
 		return l, err
 	}
 	v := reflect.ValueOf(rlist)
@@ -113,7 +111,7 @@ func GetFollowOffline() (l []Queue, err error) {
 	//redis不存在 , 查询mysql
 	list, err := mysql.Conn().QueryAll("select l.live_id,l.live_uri,l.live_platform from live as l JOIN live_user_follow as luf ON luf.live_id = l.live_id WHERE luf.`status`=1 AND luf.is_notice=1 AND l.live_is_online='no'")
 	if err != nil {
-		log.Println("MySql error", RedisFollowOffSet)
+		log.Println("MySql error", RedisFollowOfflineSet)
 		return l, err
 	}
 	for _, v := range list {
@@ -125,7 +123,7 @@ func GetFollowOffline() (l []Queue, err error) {
 		l = append(l, vo)
 
 		str,_ := json.Marshal(vo)
-		rconn.Do("SADD", RedisFollowOffSet, str)
+		rconn.Do("SADD", RedisFollowOfflineSet, str)
 	}
 	return l,err
 }
@@ -135,9 +133,9 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 
-	rlist, err := rconn.Do("SMEMBERS", RedisNotFollowOffSet)
+	rlist, err := rconn.Do("SMEMBERS", RedisNotFollowOfflineSet)
 	if err != nil {
-		log.Println("Redis SMEMBERS error",RedisNotFollowOffSet)
+		log.Println("Redis SMEMBERS error",RedisNotFollowOfflineSet)
 		return l, err
 	}
 	v := reflect.ValueOf(rlist)
@@ -176,7 +174,7 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
 	where l.live_is_online = 'no' and  luf.live_id is null`)
 	if err != nil {
-		log.Println("MySql error", RedisNotFollowOffSet)
+		log.Println("MySql error", RedisNotFollowOfflineSet)
 		return l, err
 	}
 	for _, v := range list {
@@ -187,7 +185,7 @@ func GetNotFollowOffline() (l []Queue, err error) {
 		l = append(l, vo)
 
 		str,_ := json.Marshal(vo)
-		rconn.Do("SADD", RedisNotFollowOffSet, str)
+		rconn.Do("SADD", RedisNotFollowOfflineSet, str)
 	}
 	return l,err
 }
@@ -207,11 +205,10 @@ func GetOnline() (l []Queue, err error)  {
 	if len != 0 {
 		for i := 0; i < len; i++ {
 			queue := Queue{}
-			//json.Unmarshal(.([]byte), &queue)
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
 			vo := Queue{
-				LiveId: "",
 				Platform: queue.Platform,
-				Uri:      v.Index(i).String(),
+				Uri:      queue.Uri,
 			}
 			l = append(l, vo)
 		}
