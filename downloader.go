@@ -12,9 +12,9 @@ import (
 )
 
 func (spider *Spider) Downloader()  {
-	//go spider.downloaderFollowOffline()
-	//go spider.downloaderNotFollowOffline()
-	//go spider.downloaderOnline()
+	go spider.downloaderFollowOffline()
+	go spider.downloaderNotFollowOffline()
+	go spider.downloaderOnline()
 	go spider.downloaderTotalPlatform()
 }
 
@@ -139,13 +139,23 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	if err = json.Unmarshal(v.([]byte), &queue); err != nil {
 		return body, err
 	}
-	resp,err := http.Get(queue.Uri)
+
+
+	client := &http.Client{}
+
+	request, err := http.NewRequest("GET", queue.Uri, nil)
 	if err != nil {
 		return body, err
 	}
+	//增加header选项
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
+
+	response, err := client.Do(request)
 	// 下面这句导致内存泄露  - 原因:资源还需要使用, 但是被close回收了
-	defer resp.Body.Close()
-	body, err = ioutil.ReadAll(resp.Body)
+	defer response.Body.Close()
+
+
+	body, err = ioutil.ReadAll(response.Body)
 	fmt.Println(queue.Uri)
 	return body, err
 }

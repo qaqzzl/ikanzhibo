@@ -95,7 +95,6 @@ func writeLiveInfos(info []*WriteInfo)  {
 			data.Live_type_name+"','" +
 			data.Live_platform+"','" +
 			data.Live_is_online+"','" +
-			data.Live_pull_url+"','" +
 			data.Created_at+"','" +
 			data.Updated_at+
 			"'),"
@@ -117,7 +116,6 @@ func writeLiveInfos(info []*WriteInfo)  {
 		"live_type_id=VALUES(live_type_id)," +
 		"live_type_name=VALUES(live_type_name)," +
 		"live_is_online=VALUES(live_is_online)," +
-		"live_pull_url=VALUES(live_pull_url)," +
 		"updated_at=VALUES(updated_at);"
 
 	err := mysql.Conn().InsertSql(sql);

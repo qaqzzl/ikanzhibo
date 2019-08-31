@@ -132,7 +132,6 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	//哎呀，虎牙君找不到这个主播，要不搜索看看？
 	if strings.Contains(string(p.Body),"哎呀，虎牙君找不到这个主播，要不搜索看看？") {
 		Live.Live_uri = urlGetUri(p.Queue.Uri)
-		Live.Live_pull_url= p.Queue.Uri
 		Live.Live_is_online = "del"
 		Live.Live_anchortv_sex = "0"
 		Live.Live_online_user = "0"
@@ -149,7 +148,6 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	//该主播涉嫌违规，正在整改中……
 	if strings.Contains(string(p.Body),"该主播涉嫌违规，正在整改中……") {
 		Live.Live_uri = urlGetUri(p.Queue.Uri)
-		Live.Live_pull_url = p.Queue.Uri
 		Live.Live_is_online = "vio"
 		Live.Live_anchortv_sex = "0"
 		Live.Live_online_user = "0"
@@ -187,7 +185,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	}
 
 
-	//.Live_pull_url #
+	//.Live_uri #
 	Live.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Uri))
 
 	//.Live_platform #
@@ -268,7 +266,6 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 
 	Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-	Live.Live_pull_url= p.Queue.Uri
 
 	spider.ChanWriteInfo <- &WriteInfo{
 		TableLive:Live,
@@ -298,11 +295,6 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	//14.Live_is_online
 	Live.Live_is_online = "no"
 
-	//1.Live_pull_url #
-	//if TT_PROFILE_INFO.Host == "" {
-	//	log.Println()("Live_pull_url:NULL")
-	//	return
-	//}
 	Live.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Uri))
 
 	//2.Live_platform #
@@ -370,7 +362,6 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 
 	Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-	Live.Live_pull_url= p.Queue.Uri
 
 	spider.ChanWriteInfo <- &WriteInfo{
 		TableLive:Live,

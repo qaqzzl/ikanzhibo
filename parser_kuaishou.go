@@ -61,19 +61,7 @@ type userLive struct {
 //直播间解析方法
 func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	Live := db.TableLive{}
-	//userLive := userLive{}
-	//res_regexp := regexp.MustCompile(`User:[0-9a-zA-Z]+":(\{[\s\S]+\}),"\$User:[0-9a-zA-Z]+.verifiedStatus":`);
-	//res_regexps := res_regexp.FindSubmatch(p.Body)
-	//if res_regexps != nil {
-	//	err := json.Unmarshal(res_regexps[1],&userLive)
-	//	if err !=nil {
-	//		log.Println("解析JSON失败. ERR: "+err.Error() +"\n"+p.Queue.Uri)
-	//		return
-	//	}
-	//} else {
-	//	log.Println("快手json解析为空.\n"+p.Queue.Uri)
-	//	return
-	//}
+
 	doc, err := htmlquery.Parse(strings.NewReader(string(p.Body)))
 	if err != nil {
 		log.Println("htmlquery ERR:" + err.Error())
@@ -91,7 +79,7 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	Live.Live_uri = p.Queue.Uri
 
 	//.Live_platform #
-	Live.Live_platform = "kuaishou"
+	Live.Live_platform = p.Queue.Platform
 
 	//.Live_title #
 	Live_title := htmlquery.FindOne(doc, "//a[@class='router-link-exact-active router-link-active live-card-following-info-title']")
@@ -100,10 +88,16 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	//.Live_anchortv_name #
 	Live_anchortv_name := htmlquery.FindOne(doc, "//p[@class='user-info-name']")
 	if Live_anchortv_name == nil {
-		log.Println("昵称查找失败 \n" + p.Queue.Uri)
+		log.Println("昵称查找失败 \n" + p.Queue.Uri + "\n" +string(p.Body))
 		return
 	}
 	Live.Live_anchortv_name = htmlquery.InnerText(Live_anchortv_name)
+	// 去除空格
+	Live.Live_anchortv_name = strings.Replace(Live.Live_anchortv_name, " ", "", -1)
+	// 去除换行符
+	Live.Live_anchortv_name = strings.Replace(Live.Live_anchortv_name, "\n", "", -1)
+	// 去除字符 (举报)
+	Live.Live_anchortv_name = strings.Replace(Live.Live_anchortv_name, "举报", "", -1)
 
 	//.Live_anchortv_photo #
 	Live_anchortv_photo := htmlquery.FindOne(doc, "//div[@class='avatar user-info-avatar']/img")
@@ -148,7 +142,6 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 
 	Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-	Live.Live_pull_url= p.Queue.Uri
 
 	spider.ChanWriteInfo <- &WriteInfo{
 		TableLive:Live,

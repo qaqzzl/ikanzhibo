@@ -82,7 +82,7 @@ type TableLive struct {
 	Live_online_user		string			//直播间在线人数
 	Live_follow				string			//被关注人数
 	Live_uri				string			//直播间地址
-	Live_pull_url			string			//抓取url
+	//Live_pull_url			string			//抓取url
 	Live_type_id			string			//自定义分类ID
 	Live_type_name			string			//自定义分类ID
 	Live_platform			string			//所属平台
