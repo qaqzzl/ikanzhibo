@@ -77,6 +77,9 @@ func (m *Monitor) StatusRta(s *Spider) {
 				m.TpsSli = m.TpsSli[1:]
 			}
 		}
+	}()
+
+	go func() {
 		for {
 			//在线队列数量
 			m.Data.RedisOnlineList = 0;					//在线队列数量
@@ -89,7 +92,6 @@ func (m *Monitor) StatusRta(s *Spider) {
 			m.Data.RedisListOnceSet = 0;				//发现任务集合数量
 			m.Data.RedisInfoOnceSet = 0;				//开播通知队列数量
 		}
-
 	}()
 }
 

@@ -84,7 +84,7 @@ func (spider *Spider) downloaderOnline() {
 	for {
 		v, err := rconn.Do("RPOP", db.RedisOnlineList)
 		if err != nil {
-			log.Panicln(err.Error())
+			log.Println(err.Error())
 			continue
 		}
 		if v == nil {
@@ -132,15 +132,10 @@ func (spider *Spider) downloaderTotalPlatform()  {
 			Body:body,
 			Queue:queue,
 		}
-		fmt.Println(len(spider.ChanParsers))
-		fmt.Println(len(spider.ChanProduceList))
-		fmt.Println(len(spider.ChanWriteInfo))
-
 	}
 }
 
 func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
-	fmt.Println(queue.Uri)
 	if err = json.Unmarshal(v.([]byte), &queue); err != nil {
 		return body, err
 	}
@@ -151,5 +146,6 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	// 下面这句导致内存泄露  - 原因:资源还需要使用, 但是被close回收了
 	defer resp.Body.Close()
 	body, err = ioutil.ReadAll(resp.Body)
+	fmt.Println(queue.Uri)
 	return body, err
 }

@@ -43,7 +43,21 @@ type Platform struct {
 var platforms []Platform
 
 
-
+type request struct {
+	Url		string
+	Method	string
+	Headers	[]string
+	Data	interface{}
+}
+type liveData struct {
+	LiveId	 	string		//直播ID
+	Platform 	string		//所属平台
+	Unique 		string		// Platform 跟 Unique 构成数据唯一标识
+}
+type QueueV2 struct {
+	Request		request
+	LiveData	liveData
+}
 
 //任务队列结构体
 type Queue struct {

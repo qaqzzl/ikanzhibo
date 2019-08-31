@@ -53,7 +53,7 @@ create table if not exists `live_user_follow`(
 	`send_notice_time` int not null default 0 comment '上次通知时间',
     `created_at` int not null default 0 comment '添加时间',
     `updated_at` int not null default 0 comment '修改时间',
-    UNIQUE KEY `member_id` (`member_id`)
+    UNIQUE KEY `member_id_live_id` (`member_id`,`live_id`) USING BTREE
 )engine=innodb default charset=utf8 comment '直播用户关注表';
 
 -- 直播表(主播表)

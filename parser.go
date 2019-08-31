@@ -11,6 +11,8 @@ func (spider *Spider) Parsers()  {
 			spider.huYaParser(v)
 		case "douyu":
 			//douYuParser(v)
+		case "kuaishou":
+			//spider.kuaiShouParser(v)
 		default:
 			log.Println("未知平台")
 		}

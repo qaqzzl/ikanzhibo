@@ -1,9 +1,14 @@
 package main
 
 import (
+	"github.com/antchfx/htmlquery"
 	"ikanzhibo/db"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
+	"strings"
+	"time"
 )
 
 func init() {
@@ -20,15 +25,6 @@ func init() {
 
 
 func main() {
-	//db.Test()
-	//
-	//go func() {
-	//	for true  {
-	//		<-time.Tick(time.Second * 1)
-	//		fmt.Println(db.Tests)
-	//	}
-	//}()
-	//<-time.Tick(time.Second * 50000)
 
 	spider := Spider{
 		ChanParsers: make(chan *Parser, 1000),
@@ -36,8 +32,39 @@ func main() {
 		ChanWriteInfo: make(chan *WriteInfo, 1000),
 	}
 
-	Master(&spider)
+	go Master(&spider)
 
-	Monitor := Monitor{}
-	Monitor.Start(&spider)
+
+	<-time.Tick(time.Second * 60000)
+	//Monitor := Monitor{}
+	//Monitor.Start(&spider)
+}
+
+func test()  {
+
+	resp,_ := http.Get("https://live.kuaishou.com/profile/saoyu2002")
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	Live := db.TableLive{}
+
+	doc, err := htmlquery.Parse(strings.NewReader(string(body)))
+	if err != nil {
+		log.Println("htmlquery ERR:" + err.Error())
+		return
+	}
+	//.Live_is_online - 判断是在播
+	Live_is_online := htmlquery.FindOne(doc, "//div[@class='live-card']")
+	if Live_is_online == nil {
+		Live.Live_is_online = "no"
+	} else {
+		Live.Live_is_online = "yes"
+	}
+
+
+	//.Live_uri #
+	Live.Live_uri = "p.Queue.Uri"
+
+	//.Live_platform #
+	Live.Live_platform = "kuaishou"
+
 }
