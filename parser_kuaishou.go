@@ -159,6 +159,12 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 
 //直播发现
 func (spider *Spider) kuaiShouLiveList(p *Parser) {
+	doc, err := htmlquery.Parse(strings.NewReader(string(p.Body)))
+	if err != nil {
+		log.Println("htmlquery ERR:" + err.Error())
+		return
+	}
+
 	//分类直播列表页
 	regexps := regexp.MustCompile(`<a href="(/cate/[/0-9a-zA-Z]+)" class="category-card-preview"`)
 	t := regexps.FindAllSubmatch(p.Body, -1)
@@ -171,15 +177,24 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 	}
 
 	//直播info详情
-	regexps = regexp.MustCompile(`<a href="(/profile/[0-9a-zA-Z]+)" title="[\S]+" target="_blank" class="user-info"`)
-	t = regexps.FindAllSubmatch(p.Body, -1)
-	for i:=0; i<len(t); i++ {
+	live_info_url := htmlquery.Find(doc, "//a[@class='user-info']")
+	for _, n := range live_info_url {
+		url := htmlquery.SelectAttr(n, "href")
 		spider.ChanProduceList <- &db.Queue{
 			Platform: p.Queue.Platform,
-			Uri:      "https://live.kuaishou.com"+string(t[i][1]),
+			Uri:      "https://live.kuaishou.com"+url,
 			Type:     "live_info",
 		}
 	}
+	//regexps = regexp.MustCompile(`<a href="(/profile/[0-9a-zA-Z]+)" title="[\S]+" target="_blank" class="user-info"`)
+	//t = regexps.FindAllSubmatch(p.Body, -1)
+	//for i:=0; i<len(t); i++ {
+	//	spider.ChanProduceList <- &db.Queue{
+	//		Platform: p.Queue.Platform,
+	//		Uri:      "https://live.kuaishou.com"+string(t[i][1]),
+	//		Type:     "live_info",
+	//	}
+	//}
 
 	//下一页
 	var page int
