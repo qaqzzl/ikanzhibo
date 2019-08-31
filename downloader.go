@@ -12,9 +12,9 @@ import (
 )
 
 func (spider *Spider) Downloader()  {
-	go spider.downloaderFollowOffline()
-	go spider.downloaderNotFollowOffline()
-	go spider.downloaderOnline()
+	//go spider.downloaderFollowOffline()
+	//go spider.downloaderNotFollowOffline()
+	//go spider.downloaderOnline()
 	go spider.downloaderTotalPlatform()
 }
 

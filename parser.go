@@ -12,7 +12,7 @@ func (spider *Spider) Parsers()  {
 		case "douyu":
 			//douYuParser(v)
 		case "kuaishou":
-			//spider.kuaiShouParser(v)
+			spider.kuaiShouParser(v)
 		default:
 			log.Println("未知平台")
 		}

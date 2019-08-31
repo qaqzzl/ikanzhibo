@@ -99,10 +99,18 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 
 	//.Live_anchortv_name #
 	Live_anchortv_name := htmlquery.FindOne(doc, "//p[@class='user-info-name']")
+	if Live_anchortv_name == nil {
+		log.Println("昵称查找失败 \n" + p.Queue.Uri)
+		return
+	}
 	Live.Live_anchortv_name = htmlquery.InnerText(Live_anchortv_name)
 
 	//.Live_anchortv_photo #
 	Live_anchortv_photo := htmlquery.FindOne(doc, "//div[@class='avatar user-info-avatar']/img")
+	if Live_anchortv_photo == nil {
+		log.Println("头像查找失败\n" + p.Queue.Uri)
+		return
+	}
 	Live.Live_anchortv_name = htmlquery.SelectAttr(Live_anchortv_photo, "src")
 
 	//.Live_cover #
@@ -126,7 +134,9 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 
 	//.Live_introduction
 	Live_introduction := htmlquery.FindOne(doc, "//p[@class='user-info-description']")
-	Live.Live_introduction = htmlquery.InnerText(Live_introduction)
+	if Live_introduction != nil {
+		Live.Live_introduction = htmlquery.InnerText(Live_introduction)
+	}
 
 	//.live_anchortv_sex #
 
@@ -161,7 +171,7 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 	}
 
 	//直播info详情
-	regexps = regexp.MustCompile(`<a href="(/u/[0-9a-zA-Z]+)" class="preview-video"`)
+	regexps = regexp.MustCompile(`<a href="(/profile/[0-9a-zA-Z]+)" title="[\S]+" target="_blank" class="user-info"`)
 	t = regexps.FindAllSubmatch(p.Body, -1)
 	for i:=0; i<len(t); i++ {
 		spider.ChanProduceList <- &db.Queue{
