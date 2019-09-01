@@ -73,10 +73,10 @@ type douYuLiveInfo struct {
 		Cq                string        `json:"cq"`
 		DefaultSrc        string        `json:"defaultSrc"`
 		DetailsData       struct{}      `json:"detailsData"`
-		EffectInfo        []interface{} `json:"effectInfo"`
-		EmperorPush       []interface{} `json:"emperorPush"`
+		//EffectInfo        []interface{} `json:"effectInfo"`
+		//EmperorPush       []interface{} `json:"emperorPush"`
 		EndTime           string        `json:"end_time"`
-		Eticket           []interface{} `json:"eticket"`
+		//Eticket           []interface{} `json:"eticket"`
 		H5wsproxy  []struct {
 			Domain string `json:"domain"`
 			Port   string `json:"port"`
