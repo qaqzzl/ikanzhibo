@@ -49,7 +49,7 @@ type douYuLiveInfo struct {
 		AvatarMid   string `json:"avatar_mid"`
 		AvatarSmall string `json:"avatar_small"`
 		BanDisplay  int    `json:"ban_display"`
-		BgimgSrc    string `json:"bgimg_src"`
+		//BgimgSrc    string `json:"bgimg_src"`
 		CanSendGift string `json:"can_send_gift"`
 		Cate1ID     string `json:"cate1_id"`
 		Cate2ID     string `json:"cate2_id"`
