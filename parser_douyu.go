@@ -69,7 +69,6 @@ type douYuLiveInfo struct {
 		ChatLevel         string        `json:"chat_level"`
 		ChildID           string        `json:"child_id"`
 		Cityname          string        `json:"cityname"`
-		ClientSys         string        `json:"client_sys"`
 		CoverSrc          string        `json:"coverSrc"`
 		Cq                string        `json:"cq"`
 		DefaultSrc        string        `json:"defaultSrc"`
@@ -185,7 +184,7 @@ type douYuLiveInfo struct {
 				Yzxx   int `json:"yzxx"`
 			} `json:"state"`
 		} `json:"stsign_room"`
-		Tags                       string   `json:"tags"`
+		//Tags                       string   `json:"tags"`
 		UpID                       string   `json:"up_id"`
 		VideoHighQualityNum        string   `json:"video_high_quality_num"`
 		VideoHighQualityResolution string   `json:"video_high_quality_resolution"`
