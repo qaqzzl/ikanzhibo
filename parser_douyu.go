@@ -81,7 +81,7 @@ type douYuLiveInfo struct {
 			Domain string `json:"domain"`
 			Port   string `json:"port"`
 		} `json:"h5wsproxy"`
-		IconEndTime            string `json:"icon_end_time"`
+		//IconEndTime            string `json:"icon_end_time"`
 		//IconID                 string `json:"icon_id"`
 		//IconStartTime          string `json:"icon_start_time"`
 		IsDefaultAvatar        int    `json:"isDefaultAvatar"`
