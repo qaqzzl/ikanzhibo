@@ -12,7 +12,7 @@ func (spider *Spider) UniqueList()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	for v := range spider.ChanProduceList {
-		switch v.Type {
+		switch v.QueueType {
 		case "live_list":
 			spider.uniqueLiveList(v, rconn)
 		case "live_info":
@@ -23,7 +23,7 @@ func (spider *Spider) UniqueList()  {
 
 func (spider *Spider) uniqueLiveList(v *db.Queue, rconn redis.Conn) {
 	//加入已爬取集合(set) 如果存在会返回 0 ,加入成功返回 1
-	set, err := rconn.Do("SADD", db.RedisListOnceSet, v.Uri)
+	set, err := rconn.Do("SADD", db.RedisListOnceSet, v.Request.Url)
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -42,7 +42,7 @@ func (spider *Spider) uniqueLiveList(v *db.Queue, rconn redis.Conn) {
 func (spider *Spider) uniqueLiveInfo(v *db.Queue, rconn redis.Conn)  {
 	setStr,_ := json.Marshal(v)
 	//查看info总集合是否已经存在
-	set, err := rconn.Do("SISMEMBER", db.RedisInfoOnceSet, v.Uri)
+	set, err := rconn.Do("SISMEMBER", db.RedisInfoOnceSet, v.Request.Url)
 	if err != nil {
 		log.Println(err.Error())
 		return

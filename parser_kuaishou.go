@@ -12,7 +12,7 @@ import (
 
 //huya解析方法
 func (spider *Spider) kuaiShouParser(p *Parser)  {
-	switch p.Queue.Type {
+	switch p.Queue.QueueType {
 	case "live_info":
 		spider.kuaiShouLiveInfo(p)
 	case "live_list":
@@ -76,10 +76,10 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	}
 
 	//.Live_uri #
-	Live.Live_uri = p.Queue.Uri
+	Live.Live_uri = p.Queue.Request.Url
 
 	//.Live_platform #
-	Live.Live_platform = p.Queue.Platform
+	Live.Live_platform = "kuaishou"
 
 	//.Live_title #
 	Live_title := htmlquery.FindOne(doc, "//a[@class='router-link-exact-active router-link-active live-card-following-info-title']")
@@ -88,7 +88,7 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	//.Live_anchortv_name #
 	Live_anchortv_name := htmlquery.FindOne(doc, "//p[@class='user-info-name']")
 	if Live_anchortv_name == nil {
-		log.Println("昵称查找失败 \n" + p.Queue.Uri + "\n" +string(p.Body))
+		log.Println("昵称查找失败 \n" + p.Queue.Request.Url + "\n" +string(p.Body))
 		return
 	}
 	Live.Live_anchortv_name = htmlquery.InnerText(Live_anchortv_name)
@@ -102,7 +102,7 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	//.Live_anchortv_photo #
 	Live_anchortv_photo := htmlquery.FindOne(doc, "//div[@class='avatar user-info-avatar']/img")
 	if Live_anchortv_photo == nil {
-		log.Println("头像查找失败\n" + p.Queue.Uri)
+		log.Println("头像查找失败\n" + p.Queue.Request.Url)
 		return
 	}
 	Live.Live_anchortv_name = htmlquery.SelectAttr(Live_anchortv_photo, "src")
@@ -143,10 +143,7 @@ func (spider *Spider) kuaiShouLiveInfo(p *Parser) {
 	Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 
-	spider.ChanWriteInfo <- &WriteInfo{
-		TableLive:Live,
-		Queue: p.Queue,
-	}
+	spider.ChanWriteInfo <- &p.Queue
 	return
 }
 
@@ -163,9 +160,13 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 	t := regexps.FindAllSubmatch(p.Body, -1)
 	for i:=0; i<len(t); i++ {
 		spider.ChanProduceList <- &db.Queue{
-			Platform: p.Queue.Platform,
-			Uri:      "https://live.kuaishou.com"+string(t[i][1]),
-			Type:     "live_list",
+			Request:     db.Request{
+				Url: "https://live.kuaishou.com"+string(t[i][1]),
+			},
+			LiveData:    db.TableLive{
+				Live_platform: "kuaishou",
+			},
+			QueueType:     "live_list",
 		}
 	}
 
@@ -174,9 +175,13 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 	for _, n := range live_info_url {
 		url := htmlquery.SelectAttr(n, "href")
 		spider.ChanProduceList <- &db.Queue{
-			Platform: p.Queue.Platform,
-			Uri:      "https://live.kuaishou.com"+url,
-			Type:     "live_info",
+			Request:     db.Request{
+				Url: "https://live.kuaishou.com"+url,
+			},
+			LiveData:    db.TableLive{
+				Live_platform: "kuaishou",
+			},
+			QueueType:     "live_info",
 		}
 	}
 	//regexps = regexp.MustCompile(`<a href="(/profile/[0-9a-zA-Z]+)" title="[\S]+" target="_blank" class="user-info"`)
@@ -195,16 +200,20 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 	t = regexps.FindAllSubmatch(p.Body, -1)
 
 	regexps = regexp.MustCompile(`(/cate/[/0-9a-zA-Z]+)`)
-	uri := regexps.FindSubmatch([]byte(p.Queue.Uri))
+	uri := regexps.FindSubmatch([]byte(p.Queue.Request.Url))
 	for i:=0; i<len(t); i++ {
 		page, _ = strconv.Atoi(string(t[i][1]))
 	}
 	if page != 0 {
 		for i:=1; i<page+1; i++ {
 			spider.ChanProduceList <- &db.Queue{
-				Platform: p.Queue.Platform,
-				Uri:      "https://live.kuaishou.com"+string(uri[1])+"/?page="+strconv.Itoa(i),
-				Type:     "live_list",
+				Request:     db.Request{
+					Url: "https://live.kuaishou.com"+string(uri[1])+"/?page="+strconv.Itoa(i),
+				},
+				LiveData:    db.TableLive{
+					Live_platform: "kuaishou",
+				},
+				QueueType:     "live_list",
 			}
 		}
 	}

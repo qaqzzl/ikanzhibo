@@ -146,7 +146,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 
 	client := &http.Client{}
 
-	request, err := http.NewRequest("GET", queue.Uri, nil)
+	request, err := http.NewRequest("GET", queue.Request.Url, nil)
 	if err != nil {
 		return body, err
 	}
@@ -163,9 +163,8 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Println(err.Error())
 		return body, err
 	}
-	fmt.Println(queue.Uri)
+	fmt.Println(queue.Request.Url)
 	return body, err
 }

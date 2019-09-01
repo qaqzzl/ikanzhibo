@@ -9,7 +9,7 @@ import (
 )
 
 func (spider *Spider) douYuParser(p *Parser)  {
-	switch p.Queue.Type {
+	switch p.Queue.QueueType {
 	case "live_info":
 		spider.douYuLiveInfo(p)
 	case "live_list":
@@ -82,7 +82,7 @@ type douYuLiveInfo struct {
 			Port   string `json:"port"`
 		} `json:"h5wsproxy"`
 		IconEndTime            string `json:"icon_end_time"`
-		IconID                 string `json:"icon_id"`
+		//IconID                 string `json:"icon_id"`
 		IconStartTime          string `json:"icon_start_time"`
 		IsDefaultAvatar        int    `json:"isDefaultAvatar"`
 		IsNzRoom               int    `json:"isNzRoom"`
@@ -219,69 +219,79 @@ type douYuLiveInfo struct {
 }
 
 func (spider *Spider) douYuLiveInfo(p *Parser) {
-	Live := db.TableLive{}
 	douYuLiveInfo := douYuLiveInfo{}
 
 	if err := json.Unmarshal(p.Body, &douYuLiveInfo); err != nil {
-		log.Println(err.Error()+"\n"+p.Queue.Uri)
+		log.Println(err.Error()+"\n"+p.Queue.Request.Url)
 		return
 	}
 
 	//.Live_is_online - 判断是在播
 	if douYuLiveInfo.Room.ShowStatus == 1 {
-		Live.Live_is_online = "yes"
+		p.Queue.LiveData.Live_is_online = "yes"
+	} else {
+		p.Queue.LiveData.Live_is_online = "no"
+	}
+
+	p.Queue.LiveData.Spider_pull_url = p.Queue.Request.Url
+
+	//最近直播时间
+	p.Queue.LiveData.Live_play_time = strconv.Itoa(douYuLiveInfo.Room.ShowTime)
+	if (p.Queue.LiveData.Live_play_time == "") {
+		p.Queue.LiveData.Live_play_time = "0";
+	}
+	p.Queue.LiveData.Live_play_end_time = douYuLiveInfo.Room.EndTime
+	if (p.Queue.LiveData.Live_play_end_time == "") {
+		p.Queue.LiveData.Live_play_end_time = "0";
 	}
 
 	//.Live_uri #
-	Live.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Uri))
+	p.Queue.LiveData.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Request.Url))
 
-	//.Live_platform #
-	Live.Live_platform = p.Queue.Platform
+	// Platform_room_id
+	p.Queue.LiveData.Platform_room_id = strconv.Itoa(douYuLiveInfo.Room.RoomID)
 
 	//.Live_title #
-	Live.Live_title = liveReplaceSql(douYuLiveInfo.Room.RoomName)
+	p.Queue.LiveData.Live_title = liveReplaceSql(douYuLiveInfo.Room.RoomName)
 
 	//.Live_anchortv_name #
-	Live.Live_anchortv_name = liveReplaceSql(douYuLiveInfo.Room.Nickname)
+	p.Queue.LiveData.Live_anchortv_name = liveReplaceSql(douYuLiveInfo.Room.Nickname)
 
 	//.Live_anchortv_photo #
-	Live.Live_anchortv_photo = liveReplaceSql(douYuLiveInfo.Room.Avatar.Big)
+	p.Queue.LiveData.Live_anchortv_photo = liveReplaceSql(douYuLiveInfo.Room.Avatar.Big)
 
 	//.Live_cover #
-	Live.Live_cover = liveReplaceSql(douYuLiveInfo.Room.RoomPic)
+	p.Queue.LiveData.Live_cover = liveReplaceSql(douYuLiveInfo.Room.RoomPic)
 
 	//.Live_play #
-	Live.Live_play = liveReplaceSql(douYuLiveInfo.Room.RoomURL)
+	p.Queue.LiveData.Live_play = liveReplaceSql(douYuLiveInfo.Room.RoomURL)
 
 	//.Live_class # gameFullName
-	Live.Live_class = liveReplaceSql(douYuLiveInfo.Room.SecondLvlName)
+	p.Queue.LiveData.Live_class = liveReplaceSql(douYuLiveInfo.Room.SecondLvlName)
 
 	//.Live_online_user # totalCount
-	Live.Live_online_user = "0"
+	p.Queue.LiveData.Live_online_user = "0"
 
 	//.Live_follow # activityCount
-	Live.Live_follow = "0"
+	p.Queue.LiveData.Live_follow = "0"
 
 	//.Live_tag
-	Live.Live_tag = ""
+	p.Queue.LiveData.Live_tag = ""
 
 	//.Live_introduction
-	Live.Live_introduction = liveReplaceSql(douYuLiveInfo.Room.ShowDetails)
+	p.Queue.LiveData.Live_introduction = liveReplaceSql(douYuLiveInfo.Room.ShowDetails)
 
 	//.live_anchortv_sex
-	Live.Live_anchortv_sex = "0"
+	p.Queue.LiveData.Live_anchortv_sex = "0"
 
 	//.Live_type_id
 	//.Live_type_name
-	Live.Live_type_id,Live.Live_type_name = liveGetMyTypeId(Live.Live_class)
+	p.Queue.LiveData.Live_type_id,p.Queue.LiveData.Live_type_name = liveGetMyTypeId(p.Queue.LiveData.Live_class)
 
-	Live.Created_at = strconv.FormatInt(time.Now().Unix(),10)
-	Live.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
-
-	spider.ChanWriteInfo <- &WriteInfo{
-		TableLive:Live,
-		Queue: p.Queue,
-	}
+	p.Queue.LiveData.Created_at = strconv.FormatInt(time.Now().Unix(),10)
+	p.Queue.LiveData.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
+	p.Queue.LiveData.Spider_pull_time = p.Queue.LiveData.Updated_at
+	spider.ChanWriteInfo <- &p.Queue
 	return
 }
 
@@ -345,11 +355,11 @@ type douYuLiveLists struct {
 func (spider *Spider) douYuLiveList(p *Parser)  {
 	douYuLiveLists := douYuLiveLists{}
 	if err := json.Unmarshal(p.Body, &douYuLiveLists); err != nil {
-		log.Println(err.Error()+"\n"+p.Queue.Uri)
+		log.Println(err.Error()+"\n"+p.Queue.Request.Url)
 		return
 	}
 	if douYuLiveLists.Code != 0 {
-		log.Println("douYuLiveLists.Status != 200\n"+p.Queue.Uri)
+		log.Println("douYuLiveLists.Status != 200\n"+p.Queue.Request.Url)
 		return
 	}
 
@@ -360,20 +370,27 @@ func (spider *Spider) douYuLiveList(p *Parser)  {
 	//更多列表
 	for i:=1; i<=douYuLiveLists.Data.Pgcnt; i++ {
 		spider.ChanProduceList <- &db.Queue{
-			Platform: p.Queue.Platform,
-			Uri:      "https://www.douyu.com/gapi/rkc/directory/0_0/"+strconv.Itoa(i),
-			Type:     "live_list",
-			Event:    p.Queue.Event,
+			LiveData: db.TableLive{
+				Live_platform: p.Queue.LiveData.Live_platform,
+			},
+			Request: db.Request{
+				Url:     "https://www.douyu.com/gapi/rkc/directory/0_0/"+strconv.Itoa(i),
+			},
+			QueueType: "live_list",
+			WriteEvent:    p.Queue.WriteEvent,
 		}
-
 	}
 
 	for _, v := range douYuLiveLists.Data.Rl {
 		spider.ChanProduceList <- &db.Queue{
-			Platform: p.Queue.Platform,
-			Uri:      "https://www.douyu.com/betard/"+strconv.Itoa(v.Rid),
-			Type:     "live_info",
-			Event:    "",
+			LiveData: db.TableLive{
+				Live_platform: p.Queue.LiveData.Live_platform,
+			},
+			Request: db.Request{
+				Url:     "https://www.douyu.com/betard/"+strconv.Itoa(v.Rid),
+			},
+			QueueType: "live_info",
+			WriteEvent:    p.Queue.WriteEvent,
 		}
 	}
 }

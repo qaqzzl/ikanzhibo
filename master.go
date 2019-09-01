@@ -17,12 +17,6 @@ type Parser struct {
 	Queue	db.Queue
 }
 
-//直播间数据 chan
-type WriteInfo struct {
-	TableLive	db.TableLive
-	Queue		db.Queue
-}
-
 type SpiderInterface interface {
 	handlerFollowOffline()
 }
@@ -30,7 +24,7 @@ type SpiderInterface interface {
 type Spider struct {
 	ChanParsers 		chan *Parser		//解析任务 chan
 	ChanProduceList 	chan *db.Queue		//发现任务列表 chan
-	ChanWriteInfo		chan *WriteInfo		//写入数据 chan
+	ChanWriteInfo		chan *db.Queue		//写入数据 chan
 }
 
 //调度器
@@ -93,14 +87,13 @@ func (spider *Spider) handlerFollowOffline() {
 		}
 
 		for _, v := range l {
-			v.Type = "live_info"
-			v.Event = "online_notice"
+			v.QueueType = "live_info"
+			v.WriteEvent = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisFollowOfflineList, str); err != nil {
 				log.Println(err.Error())
 			}
-
 		}
 	}
 
@@ -141,7 +134,7 @@ func (Spider *Spider) handlerNotFollowOffline() {
 		}
 
 		for _, v := range l {
-			v.Type = "live_info"
+			v.QueueType = "live_info"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisNotFollowOfflineList, str); err != nil {
@@ -187,7 +180,7 @@ func (Spider *Spider) handlerOnline() {
 		}
 
 		for _, v := range l {
-			v.Type = "live_info"
+			v.QueueType = "live_info"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisOnlineList, str); err != nil {
@@ -235,11 +228,15 @@ func (spider *Spider) handlerTotalPlatforms() {
 		}
 		for _, v := range p {
 			vs := db.Queue{
-				Platform: v.Mark,
-				Uri:      v.PullUrl,
-				Type:     "live_list",
+				LiveData:    db.TableLive{
+					Live_platform: v.Mark,
+				},
+				Request:     db.Request{
+					Url: v.PullUrl,
+				},
+				QueueType:     "live_list",
 			}
-			rconn.Do("SADD", db.RedisListOnceSet, vs.Uri)
+			rconn.Do("SADD", db.RedisListOnceSet, v.PullUrl)
 			str,_ := json.Marshal(vs)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisListList, str); err != nil {
@@ -289,3 +286,4 @@ func initLiveMyType() (err error) {
 	}
 	return err
 }
+

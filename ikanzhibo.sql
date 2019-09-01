@@ -80,13 +80,14 @@ create table if not exists `live`(
 	`live_play_end_time` int not null default 0 comment '最近关播时间',
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
---    `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
+    `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
+    `platform_room_id` varchar(255) not null default '' comment '平台房间ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
---     UNIQUE KEY `queueid` (`queueid`),
-    UNIQUE KEY `live_uri_live_platform` (`live_uri`,`live_platform`) USING BTREE
+    UNIQUE KEY `platform_room_id_live_platform` (`platform_room_id`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
-alter table live add spider_pull_time int not null default 0 comment '上次抓取时间';
+
+alter table live add platform_room_id varchar(255) not null default '' comment '平台房间ID';
 --
 -- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

@@ -10,12 +10,12 @@ import (
 /**
   * 主播开播事件
 */
-func (spider *Spider) EventOnlineNotice(w *WriteInfo, rconn redis.Conn)  {
-	if w.TableLive.Live_is_online != "yes" {
+func (spider *Spider) EventOnlineNotice(q *db.Queue, rconn redis.Conn)  {
+	if q.LiveData.Live_is_online != "yes" {
 		return
 	}
 
-	str,_ := json.Marshal(w)
+	str,_ := json.Marshal(q)
 	if _, err := rconn.Do("RPUSH", db.RedisOnlineNotice, str); err != nil {
 		log.Println(err.Error())
 	}
