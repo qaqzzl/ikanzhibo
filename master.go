@@ -45,7 +45,7 @@ func Master(spider *Spider)  {
 
 	go spider.handlerOnline()						//在线直播间
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		go spider.Downloader()						//下载器
 	}
 

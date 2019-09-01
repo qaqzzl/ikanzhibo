@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"ikanzhibo/db"
+	"ikanzhibo/db/redis"
 	"io"
 	"net/http"
 	"time"
@@ -12,15 +14,15 @@ type SystemMonitor struct {
 	TotalRequestNum   				int     `json:"total_request_num"`   		// 总处理请求数
 	Tps          					float64 `json:"tps"`          				// 系统吞出量
 
-	RedisOnlineList   				int     `json:"redis_online_list"`   				// 在线队列数量
-	RedisOnlineSet   				int     `json:"redis_online_set"`   				// 在线集合数量
-	RedisNotFollowOfflineList   	int     `json:"redis_notFollow_offline_list"`   	// 关注不在线队列数量
-	RedisNotFollowOfflineSet   		int     `json:"redis_notFollow_offline_set"`   		// 关注不在线集合数量
-	RedisFollowOfflineList   		int     `json:"redis_follow_offline_list"`   		// 未关注不在线队列数量
-	RedisFollowOffSet   			int     `json:"redis_follow_offline_set"`   		// 未关注不在线集合数量
-	RedisListList   				int     `json:"redis_list_list"`   					// 发现任务队列数量
-	RedisListOnceSet   				int     `json:"redis_list_once_set"`   				// 发现任务集合数量
-	RedisInfoOnceSet   				int     `json:"redis_info_once_set"`   				// 开播通知队列数量
+	RedisOnlineList   				int64     `json:"redis_online_list"`   				// 在线队列数量
+	RedisOnlineSet   				int64     `json:"redis_online_set"`   				// 在线集合数量
+	RedisNotFollowOfflineList   	int64     `json:"redis_notFollow_offline_list"`   	// 关注不在线队列数量
+	RedisNotFollowOfflineSet   		int64     `json:"redis_notFollow_offline_set"`   		// 关注不在线集合数量
+	RedisFollowOfflineList   		int64     `json:"redis_follow_offline_list"`   		// 未关注不在线队列数量
+	RedisFollowOfflineSet   		int64     `json:"redis_follow_offline_set"`   		// 未关注不在线集合数量
+	RedisListList   				int64     `json:"redis_list_list"`   					// 发现任务队列数量
+	RedisListOnceSet   				int64     `json:"redis_list_once_set"`   				// 发现任务集合数量
+	RedisInfoOnceSet   				int64     `json:"redis_info_once_set"`   				// 开播通知队列数量
 
 	UsedMemoryHuman          		string	`json:"used_memory_human"`          // 应用使用内存, 20.00M
 
@@ -52,6 +54,8 @@ type Monitor struct {
 // 应用 处理数量|错误数量
 func (m *Monitor) StatusRta(s *Spider) {
 	go func() {
+		rconn := redis.GetConn()
+		defer rconn.Close()
 		for n := range TypeMonitorChan {
 			switch n {
 			case TypeErrNum:
@@ -80,18 +84,40 @@ func (m *Monitor) StatusRta(s *Spider) {
 	}()
 
 	go func() {
-
+		rconn := redis.GetConn()
+		defer rconn.Close()
 		for {
-			//在线队列数量
-			m.Data.RedisOnlineList = 0;					//在线队列数量
-			m.Data.RedisOnlineSet = 0;					//在线集合数量
-			m.Data.RedisNotFollowOfflineList = 0;		//关注不在线队列数量
-			m.Data.RedisNotFollowOfflineSet = 0;		//关注不在线集合数量
-			m.Data.RedisFollowOfflineList = 0;			//未关注不在线队列数量
-			m.Data.RedisFollowOffSet = 0;				//未关注不在线集合数量
-			m.Data.RedisListList = 0;					//发现任务队列数量
-			m.Data.RedisListOnceSet = 0;				//发现任务集合数量
-			m.Data.RedisInfoOnceSet = 0;				//开播通知队列数量
+			<-ticker.C
+			RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
+			m.Data.RedisOnlineList = RedisOnlineList.(int64);					//在线队列数量
+
+			RedisOnlineSet,_ := rconn.Do("SCARD", db.RedisListOnceSet)
+			m.Data.RedisOnlineSet = RedisOnlineSet.(int64);					//在线集合数量
+
+			RedisNotFollowOfflineList,_ := rconn.Do("LLEN", db.RedisNotFollowOfflineList)
+			m.Data.RedisNotFollowOfflineList = RedisNotFollowOfflineList.(int64);		//关注不在线队列数量
+
+			RedisNotFollowOfflineSet,_ := rconn.Do("SCARD", db.RedisNotFollowOfflineSet)
+			m.Data.RedisNotFollowOfflineSet = RedisNotFollowOfflineSet.(int64);		//关注不在线集合数量
+
+			RedisFollowOfflineList,_ := rconn.Do("LLEN", db.RedisFollowOfflineList)
+			m.Data.RedisFollowOfflineList = RedisFollowOfflineList.(int64);			//未关注不在线队列数量
+
+			RedisFollowOfflineSet,_ := rconn.Do("SCARD", db.RedisFollowOfflineSet)
+			m.Data.RedisFollowOfflineSet = RedisFollowOfflineSet.(int64);				//未关注不在线集合数量
+
+			RedisListList,_ := rconn.Do("LLEN", db.RedisListList)
+			m.Data.RedisListList = RedisListList.(int64);					//发现任务队列数量
+
+			RedisListOnceSet,_ := rconn.Do("SCARD", db.RedisListOnceSet)
+			m.Data.RedisListOnceSet = RedisListOnceSet.(int64);				//发现任务集合数量
+
+			RedisInfoOnceSet,_ := rconn.Do("SCARD", db.RedisInfoOnceSet)
+			m.Data.RedisInfoOnceSet = RedisInfoOnceSet.(int64);				//开播通知队列数量
+
+			m.Data.ChanParsersNum	= len(s.ChanParsers);				//等待解析 channel 数量
+			m.Data.ChanProduceListNum = len(s.ChanProduceList);				//发现任务 channel 数量
+			m.Data.ChanWriteInfoNum = len(s.ChanWriteInfo);				//入数据 channel 数量
 		}
 
 	}()
@@ -99,7 +125,7 @@ func (m *Monitor) StatusRta(s *Spider) {
 
 
 func (m *Monitor) Start(s *Spider) {
-	m.StatusRta(s)
+	go m.StatusRta(s)
 	//http 服务 可以保持服务永久运行
 	http.HandleFunc("/monitor", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Access-Control-Allow-Origin", "*")             //允许访问所有域
@@ -114,6 +140,8 @@ func (m *Monitor) Start(s *Spider) {
 
 		io.WriteString(writer, string(ret))
 	})
-
-	http.ListenAndServe(":1415", nil)
+	err := http.ListenAndServe(":1415", nil)
+	if (  err != nil ) {
+		panic(err.Error())
+	}
 }

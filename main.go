@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 func init() {
@@ -26,6 +25,10 @@ func init() {
 
 
 func main() {
+	//rconn := redis.GetConn()
+	//defer rconn.Close()
+	//RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
+	//fmt.Println(int(RedisOnlineList.(int64)))
 	//test()
 
 	spider := Spider{
@@ -35,9 +38,11 @@ func main() {
 	}
 
 	go Master(&spider)
-	<-time.Tick(time.Second * 60000)
-	//Monitor := Monitor{}
-	//Monitor.Start(&spider)
+	Monitor := Monitor{}
+	Monitor.Start(&spider)
+
+	//<-time.Tick(time.Second * 60000)
+
 }
 
 func test()  {

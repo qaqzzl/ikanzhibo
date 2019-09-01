@@ -24,9 +24,9 @@ func (spider *Spider) downloaderFollowOffline() {
 	defer rconn.Close()
 	var queue db.Queue
 	for {
-		v, err := rconn.Do("RPOP", db.RedisFollowOfflineList)
+		v, err := rconn.Do("LPOP", db.RedisFollowOfflineList)
 		if err != nil {
-			log.Panicln(err.Error())
+			log.Println(err.Error())
 			continue
 		}
 		if v == nil {
@@ -54,7 +54,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 	defer rconn.Close()
 	var queue db.Queue
 	for {
-		v, err := rconn.Do("RPOP", db.RedisNotFollowOfflineList)
+		v, err := rconn.Do("LPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
 			log.Panicln(err.Error())
 			continue
@@ -84,7 +84,7 @@ func (spider *Spider) downloaderOnline() {
 	defer rconn.Close()
 	var queue db.Queue
 	for {
-		v, err := rconn.Do("RPOP", db.RedisOnlineList)
+		v, err := rconn.Do("LPOP", db.RedisOnlineList)
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -114,7 +114,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 	defer rconn.Close()
 	var queue db.Queue
 	for {
-		v, err := rconn.Do("RPOP", db.RedisListList)
+		v, err := rconn.Do("LPOP", db.RedisListList)
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -142,6 +142,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 		return body, err
 	}
 
+	TypeMonitorChan <- TypeRequestNum
 
 	client := &http.Client{}
 

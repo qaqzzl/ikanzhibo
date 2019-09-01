@@ -102,6 +102,7 @@ create table if not exists `live_type`(
   `key` varchar(20) unique COMMENT '分类标识',
   `parent_id` int  DEFAULT 0 comment '父级ID',
   `img` varchar(255) DEFAULT NULL comment '图片',
+  `icon` varchar(255) DEFAULT NULL comment '图标',
   `order` tinyint(2) DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) DEFAULT '0' COMMENT '0-隐藏 1-显示 2-header',
   `title` varchar(50) DEFAULT NULL comment '网站title',
