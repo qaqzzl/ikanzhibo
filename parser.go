@@ -10,7 +10,7 @@ func (spider *Spider) Parsers()  {
 		case "huya":
 			spider.huYaParser(v)
 		case "douyu":
-			//douYuParser(v)
+			spider.douYuParser(v)
 		case "kuaishou":
 			spider.kuaiShouParser(v)
 		default:
