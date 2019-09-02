@@ -51,8 +51,8 @@ func main() {
 	}
 
 	go Master(&spider)
-	//Monitor := Monitor{}
-	//Monitor.Start(&spider)
+	Monitor := Monitor{}
+	Monitor.Start(&spider)
 	<-time.Tick(time.Second * 60000)
 
 }
