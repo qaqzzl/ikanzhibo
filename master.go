@@ -173,7 +173,8 @@ func (Spider *Spider) handlerOnline() {
 		//获取在线直播间
 		l, err := db.GetOnline();
 		if err != nil {
-			log.Panicln(err)
+			log.Println(err)
+			continue
 		}
 
 		for _, v := range l {

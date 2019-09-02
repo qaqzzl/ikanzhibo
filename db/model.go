@@ -24,7 +24,6 @@ var (
 	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 列表 - 已爬取 , 防止当前启动发现任务抓取重复列表数据
 	RedisInfoOnceSet				= "live_info_once_set"						//生产任务集合 - 直播间详情 - 已爬取 , 防止每次发现任务重复爬取系统已经存在的直播间
 
-
 	RedisOnlineNotice				= "event_online_notice_list"				//事件 - 开播通知
 
 )
@@ -120,7 +119,7 @@ func GetFollowOffline() (l []Queue, err error) {
 	if len != 0 {
 		for i := 0; i < len; i++ {
 			queue := Queue{}
-			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
 			l = append(l, queue)
 		}
 		return l,err
@@ -171,12 +170,9 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	len := v.Len()
 	if len != 0 {
 		for i := 0; i < len; i++ {
-			queueSet := QueueSet{}
-			json.Unmarshal(v.Index(i).Interface().([]byte), &queueSet)
-			val := Queue{
-				QueueSet:   queueSet,
-			}
-			l = append(l, val)
+			queue := Queue{}
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
+			l = append(l, queue)
 		}
 		return l,err
 	}
@@ -234,7 +230,7 @@ func GetOnline() (l []Queue, err error)  {
 	if len != 0 {
 		for i := 0; i < len; i++ {
 			queue := Queue{}
-			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
 			l = append(l, queue)
 		}
 	}

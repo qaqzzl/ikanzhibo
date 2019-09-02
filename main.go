@@ -9,6 +9,9 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
+
+	_ "net/http/pprof"
 )
 
 func init() {
@@ -31,6 +34,16 @@ func main() {
 	//fmt.Println(int(RedisOnlineList.(int64)))
 	//test()
 
+	go func() {
+		//mux := http.NewServeMux()
+		//mux.HandleFunc("/go", func(w http.ResponseWriter, r *http.Request) {
+		//	num := strconv.FormatInt(int64(runtime.NumGoroutine()), 10)
+		//	w.Write([]byte(num))
+		//})
+		//http.ListenAndServe("127.0.0.1:6061", mux)
+		http.ListenAndServe("127.0.0.1:6060", nil)
+	}()
+
 	spider := Spider{
 		ChanParsers: make(chan *Parser, 1000),
 		ChanProduceList: make(chan *db.Queue, 1000),
@@ -38,10 +51,9 @@ func main() {
 	}
 
 	go Master(&spider)
-	Monitor := Monitor{}
-	Monitor.Start(&spider)
-
-	//<-time.Tick(time.Second * 60000)
+	//Monitor := Monitor{}
+	//Monitor.Start(&spider)
+	<-time.Tick(time.Second * 60000)
 
 }
 
