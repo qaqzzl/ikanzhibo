@@ -39,7 +39,7 @@ func Master(spider *Spider)  {
 
 	go spider.handlerOnline()						//在线直播间
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 5; i++ {
 		go spider.Downloader()						//下载器
 	}
 
@@ -87,8 +87,6 @@ func (spider *Spider) handlerFollowOffline() {
 		}
 
 		for _, v := range l {
-			v.QueueType = "live_info"
-			v.WriteEvent = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisFollowOfflineList, str); err != nil {
@@ -134,7 +132,6 @@ func (Spider *Spider) handlerNotFollowOffline() {
 		}
 
 		for _, v := range l {
-			v.QueueType = "live_info"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisNotFollowOfflineList, str); err != nil {
@@ -180,7 +177,6 @@ func (Spider *Spider) handlerOnline() {
 		}
 
 		for _, v := range l {
-			v.QueueType = "live_info"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisOnlineList, str); err != nil {
@@ -227,17 +223,17 @@ func (spider *Spider) handlerTotalPlatforms() {
 			continue
 		}
 		for _, v := range p {
-			vs := db.Queue{
-				LiveData:    db.TableLive{
+			val := db.Queue{
+				QueueSet:db.QueueSet{
+					Request:     db.Request{
+						Url: v.PullUrl,
+					},
+					QueueType: "live_list",
 					Live_platform: v.Mark,
 				},
-				Request:     db.Request{
-					Url: v.PullUrl,
-				},
-				QueueType:     "live_list",
 			}
 			rconn.Do("SADD", db.RedisListOnceSet, v.PullUrl)
-			str,_ := json.Marshal(vs)
+			str,_ := json.Marshal(val)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisListList, str); err != nil {
 				log.Println(err.Error())

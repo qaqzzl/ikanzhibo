@@ -7,7 +7,6 @@ import (
 	"log"
 	"reflect"
 	"strconv"
-	"time"
 )
 
 //redis表名
@@ -51,11 +50,16 @@ type Request struct {
 
 //任务队列结构体 v1.1
 type Queue struct {
-	Request		Request
+	QueueSet	QueueSet
 	LiveData	TableLive
-	QueueType	string						//任务类型 , live_info:直播间数据, live_list:直播列表
 	WriteEvent	string						//写入时触发事件, online_notice:开播通知, send_barrage:发送弹幕 , listener_barrage:监听弹幕 多个事件用逗号隔开
 	//ParserEvent	string		`json:"-"`		//解析时触发事件, offline_to_online:离线to在线, online_to_offline:在线to离线 多个事件用逗号隔开
+}
+//任务集合结构体 , 要保证每条数据结构体json后数据是唯一的
+type QueueSet struct {
+	Request		Request
+	QueueType	string						//任务类型 , live_info:直播间数据, live_list:直播列表
+	Live_platform string
 }
 
 ////任务队列结构体 v1
@@ -130,18 +134,21 @@ func GetFollowOffline() (l []Queue, err error) {
 	}
 	for _, v := range list {
 		vo := Queue{
-			Request:     Request{
-				Url: v["spider_pull_url"],
-			},
-			LiveData:    TableLive{
-				LiveId: v["live_id"],
+			QueueSet:QueueSet{
+				Request:     Request{
+					Url: v["spider_pull_url"],
+				},
+				QueueType: "live_info",
 				Live_platform: v["live_platform"],
-				Live_is_online: "no",
 			},
+			LiveData:TableLive{
+				LiveId: v["live_id"],
+			},
+			WriteEvent: "online_notice",
 		}
 		l = append(l, vo)
 
-		str,_ := json.Marshal(vo)
+		str,_ := json.Marshal(vo.QueueSet)
 		rconn.Do("SADD", RedisFollowOfflineSet, str)
 	}
 	return l,err
@@ -164,10 +171,12 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	len := v.Len()
 	if len != 0 {
 		for i := 0; i < len; i++ {
-			queue := Queue{}
-			json.Unmarshal(v.Index(i).Interface().([]byte), &queue)
-			vo := queue
-			l = append(l, vo)
+			queueSet := QueueSet{}
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queueSet)
+			val := Queue{
+				QueueSet:   queueSet,
+			}
+			l = append(l, val)
 		}
 		return l,err
 	}
@@ -193,18 +202,18 @@ func GetNotFollowOffline() (l []Queue, err error) {
 		return l, err
 	}
 	for _, v := range list {
-		vo := Queue{
-			Request:     Request{
-				Url: v["spider_pull_url"],
-			},
-			LiveData:    TableLive{
+		val := Queue{
+			QueueSet:QueueSet{
+				Request:     Request{
+					Url: v["spider_pull_url"],
+				},
+				QueueType: "live_info",
 				Live_platform: v["live_platform"],
-				Live_is_online: "no",
 			},
 		}
-		l = append(l, vo)
+		l = append(l, val)
 
-		str,_ := json.Marshal(vo)
+		str,_ := json.Marshal(val.QueueSet)
 		rconn.Do("SADD", RedisNotFollowOfflineSet, str)
 	}
 	return l,err
@@ -256,13 +265,4 @@ func GetPlatforms() (p []Platform, err error) {
 
 	platforms = p
 	return p,err
-}
-var Tests int
-func Test()  {
-	go func() {
-		for true  {
-			<-time.Tick(time.Second * 1)
-			Tests++
-		}
-	}()
 }

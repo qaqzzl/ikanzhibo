@@ -63,20 +63,20 @@ func (spider *Spider) WriteLiveInfo()  {
 		}
 
 		//redis -> 在播添加 , 不在播删除
-		str,_ := json.Marshal(v)
+		setStr,_ := json.Marshal(v.QueueSet)
 		switch v.LiveData.Live_is_online {
 		case "yes":
-			rconn.Do("SADD", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+			rconn.Do("SADD", db.RedisOnlineSet, setStr)		//被关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
 		case "no":
-			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-			rconn.Do("SADD", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisOnlineSet, setStr)		//被关注&&不在线直播间集合
+			rconn.Do("SADD", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
 		case "vio":
-			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisOnlineSet, setStr)		//被关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
 		case "del":
-			rconn.Do("SREM", db.RedisOnlineSet, str)		//被关注&&不在线直播间集合
-			rconn.Do("SREM", db.RedisNotFollowOfflineSet, str)	//未关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisOnlineSet, setStr)		//被关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
 		}
 
 	}

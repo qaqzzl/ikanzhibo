@@ -117,7 +117,7 @@ type tT_PROFILE_INFO struct {
 
 //huya解析方法
 func (spider *Spider) huYaParser(p *Parser)  {
-	switch p.Queue.QueueType {
+	switch p.Queue.QueueSet.QueueType {
 	case "live_info":
 		spider.huYaLiveInfo(p)
 	case "live_list":
@@ -131,8 +131,8 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 
 	//哎呀，虎牙君找不到这个主播，要不搜索看看？
 	if strings.Contains(string(p.Body),"哎呀，虎牙君找不到这个主播，要不搜索看看？") {
-		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.Request.Url)
-		p.Queue.LiveData.Spider_pull_url = p.Queue.Request.Url
+		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.QueueSet.Request.Url)
+		p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
 		p.Queue.LiveData.Live_is_online = "del"
 		p.Queue.LiveData.Live_anchortv_sex = "0"
 		p.Queue.LiveData.Live_online_user = "0"
@@ -147,8 +147,8 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	}
 	//该主播涉嫌违规，正在整改中……
 	if strings.Contains(string(p.Body),"该主播涉嫌违规，正在整改中……") {
-		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.Request.Url)
-		p.Queue.LiveData.Spider_pull_url = p.Queue.Request.Url
+		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.QueueSet.Request.Url)
+		p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
 		p.Queue.LiveData.Live_is_online = "vio"
 		p.Queue.LiveData.Live_anchortv_sex = "0"
 		p.Queue.LiveData.Live_online_user = "0"
@@ -169,11 +169,11 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	if josn_hyPlayerConfig != nil {
 		err := json.Unmarshal(josn_hyPlayerConfig[1],&hyPlayerConfig)
 		if err !=nil {
-			log.Println("解析JSON失败. ERR: "+err.Error() +"\n"+p.Queue.Request.Url)
+			log.Println("解析JSON失败. ERR: "+err.Error() +"\n"+p.Queue.QueueSet.Request.Url)
 			return
 		}
 	} else {
-		log.Println("解析josn_hyPlayerConfig 为空.\n"+p.Queue.Request.Url)
+		log.Println("解析josn_hyPlayerConfig 为空.\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	//.Live_is_online - 判断是在播 . 如果不再播 . 使用新策略爬取直播间基本数据
@@ -201,56 +201,56 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 
 	//.Live_title #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.Introduction == "" {
-		log.Println("Live_title:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_title:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_title = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.Introduction)
 
 	//.Live_anchortv_name #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.Nick == "" {
-		log.Println("Live_anchortv_name:NULL \n"+p.Queue.Request.Url)
+		log.Println("Live_anchortv_name:NULL \n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_anchortv_name = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.Nick)
 
 	//.Live_anchortv_photo #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.Avatar180 == "" {
-		log.Println("Live_anchortv_photo:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_anchortv_photo:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_anchortv_photo = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.Avatar180)
 
 	//.Live_cover #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.Screenshot == "" {
-		log.Println("Live_cover:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_cover:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_cover = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.Screenshot)
 
 	//.Live_play #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.ProfileRoom == "" {
-		log.Println("Live_play:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_play:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_play = liveReplaceSql("https://liveshare.huya.com/iframe/"+hyPlayerConfig.Stream.Data[0].GameLiveInfo.ProfileRoom)
 
 	//.Live_class # gameFullName
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.GameFullName == "" {
-		log.Println("Live_class:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_class:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_class = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.GameFullName)
 
 	//.Live_online_user # totalCount
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.TotalCount == "" {
-		log.Println("Live_online_user:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_online_user:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_online_user = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.TotalCount)
 
 	//.Live_follow # activityCount
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.ActivityCount == "" {
-		log.Println("Live_follow:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_follow:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_follow = liveReplaceSql(hyPlayerConfig.Stream.Data[0].GameLiveInfo.ActivityCount)
@@ -288,25 +288,25 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	if josn_TT_PROFILE_INFO != nil {
 		err := json.Unmarshal(josn_TT_PROFILE_INFO[1],&TT_PROFILE_INFO)
 		if err !=nil{
-			log.Println("解析JSON失败."+err.Error() +"\n"+p.Queue.Request.Url)
+			log.Println("解析JSON失败."+err.Error() +"\n"+p.Queue.QueueSet.Request.Url)
 			return
 		}
 	} else {
-		log.Println("not 抓取失败\n"+p.Queue.Request.Url)
+		log.Println("not 抓取失败\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 
 	//14.Live_is_online
 	p.Queue.LiveData.Live_is_online = "no"
 
-	p.Queue.LiveData.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Request.Url))
+	p.Queue.LiveData.Live_uri = liveReplaceSql(urlGetUri(p.Queue.QueueSet.Request.Url))
 	p.Queue.LiveData.Platform_room_id = TT_PROFILE_INFO.ProfileRoom
 	//2.Live_platform #
 	p.Queue.LiveData.Live_platform = "huya"
 
 	//4.Live_anchortv_name #
 	if TT_PROFILE_INFO.Nick == "" {
-		log.Println("Live_anchortv_name:NULL\n"+p.Queue.Request.Url)
+		log.Println("Live_anchortv_name:NULL\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	p.Queue.LiveData.Live_anchortv_name = liveReplaceSql(TT_PROFILE_INFO.Nick)
@@ -318,7 +318,7 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	if TT_PROFILE_INFO.Avatar != "" {
 		p.Queue.LiveData.Live_anchortv_photo = liveReplaceSql(TT_PROFILE_INFO.Avatar)
 	} else {
-		log.Println("头像为空\n"+p.Queue.Request.Url)
+		log.Println("头像为空\n"+p.Queue.QueueSet.Request.Url)
 	}
 
 	//10.Live_follow #
@@ -377,11 +377,11 @@ type huYaLiveListStruct struct {
 func (spider *Spider) huYaLiveList(p *Parser)  {
 	huYaLiveListStruct := huYaLiveListStruct{}
 	if err := json.Unmarshal(p.Body, &huYaLiveListStruct); err != nil {
-		log.Println(err.Error()+"\n"+p.Queue.Request.Url)
+		log.Println(err.Error()+"\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	if huYaLiveListStruct.Status != 200 {
-		log.Println("huYaLiveListStruct.Status != 200\n"+p.Queue.Request.Url)
+		log.Println("huYaLiveListStruct.Status != 200\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 
@@ -392,27 +392,26 @@ func (spider *Spider) huYaLiveList(p *Parser)  {
 	//更多列表
 	for i:=1; i<=huYaLiveListStruct.Data.TotalPage; i++ {
 		spider.ChanProduceList <- &db.Queue{
-			Request:     db.Request{
-				Url: "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
-			},
-			LiveData:    db.TableLive{
+			QueueSet:db.QueueSet{
+				Request:     db.Request{
+					Url: "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
+				},
+				QueueType: "live_list",
 				Live_platform: "huya",
 			},
-			QueueType:     "live_list",
 		}
-
 
 	}
 
 	for _, v := range huYaLiveListStruct.Data.Datas {
 		spider.ChanProduceList <- &db.Queue{
-			Request:     db.Request{
-				Url: "https://www.huya.com/"+v.ProfileRoom,
-			},
-			LiveData:    db.TableLive{
+			QueueSet:db.QueueSet{
+				Request:     db.Request{
+					Url: "https://www.huya.com/"+v.ProfileRoom,
+				},
+				QueueType: "live_info",
 				Live_platform: "huya",
 			},
-			QueueType:     "live_info",
 		}
 	}
 }

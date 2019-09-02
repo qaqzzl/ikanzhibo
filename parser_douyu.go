@@ -9,7 +9,7 @@ import (
 )
 
 func (spider *Spider) douYuParser(p *Parser)  {
-	switch p.Queue.QueueType {
+	switch p.Queue.QueueSet.QueueType {
 	case "live_info":
 		spider.douYuLiveInfo(p)
 	case "live_list":
@@ -222,7 +222,7 @@ func (spider *Spider) douYuLiveInfo(p *Parser) {
 	douYuLiveInfo := douYuLiveInfo{}
 
 	if err := json.Unmarshal(p.Body, &douYuLiveInfo); err != nil {
-		log.Println(err.Error()+"\n"+p.Queue.Request.Url)
+		log.Println(err.Error()+"\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 
@@ -233,7 +233,7 @@ func (spider *Spider) douYuLiveInfo(p *Parser) {
 		p.Queue.LiveData.Live_is_online = "no"
 	}
 
-	p.Queue.LiveData.Spider_pull_url = p.Queue.Request.Url
+	p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
 
 	//最近直播时间
 	p.Queue.LiveData.Live_play_time = strconv.Itoa(douYuLiveInfo.Room.ShowTime)
@@ -246,7 +246,7 @@ func (spider *Spider) douYuLiveInfo(p *Parser) {
 	}
 
 	//.Live_uri #
-	p.Queue.LiveData.Live_uri = liveReplaceSql(urlGetUri(p.Queue.Request.Url))
+	p.Queue.LiveData.Live_uri = liveReplaceSql(urlGetUri(p.Queue.QueueSet.Request.Url))
 
 	// Platform_room_id
 	p.Queue.LiveData.Platform_room_id = strconv.Itoa(douYuLiveInfo.Room.RoomID)
@@ -355,11 +355,11 @@ type douYuLiveLists struct {
 func (spider *Spider) douYuLiveList(p *Parser)  {
 	douYuLiveLists := douYuLiveLists{}
 	if err := json.Unmarshal(p.Body, &douYuLiveLists); err != nil {
-		log.Println(err.Error()+"\n"+p.Queue.Request.Url)
+		log.Println(err.Error()+"\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 	if douYuLiveLists.Code != 0 {
-		log.Println("douYuLiveLists.Status != 200\n"+p.Queue.Request.Url)
+		log.Println("douYuLiveLists.Code != 0\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
 
@@ -370,27 +370,25 @@ func (spider *Spider) douYuLiveList(p *Parser)  {
 	//更多列表
 	for i:=1; i<=douYuLiveLists.Data.Pgcnt; i++ {
 		spider.ChanProduceList <- &db.Queue{
-			LiveData: db.TableLive{
-				Live_platform: p.Queue.LiveData.Live_platform,
+			QueueSet:db.QueueSet{
+				Request:     db.Request{
+					Url: "https://www.douyu.com/gapi/rkc/directory/0_0/"+strconv.Itoa(i),
+				},
+				QueueType: "live_list",
+				Live_platform: "douyu",
 			},
-			Request: db.Request{
-				Url:     "https://www.douyu.com/gapi/rkc/directory/0_0/"+strconv.Itoa(i),
-			},
-			QueueType: "live_list",
-			WriteEvent:    p.Queue.WriteEvent,
 		}
 	}
 
 	for _, v := range douYuLiveLists.Data.Rl {
 		spider.ChanProduceList <- &db.Queue{
-			LiveData: db.TableLive{
-				Live_platform: p.Queue.LiveData.Live_platform,
+			QueueSet:db.QueueSet{
+				Request:     db.Request{
+					Url: "https://www.douyu.com/betard/"+strconv.Itoa(v.Rid),
+				},
+				QueueType: "live_info",
+				Live_platform: "douyu",
 			},
-			Request: db.Request{
-				Url:     "https://www.douyu.com/betard/"+strconv.Itoa(v.Rid),
-			},
-			QueueType: "live_info",
-			WriteEvent:    p.Queue.WriteEvent,
 		}
 	}
 }

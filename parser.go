@@ -6,7 +6,7 @@ import (
 
 func (spider *Spider) Parsers()  {
 	for v := range spider.ChanParsers {
-		switch v.Queue.LiveData.Live_platform {
+		switch v.Queue.QueueSet.Live_platform {
 		case "huya":
 			spider.huYaParser(v)
 		case "douyu":

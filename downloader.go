@@ -146,7 +146,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 
 	client := &http.Client{}
 
-	request, err := http.NewRequest("GET", queue.Request.Url, nil)
+	request, err := http.NewRequest("GET", queue.QueueSet.Request.Url, nil)
 	if err != nil {
 		return body, err
 	}
@@ -154,17 +154,16 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
 
 	response, err := client.Do(request)
+	// 下面这句导致内存泄露  - 原因:资源还需要使用, 但是被close回收了
+	//defer response.Body.Close()
 	if err != nil {
 		log.Println(err.Error())
 		return body, err
 	}
-	// 下面这句导致内存泄露  - 原因:资源还需要使用, 但是被close回收了
-	defer response.Body.Close()
-
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
 		return body, err
 	}
-	fmt.Println(queue.Request.Url)
+	fmt.Println(queue.QueueSet.Request.Url)
 	return body, err
 }
