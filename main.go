@@ -49,10 +49,10 @@ func main() {
 		ChanProduceList: make(chan *db.Queue, 1000),
 		ChanWriteInfo: make(chan *db.Queue, 1000),
 	}
-
 	go Master(&spider)
-	Monitor := Monitor{}
-	Monitor.Start(&spider)
+
+	//Monitor := Monitor{}
+	//Monitor.Start(&spider)
 	<-time.Tick(time.Second * 60000)
 
 }

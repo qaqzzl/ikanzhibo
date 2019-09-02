@@ -2,10 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"ikanzhibo/db"
-	"ikanzhibo/db/mysql"
 	"ikanzhibo/db/redis"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -24,7 +23,7 @@ func (spider *Spider) WriteLiveInfo()  {
 		onlineCurrentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime <= onlineCurrentTime || len(online_data) > 20 {
 			if len(online_data) > 0 {
-				writeOnlineLiveInfos(online_data)		//写入 code ...
+				writeOnlineLiveInfos(online_data, rconn)		//写入 code ...
 			}
 			//清空
 			online_data = []*db.Queue{}
@@ -34,9 +33,9 @@ func (spider *Spider) WriteLiveInfo()  {
 		}
 		//30秒 || 数据大于20 -> 更新数据 , 离线
 		offlineCurrentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		if endTime <= offlineCurrentTime || len(online_data) > 20 {
-			if len(online_data) > 0 {
-				writeOfflineLiveInfos(online_data)		//写入 code ...
+		if endTime <= offlineCurrentTime || len(offline_data) > 20 {
+			if len(offline_data) > 0 {
+				writeOfflineLiveInfos(online_data, rconn)		//写入 code ...
 			}
 			offline_data = []*db.Queue{}	//清空
 			//初始化时间
@@ -82,9 +81,7 @@ func (spider *Spider) WriteLiveInfo()  {
 	}
 }
 
-func writeOnlineLiveInfos(info []*db.Queue)  {
-	rconn := redis.GetConn()
-	defer rconn.Close()
+func writeOnlineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
@@ -142,16 +139,14 @@ func writeOnlineLiveInfos(info []*db.Queue)  {
 		"live_play_end_time=VALUES(live_play_end_time)," +
 		"updated_at=VALUES(updated_at);"
 
-	err := mysql.Conn().InsertSql(sql);
-
-	if err != nil {
-		log.Printf(err.Error())
-	}
+	//err := mysql.Conn().InsertSql(sql);
+	//
+	//if err != nil {
+	//	log.Printf(err.Error())
+	//}
 }
 
-func writeOfflineLiveInfos(info []*db.Queue)  {
-	rconn := redis.GetConn()
-	defer rconn.Close()
+func writeOfflineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
@@ -199,9 +194,9 @@ func writeOfflineLiveInfos(info []*db.Queue)  {
 		"live_play_end_time=VALUES(live_play_end_time)," +
 		"updated_at=VALUES(updated_at);"
 
-	err := mysql.Conn().InsertSql(sql);
+	//err := mysql.Conn().InsertSql(sql);
 
-	if err != nil {
-		log.Printf(err.Error())
-	}
+	//if err != nil {
+	//	log.Printf(err.Error())
+	//}
 }

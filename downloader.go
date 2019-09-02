@@ -35,6 +35,9 @@ func (spider *Spider) downloaderFollowOffline() {
 			continue
 		}
 		body, err := downloaders(v, &queue)
+		if body == nil {
+			continue
+		}
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -56,7 +59,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 	for {
 		v, err := rconn.Do("LPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
-			log.Panicln(err.Error())
+			log.Println(err.Error())
 			continue
 		}
 		if v == nil {
@@ -65,6 +68,9 @@ func (spider *Spider) downloaderNotFollowOffline() {
 			continue
 		}
 		body, err := downloaders(v, &queue)
+		if body == nil {
+			continue
+		}
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -72,7 +78,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 
 		spider.ChanParsers <- &Parser{
 			Body:body,
-			Queue:queue,
+			Queue: queue,
 		}
 
 	}
@@ -95,6 +101,9 @@ func (spider *Spider) downloaderOnline() {
 			continue
 		}
 		body, err := downloaders(v, &queue)
+		if body == nil {
+			continue
+		}
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -112,7 +121,7 @@ func (spider *Spider) downloaderOnline() {
 func (spider *Spider) downloaderTotalPlatform()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
-	var queue db.Queue
+	queue := db.Queue{}
 	for {
 		v, err := rconn.Do("LPOP", db.RedisListList)
 		if err != nil {
@@ -126,6 +135,9 @@ func (spider *Spider) downloaderTotalPlatform()  {
 		}
 
 		body, err := downloaders(v, &queue)
+		if body == nil {
+			continue
+		}
 		if err != nil {
 			log.Println(err.Error())
 			continue
@@ -136,17 +148,22 @@ func (spider *Spider) downloaderTotalPlatform()  {
 		}
 	}
 }
-
+//var client = &http.Client{}
 func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	if err = json.Unmarshal(v.([]byte), &queue); err != nil {
 		return body, err
 	}
 
-	TypeMonitorChan <- TypeRequestNum
-
-	client := &http.Client{}
+	tr := http.Transport{DisableKeepAlives: true}
+	client := http.Client{Transport: &tr}
+	//client := &http.Client{}
 
 	request, err := http.NewRequest("GET", queue.QueueSet.Request.Url, nil)
+
+	//TypeMonitorChan <- TypeRequestNum
+
+	//request.Close = true
+
 	if err != nil {
 		return body, err
 	}
@@ -154,16 +171,24 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
 
 	response, err := client.Do(request)
+	//response,err := http.Get( queue.QueueSet.Request.Url)
 	if err != nil {
 		log.Println(err.Error())
 		return body, err
 	}
-	// 下面这句导致内存泄露  - 原因:资源还需要使用, 但是被close回收了
-	defer response.Body.Close()
+	if response == nil {
+		log.Println("err response")
+		return body, err
+	}
+	// 可以不回收 close , 因为在for里 所以连接还在被使用?
+	//defer response.Body.Close()
 	body, err = ioutil.ReadAll(response.Body)
+	//response.Body.Close()
+
 	if err != nil {
 		return body, err
 	}
+
 	fmt.Println(queue.QueueSet.Request.Url)
 	return body, err
 }
