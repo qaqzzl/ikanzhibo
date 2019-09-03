@@ -183,7 +183,7 @@ func writeOfflineLiveInfos(info []*db.Queue)  {
 	sql = strings.Trim(sql,",")
 	sql += " ON DUPLICATE KEY UPDATE " +
 		"live_title=VALUES(live_title)," +
-		"live_introduction=VALUES(live_introduction)," +
+		//"live_introduction=VALUES(live_introduction)," +
 		"live_follow=VALUES(live_follow)," +
 		"live_is_online=VALUES(live_is_online)," +
 		"spider_pull_url=VALUES(spider_pull_url)," +

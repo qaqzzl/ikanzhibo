@@ -173,7 +173,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	response, err := client.Do(request)
 	//response,err := http.Get( queue.QueueSet.Request.Url)
 	if err != nil {
-		log.Println(err.Error())
+		log.Println(err.Error()+"\n"+queue.QueueSet.Request.Url)
 		return body, err
 	}
 	if response == nil {

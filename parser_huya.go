@@ -127,12 +127,12 @@ func (spider *Spider) huYaParser(p *Parser)  {
 
 func (spider *Spider) huYaLiveInfo(p *Parser) {
 	hyPlayerConfig := hyPlayerConfig{}
-	p.Queue.LiveData.Spider_pull_time = strconv.FormatInt(time.Now().Unix(),10)
-
+	p.Queue.LiveData.Spider_pull_time = strconv.FormatInt(time.Now().Unix(),10)	// *
+	p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url				// *
+	p.Queue.LiveData.Live_platform = "huya"			//Live_platform #
 	//哎呀，虎牙君找不到这个主播，要不搜索看看？
 	if strings.Contains(string(p.Body),"哎呀，虎牙君找不到这个主播，要不搜索看看？") {
 		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.QueueSet.Request.Url)
-		p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
 		p.Queue.LiveData.Live_is_online = "del"
 		p.Queue.LiveData.Live_anchortv_sex = "0"
 		p.Queue.LiveData.Live_online_user = "0"
@@ -148,7 +148,6 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	//该主播涉嫌违规，正在整改中……
 	if strings.Contains(string(p.Body),"该主播涉嫌违规，正在整改中……") {
 		p.Queue.LiveData.Live_uri = urlGetUri(p.Queue.QueueSet.Request.Url)
-		p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
 		p.Queue.LiveData.Live_is_online = "vio"
 		p.Queue.LiveData.Live_anchortv_sex = "0"
 		p.Queue.LiveData.Live_online_user = "0"
@@ -195,9 +194,6 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 	p.Queue.LiveData.Live_uri = hyPlayerConfig.Stream.Data[0].GameLiveInfo.ProfileHomeHost
 
 	p.Queue.LiveData.Platform_room_id = hyPlayerConfig.Stream.Data[0].GameLiveInfo.ProfileRoom
-
-	//.Live_platform #
-	p.Queue.LiveData.Live_platform = "huya"
 
 	//.Live_title #
 	if hyPlayerConfig.Stream.Data[0].GameLiveInfo.Introduction == "" {
@@ -335,7 +331,7 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 	p.Queue.LiveData.Live_follow = strconv.Itoa(TT_PROFILE_INFO.Fans)
 
 	//12.Live_introduction
-	p.Queue.LiveData.Live_introduction = ""
+	//p.Queue.LiveData.Live_introduction = ""
 
 	p.Queue.LiveData.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 
