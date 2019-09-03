@@ -295,6 +295,16 @@ func (spider *Spider) huyaLive_is_online_no(p *Parser) {
 		log.Println("not 抓取失败\n"+p.Queue.QueueSet.Request.Url)
 		return
 	}
+	p.Queue.LiveData.Spider_pull_time = strconv.FormatInt(time.Now().Unix(),10)
+	p.Queue.LiveData.Spider_pull_url = p.Queue.QueueSet.Request.Url
+	p.Queue.LiveData.Live_anchortv_sex = "0"
+	p.Queue.LiveData.Live_online_user = "0"
+	p.Queue.LiveData.Live_follow = "0"
+	p.Queue.LiveData.Live_type_id = "0"
+	p.Queue.LiveData.Live_play_time = "0"
+	p.Queue.LiveData.Live_play_end_time = "0"
+	p.Queue.LiveData.Created_at = strconv.FormatInt(time.Now().Unix(),10)
+	p.Queue.LiveData.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
 
 	//14.Live_is_online
 	p.Queue.LiveData.Live_is_online = "no"

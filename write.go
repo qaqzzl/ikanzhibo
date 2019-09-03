@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"ikanzhibo/db"
+	"ikanzhibo/db/mysql"
 	"ikanzhibo/db/redis"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -16,30 +18,31 @@ func (spider *Spider) WriteLiveInfo()  {
 	offline_data := []*db.Queue{}
 	online_data := []*db.Queue{}
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-	endTime := initTime + 30;	//控制更新数据库写入频率
+	offline_endTime := initTime + 30;	//控制更新数据库写入频率
+	online_endTime := initTime + 30;	//控制更新数据库写入频率
 	for v := range spider.ChanWriteInfo {
 		//30秒 || 数据大于20 -> 更新数据 , 在线
 		onlineCurrentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		if endTime <= onlineCurrentTime || len(online_data) > 20 {
+		if online_endTime <= onlineCurrentTime || len(online_data) > 20 {
 			if len(online_data) > 0 {
-				writeOnlineLiveInfos(online_data, rconn)		//写入 code ...
+				writeOnlineLiveInfos(online_data)		//写入 code ...
 			}
 			//清空
 			online_data = []*db.Queue{}
 			//初始化时间
 			onlineCurrentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-			endTime = onlineCurrentTime + 30
+			online_endTime = onlineCurrentTime + 30
 		}
 		//30秒 || 数据大于20 -> 更新数据 , 离线
 		offlineCurrentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		if endTime <= offlineCurrentTime || len(offline_data) > 20 {
+		if offline_endTime <= offlineCurrentTime || len(offline_data) > 20 {
 			if len(offline_data) > 0 {
-				writeOfflineLiveInfos(online_data, rconn)		//写入 code ...
+				writeOfflineLiveInfos(offline_data)		//写入 code ...
 			}
 			offline_data = []*db.Queue{}	//清空
 			//初始化时间
 			offlineCurrentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-			endTime = offlineCurrentTime + 30
+			offline_endTime = offlineCurrentTime + 30
 		}
 
 		if v.LiveData.Live_is_online == "no" {	//离线
@@ -80,7 +83,7 @@ func (spider *Spider) WriteLiveInfo()  {
 	}
 }
 
-func writeOnlineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
+func writeOnlineLiveInfos(info []*db.Queue)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
@@ -119,7 +122,6 @@ func writeOnlineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
 		"live_title=VALUES(live_title)," +
 		"live_anchortv_name=VALUES(live_anchortv_name)," +
 		"live_anchortv_photo=VALUES(live_anchortv_photo)," +
-		"live_anchortv_sex=VALUES(live_anchortv_sex)," +
 		"live_cover=VALUES(live_cover)," +
 		"live_play=VALUES(live_play)," +
 		"live_class=VALUES(live_class)," +
@@ -133,19 +135,18 @@ func writeOnlineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
 		"spider_pull_url=VALUES(spider_pull_url)," +
 		"live_uri=VALUES(live_uri)," +
 		"spider_pull_time=VALUES(spider_pull_time)," +
-		"live_is_online=VALUES(live_is_online)," +
 		"live_play_time=VALUES(live_play_time)," +
 		"live_play_end_time=VALUES(live_play_end_time)," +
 		"updated_at=VALUES(updated_at);"
 
-	//err := mysql.Conn().InsertSql(sql);
-	//
-	//if err != nil {
-	//	log.Printf(err.Error())
-	//}
+	err := mysql.Conn().InsertSql(sql);
+
+	if err != nil {
+		log.Printf(err.Error())
+	}
 }
 
-func writeOfflineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
+func writeOfflineLiveInfos(info []*db.Queue)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
@@ -188,14 +189,13 @@ func writeOfflineLiveInfos(info []*db.Queue, rconn redis.Conn)  {
 		"spider_pull_url=VALUES(spider_pull_url)," +
 		"live_uri=VALUES(live_uri)," +
 		"spider_pull_time=VALUES(spider_pull_time)," +
-		"live_is_online=VALUES(live_is_online)," +
 		"live_play_time=VALUES(live_play_time)," +
 		"live_play_end_time=VALUES(live_play_end_time)," +
 		"updated_at=VALUES(updated_at);"
 
-	//err := mysql.Conn().InsertSql(sql);
+	err := mysql.Conn().InsertSql(sql);
 
-	//if err != nil {
-	//	log.Printf(err.Error())
-	//}
+	if err != nil {
+		log.Printf(err.Error())
+	}
 }
