@@ -7,11 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"strings"
-	"time"
-
-	_ "net/http/pprof"
 )
 
 func init() {
@@ -51,9 +49,9 @@ func main() {
 	}
 	go Master(&spider)
 
-	//Monitor := Monitor{}
-	//Monitor.Start(&spider)
-	<-time.Tick(time.Second * 60000)
+	Monitor := Monitor{}
+	Monitor.Start(&spider)
+	//<-time.Tick(time.Second * 60000)
 
 }
 
