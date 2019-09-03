@@ -226,6 +226,8 @@ func (spider *Spider) douYuLiveInfo(p *Parser) {
 		return
 	}
 
+	p.Queue.LiveData.Live_platform = "douyu"
+
 	//.Live_is_online - 判断是在播
 	if douYuLiveInfo.Room.ShowStatus == 1 {
 		p.Queue.LiveData.Live_is_online = "yes"
