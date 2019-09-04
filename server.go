@@ -11,6 +11,7 @@ import (
 
 // 系统状态监控
 type SystemMonitor struct {
+	CurrentTime						int64	`json:"current_time"`
 	TotalRequestNum   				int     `json:"total_request_num"`   		// 总处理请求数
 	Tps          					float64 `json:"tps"`          				// 系统吞出量
 
@@ -27,8 +28,8 @@ type SystemMonitor struct {
 	UsedMemoryHuman          		string	`json:"used_memory_human"`          // 应用使用内存, 20.00M
 
 	ChanParsersNum  				int     `json:"channel_parsers_num"`  		// 等待解析 channel 数量
-	ChanProduceListNum 				int     `json:"channel_produceList_num"` 	// 发现任务 channel 数量
-	ChanWriteInfoNum 				int     `json:"channel_writeInfo_num"` 		// 写入数据 channel 数量
+	ChanProduceListNum 				int     `json:"channel_produce_list_num"` 	// 发现任务 channel 数量
+	ChanWriteInfoNum 				int     `json:"channel_write_info_num"` 		// 写入数据 channel 数量
 
 	UptimeInSeconds      			string  `json:"uptime_in_seconds"`      	// 运行时间
 	ErrNum       					int     `json:"err_num"`       				// 错误数 , 数据库错误, 下载错误
@@ -91,7 +92,7 @@ func (m *Monitor) StatusRta(s *Spider) {
 			RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
 			m.Data.RedisOnlineList = RedisOnlineList.(int64);					//在线队列数量
 
-			RedisOnlineSet,_ := rconn.Do("SCARD", db.RedisListOnceSet)
+			RedisOnlineSet,_ := rconn.Do("SCARD", db.RedisOnlineSet)
 			m.Data.RedisOnlineSet = RedisOnlineSet.(int64);					//在线集合数量
 
 			RedisNotFollowOfflineList,_ := rconn.Do("LLEN", db.RedisNotFollowOfflineList)
@@ -136,6 +137,7 @@ func (m *Monitor) Start(s *Spider) {
 		if len(m.TpsSli) >= 2 {
 			m.Data.Tps = float64(m.TpsSli[1]-m.TpsSli[0])
 		}
+		m.Data.CurrentTime = time.Now().Unix()
 		ret, _ := json.MarshalIndent(m.Data, "", "\t")
 
 		io.WriteString(writer, string(ret))

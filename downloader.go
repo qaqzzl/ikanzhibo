@@ -160,7 +160,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 
 	request, err := http.NewRequest("GET", queue.QueueSet.Request.Url, nil)
 
-	//TypeMonitorChan <- TypeRequestNum
+	TypeMonitorChan <- TypeRequestNum
 
 	//request.Close = true
 
