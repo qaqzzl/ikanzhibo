@@ -89,7 +89,7 @@ func (m *Monitor) StatusRta(s *Spider) {
 		rconn := redis.GetConn()
 		defer rconn.Close()
 		for {
-			<-ticker.C
+			<-time.Tick(time.Second * 1)
 			RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
 			m.Data.RedisOnlineList = RedisOnlineList.(int64);					//在线队列数量
 
