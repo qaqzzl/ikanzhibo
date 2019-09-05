@@ -10,6 +10,7 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"strings"
+	"time"
 )
 
 func init() {
@@ -49,7 +50,9 @@ func main() {
 	}
 	go Master(&spider)
 
-	Monitor := Monitor{}
+	Monitor := Monitor{
+		StartTime: time.Now(),
+	}
 	Monitor.Start(&spider)
 	//<-time.Tick(time.Second * 60000)
 

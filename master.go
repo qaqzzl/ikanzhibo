@@ -258,7 +258,10 @@ func Crontab()  {
 	}()
 
 	go func() {		//未关注 && 不在线
-
+		for true {
+			<-time.Tick(time.Second * 6000)	//60秒清除一次未关注 && 不在线直播间集合,定时跟数据库做一致性同步
+			rconn.Do("del", db.RedisNotFollowOfflineSet)	//清空
+		}
 	}()
 
 	go func() {		//在线 3点同步 , 策略,删除并读取数据库在线直播间进行同步

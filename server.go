@@ -72,10 +72,11 @@ func (m *Monitor) StatusRta(s *Spider) {
 	}()
 
 	// 应用 Tps
-	ticker := time.NewTicker(time.Second * 1)
+	//ticker := time.NewTicker(time.Second * 1)
 	go func() { //协程
 		for {
-			<-ticker.C
+			<-time.Tick(time.Second * 1)
+			//<-ticker.C
 			//tps
 			m.TpsSli = append(m.TpsSli, m.Data.TotalRequestNum)
 			if len(m.TpsSli) > 2 {
