@@ -72,8 +72,8 @@ func (m *Monitor) StatusRta(s *Spider) {
 	}()
 
 	// 应用 Tps
-	ticker := time.NewTicker(time.Second * 1)
 	go func() { //协程
+		ticker := time.NewTicker(time.Second * 1)
 		for {
 			//<-time.Tick(time.Second * 1)
 			<-ticker.C
@@ -88,6 +88,7 @@ func (m *Monitor) StatusRta(s *Spider) {
 	go func() {
 		rconn := redis.GetConn()
 		defer rconn.Close()
+		ticker := time.NewTicker(time.Second * 1)
 		for {
 			//<-time.Tick(time.Second * 1)
 			<-ticker.C

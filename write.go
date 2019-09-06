@@ -69,7 +69,7 @@ func (spider *Spider) WriteLiveInfo()  {
 		case "yes":
 			rconn.Do("SADD", db.RedisOnlineSet, setStr)		//在线直播间集合
 			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
-			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisFollowOfflineSet, setStr)	//关注&&不在线直播间集合
 		case "no":
 			rconn.Do("SREM", db.RedisOnlineSet, setStr)		//在线直播间集合
 		case "vio":

@@ -293,885 +293,286 @@ function handleMouseUp(evt) {
 		state = '';
 	}
 }
-]]></script><g id="viewport" transform="scale(0.5,0.5) translate(0,0)"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1591)">
+]]></script><g id="viewport" transform="scale(0.5,0.5) translate(0,0)"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 797)">
 <title>unnamed</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-1591 1238,-1591 1238,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-797 868.5,-797 868.5,4 -4,4"/>
 <g id="clust1" class="cluster"><title>cluster_L</title>
-<polygon fill="none" stroke="black" points="8,-1501 8,-1579 476,-1579 476,-1501 8,-1501"/>
+<polygon fill="none" stroke="black" points="8,-707 8,-785 476,-785 476,-707 8,-707"/>
 </g>
 <!-- Type: inuse_space -->
 <g id="node1" class="node"><title>Type: inuse_space</title>
-<polygon fill="#f8f8f8" stroke="black" points="467.5,-1571 16.5,-1571 16.5,-1509 467.5,-1509 467.5,-1571"/>
-<text text-anchor="start" x="24.5" y="-1554.2" font-family="Times New Roman,serif" font-size="16.00">Type: inuse_space</text>
-<text text-anchor="start" x="24.5" y="-1536.2" font-family="Times New Roman,serif" font-size="16.00">Time: Sep 6, 2019 at 3:41pm (CST)</text>
-<text text-anchor="start" x="24.5" y="-1518.2" font-family="Times New Roman,serif" font-size="16.00">Showing nodes accounting for 3240.03kB, 100% of 3240.03kB total</text>
+<polygon fill="#f8f8f8" stroke="black" points="467.5,-777 16.5,-777 16.5,-715 467.5,-715 467.5,-777"/>
+<text text-anchor="start" x="24.5" y="-760.2" font-family="Times New Roman,serif" font-size="16.00">Type: inuse_space</text>
+<text text-anchor="start" x="24.5" y="-742.2" font-family="Times New Roman,serif" font-size="16.00">Time: Sep 6, 2019 at 8:14pm (CST)</text>
+<text text-anchor="start" x="24.5" y="-724.2" font-family="Times New Roman,serif" font-size="16.00">Showing nodes accounting for 3337.60kB, 100% of 3337.60kB total</text>
 </g>
 <!-- N1 -->
 <g id="node1" class="node"><title>N1</title>
-<g id="a_node1"><a xlink:title="bytes.makeSlice (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="653.5,-962 434.5,-962 434.5,-876 653.5,-876 653.5,-962"/>
-<text text-anchor="middle" x="544" y="-938.8" font-family="Times New Roman,serif" font-size="24.00">bytes</text>
-<text text-anchor="middle" x="544" y="-912.8" font-family="Times New Roman,serif" font-size="24.00">makeSlice</text>
-<text text-anchor="middle" x="544" y="-886.8" font-family="Times New Roman,serif" font-size="24.00">1701.99kB (52.53%)</text>
+<g id="a_node1"><a xlink:title="bytes.makeSlice (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="653.5,-173 434.5,-173 434.5,-87 653.5,-87 653.5,-173"/>
+<text text-anchor="middle" x="544" y="-149.8" font-family="Times New Roman,serif" font-size="24.00">bytes</text>
+<text text-anchor="middle" x="544" y="-123.8" font-family="Times New Roman,serif" font-size="24.00">makeSlice</text>
+<text text-anchor="middle" x="544" y="-97.8" font-family="Times New Roman,serif" font-size="24.00">2825.32kB (84.65%)</text>
 </a>
 </g>
 </g>
 <!-- NN1_0 -->
 <g id="NN1_0" class="node"><title>NN1_0</title>
-<g id="a_NN1_0"><a xlink:title="1157.33kB">
-<polygon fill="#f8f8f8" stroke="black" points="528,-821 478,-821 474,-817 474,-785 524,-785 528,-789 528,-821"/>
-<polyline fill="none" stroke="black" points="524,-817 474,-817 "/>
-<polyline fill="none" stroke="black" points="524,-817 524,-785 "/>
-<polyline fill="none" stroke="black" points="524,-817 528,-821 "/>
-<text text-anchor="middle" x="501" y="-801.1" font-family="Times New Roman,serif" font-size="8.00">128kB</text>
+<g id="a_NN1_0"><a xlink:title="1735.99kB">
+<polygon fill="#f8f8f8" stroke="black" points="528,-36 478,-36 474,-32 474,-0 524,-0 528,-4 528,-36"/>
+<polyline fill="none" stroke="black" points="524,-32 474,-32 "/>
+<polyline fill="none" stroke="black" points="524,-32 524,-0 "/>
+<polyline fill="none" stroke="black" points="524,-32 528,-36 "/>
+<text text-anchor="middle" x="501" y="-16.1" font-family="Times New Roman,serif" font-size="8.00">128kB</text>
 </a>
 </g>
 </g>
 <!-- N1&#45;&gt;NN1_0 -->
 <g id="edge1" class="edge"><title>N1&#45;&gt;NN1_0</title>
-<g id="a_edge1"><a xlink:title="1157.33kB">
-<path fill="none" stroke="black" d="M510.002,-875.716C506.768,-870.018 503.967,-864.046 502,-858 499.277,-849.633 498.416,-840.143 498.418,-831.479"/>
-<polygon fill="black" stroke="black" points="501.917,-831.571 498.781,-821.451 494.921,-831.318 501.917,-831.571"/>
+<g id="a_edge1"><a xlink:title="1735.99kB">
+<path fill="none" stroke="black" d="M510.011,-86.7134C506.776,-81.016 503.972,-75.0441 502,-69 499.657,-61.8189 498.791,-53.744 498.669,-46.2122"/>
+<polygon fill="black" stroke="black" points="502.171,-46.158 498.915,-36.076 495.173,-45.9882 502.171,-46.158"/>
 </a>
 </g>
-<g id="a_edge1&#45;label"><a xlink:title="1157.33kB">
-<text text-anchor="middle" x="534" y="-846.8" font-family="Times New Roman,serif" font-size="14.00"> 1157.33kB</text>
+<g id="a_edge1&#45;label"><a xlink:title="1735.99kB">
+<text text-anchor="middle" x="534" y="-57.8" font-family="Times New Roman,serif" font-size="14.00"> 1735.99kB</text>
 </a>
 </g>
 </g>
 <!-- NN1_1 -->
 <g id="NN1_1" class="node"><title>NN1_1</title>
-<g id="a_NN1_1"><a xlink:title="544.67kB">
-<polygon fill="#f8f8f8" stroke="black" points="615,-821 565,-821 561,-817 561,-785 611,-785 615,-789 615,-821"/>
-<polyline fill="none" stroke="black" points="611,-817 561,-817 "/>
-<polyline fill="none" stroke="black" points="611,-817 611,-785 "/>
-<polyline fill="none" stroke="black" points="611,-817 615,-821 "/>
-<text text-anchor="middle" x="588" y="-801.1" font-family="Times New Roman,serif" font-size="8.00">64kB</text>
+<g id="a_NN1_1"><a xlink:title="1089.33kB">
+<polygon fill="#f8f8f8" stroke="black" points="615,-36 565,-36 561,-32 561,-0 611,-0 615,-4 615,-36"/>
+<polyline fill="none" stroke="black" points="611,-32 561,-32 "/>
+<polyline fill="none" stroke="black" points="611,-32 611,-0 "/>
+<polyline fill="none" stroke="black" points="611,-32 615,-36 "/>
+<text text-anchor="middle" x="588" y="-16.1" font-family="Times New Roman,serif" font-size="8.00">64kB</text>
 </a>
 </g>
 </g>
 <!-- N1&#45;&gt;NN1_1 -->
 <g id="edge2" class="edge"><title>N1&#45;&gt;NN1_1</title>
-<g id="a_edge2"><a xlink:title="544.67kB">
-<path fill="none" stroke="black" d="M560.259,-875.874C566.072,-860.813 572.461,-844.261 577.64,-830.842"/>
-<polygon fill="black" stroke="black" points="581,-831.856 581.336,-821.267 574.47,-829.336 581,-831.856"/>
+<g id="a_edge2"><a xlink:title="1089.33kB">
+<path fill="none" stroke="black" d="M560.886,-86.7857C566.376,-73.059 572.317,-58.2074 577.234,-45.9143"/>
+<polygon fill="black" stroke="black" points="580.627,-46.8553 581.092,-36.2707 574.128,-44.2555 580.627,-46.8553"/>
 </a>
 </g>
-<g id="a_edge2&#45;label"><a xlink:title="544.67kB">
-<text text-anchor="middle" x="602" y="-846.8" font-family="Times New Roman,serif" font-size="14.00"> 544.67kB</text>
+<g id="a_edge2&#45;label"><a xlink:title="1089.33kB">
+<text text-anchor="middle" x="606" y="-57.8" font-family="Times New Roman,serif" font-size="14.00"> 1089.33kB</text>
 </a>
 </g>
 </g>
 <!-- N2 -->
 <g id="node2" class="node"><title>N2</title>
-<g id="a_node2"><a xlink:title="main.downloaders (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="597.5,-1443.5 490.5,-1443.5 490.5,-1407.5 597.5,-1407.5 597.5,-1443.5"/>
-<text text-anchor="middle" x="544" y="-1432.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
-<text text-anchor="middle" x="544" y="-1423.6" font-family="Times New Roman,serif" font-size="8.00">downloaders</text>
-<text text-anchor="middle" x="544" y="-1414.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (52.53%)</text>
-</a>
-</g>
-</g>
-<!-- N33 -->
-<g id="node33" class="node"><title>N33</title>
-<g id="a_node33"><a xlink:title="io/ioutil.ReadAll (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="597.5,-1338 490.5,-1338 490.5,-1302 597.5,-1302 597.5,-1338"/>
-<text text-anchor="middle" x="544" y="-1327.1" font-family="Times New Roman,serif" font-size="8.00">ioutil</text>
-<text text-anchor="middle" x="544" y="-1318.1" font-family="Times New Roman,serif" font-size="8.00">ReadAll</text>
-<text text-anchor="middle" x="544" y="-1309.1" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (52.53%)</text>
-</a>
-</g>
-</g>
-<!-- N2&#45;&gt;N33 -->
-<g id="edge10" class="edge"><title>N2&#45;&gt;N33</title>
-<g id="a_edge10"><a xlink:title="main.downloaders &#45;&gt; io/ioutil.ReadAll (1701.99kB)">
-<path fill="none" stroke="#b21f00" stroke-width="3" d="M544,-1407.41C544,-1391.3 544,-1366.91 544,-1348.14"/>
-<polygon fill="#b21f00" stroke="#b21f00" stroke-width="3" points="547.5,-1348.12 544,-1338.12 540.5,-1348.12 547.5,-1348.12"/>
-</a>
-</g>
-<g id="a_edge10&#45;label"><a xlink:title="main.downloaders &#45;&gt; io/ioutil.ReadAll (1701.99kB)">
-<text text-anchor="middle" x="576" y="-1363.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
-</a>
-</g>
-</g>
-<!-- N3 -->
-<g id="node3" class="node"><title>N3</title>
-<g id="a_node3"><a xlink:title="main.(*Spider).downloaderNotFollowOffline (1123.33kB)">
-<polygon fill="#eddbd5" stroke="#b23000" points="602.5,-1562 485.5,-1562 485.5,-1518 602.5,-1518 602.5,-1562"/>
-<text text-anchor="middle" x="544" y="-1551.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
-<text text-anchor="middle" x="544" y="-1542.6" font-family="Times New Roman,serif" font-size="8.00">(*Spider)</text>
-<text text-anchor="middle" x="544" y="-1533.6" font-family="Times New Roman,serif" font-size="8.00">downloaderNotFollowOffline</text>
-<text text-anchor="middle" x="544" y="-1524.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1123.33kB (34.67%)</text>
-</a>
-</g>
-</g>
-<!-- N3&#45;&gt;N2 -->
-<g id="edge11" class="edge"><title>N3&#45;&gt;N2</title>
-<g id="a_edge11"><a xlink:title="main.(*Spider).downloaderNotFollowOffline &#45;&gt; main.downloaders (1123.33kB)">
-<path fill="none" stroke="#b23000" stroke-width="2" d="M544,-1517.84C544,-1499.69 544,-1473.42 544,-1453.71"/>
-<polygon fill="#b23000" stroke="#b23000" stroke-width="2" points="547.5,-1453.52 544,-1443.52 540.5,-1453.52 547.5,-1453.52"/>
-</a>
-</g>
-<g id="a_edge11&#45;label"><a xlink:title="main.(*Spider).downloaderNotFollowOffline &#45;&gt; main.downloaders (1123.33kB)">
-<text text-anchor="middle" x="576" y="-1479.8" font-family="Times New Roman,serif" font-size="14.00"> 1123.33kB</text>
-</a>
-</g>
-</g>
-<!-- N4 -->
-<g id="node4" class="node"><title>N4</title>
-<g id="a_node4"><a xlink:title="bufio.NewReaderSize (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="858.5,-730 729.5,-730 729.5,-665 858.5,-665 858.5,-730"/>
-<text text-anchor="middle" x="794" y="-712.4" font-family="Times New Roman,serif" font-size="17.00">bufio</text>
-<text text-anchor="middle" x="794" y="-693.4" font-family="Times New Roman,serif" font-size="17.00">NewReaderSize</text>
-<text text-anchor="middle" x="794" y="-674.4" font-family="Times New Roman,serif" font-size="17.00">514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- NN4_0 -->
-<g id="NN4_0" class="node"><title>NN4_0</title>
-<g id="a_NN4_0"><a xlink:title="514kB">
-<polygon fill="#f8f8f8" stroke="black" points="821,-614 771,-614 767,-610 767,-578 817,-578 821,-582 821,-614"/>
-<polyline fill="none" stroke="black" points="817,-610 767,-610 "/>
-<polyline fill="none" stroke="black" points="817,-610 817,-578 "/>
-<polyline fill="none" stroke="black" points="817,-610 821,-614 "/>
-<text text-anchor="middle" x="794" y="-594.1" font-family="Times New Roman,serif" font-size="8.00">4kB</text>
-</a>
-</g>
-</g>
-<!-- N4&#45;&gt;NN4_0 -->
-<g id="edge3" class="edge"><title>N4&#45;&gt;NN4_0</title>
-<g id="a_edge3"><a xlink:title="514kB">
-<path fill="none" stroke="black" d="M794,-664.744C794,-651.723 794,-636.802 794,-624.284"/>
-<polygon fill="black" stroke="black" points="797.5,-624.009 794,-614.009 790.5,-624.009 797.5,-624.009"/>
-</a>
-</g>
-<g id="a_edge3&#45;label"><a xlink:title="514kB">
-<text text-anchor="middle" x="814" y="-635.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N5 -->
-<g id="node5" class="node"><title>N5</title>
-<g id="a_node5"><a xlink:title="runtime.systemstack (512.03kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1008,-1458 858,-1458 858,-1393 1008,-1393 1008,-1458"/>
-<text text-anchor="middle" x="933" y="-1440.4" font-family="Times New Roman,serif" font-size="17.00">runtime</text>
-<text text-anchor="middle" x="933" y="-1421.4" font-family="Times New Roman,serif" font-size="17.00">systemstack</text>
-<text text-anchor="middle" x="933" y="-1402.4" font-family="Times New Roman,serif" font-size="17.00">512.03kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- NN5_0 -->
-<g id="NN5_0" class="node"><title>NN5_0</title>
-<g id="a_NN5_0"><a xlink:title="512.03kB">
-<polygon fill="#f8f8f8" stroke="black" points="960,-1338 910,-1338 906,-1334 906,-1302 956,-1302 960,-1306 960,-1338"/>
-<polyline fill="none" stroke="black" points="956,-1334 906,-1334 "/>
-<polyline fill="none" stroke="black" points="956,-1334 956,-1302 "/>
-<polyline fill="none" stroke="black" points="956,-1334 960,-1338 "/>
-<text text-anchor="middle" x="933" y="-1318.1" font-family="Times New Roman,serif" font-size="8.00">64B</text>
-</a>
-</g>
-</g>
-<!-- N5&#45;&gt;NN5_0 -->
-<g id="edge4" class="edge"><title>N5&#45;&gt;NN5_0</title>
-<g id="a_edge4"><a xlink:title="512.03kB">
-<path fill="none" stroke="black" d="M933,-1392.88C933,-1378.62 933,-1361.95 933,-1348.25"/>
-<polygon fill="black" stroke="black" points="936.5,-1348 933,-1338 929.5,-1348 936.5,-1348"/>
-</a>
-</g>
-<g id="a_edge4&#45;label"><a xlink:title="512.03kB">
-<text text-anchor="middle" x="962" y="-1363.8" font-family="Times New Roman,serif" font-size="14.00"> 512.03kB</text>
-</a>
-</g>
-</g>
-<!-- N6 -->
-<g id="node6" class="node"><title>N6</title>
-<g id="a_node6"><a xlink:title="encoding/asn1.parseField (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-353 1026.5,-353 1026.5,-317 1129.5,-317 1129.5,-353"/>
-<text text-anchor="middle" x="1078" y="-342.1" font-family="Times New Roman,serif" font-size="8.00">asn1</text>
-<text text-anchor="middle" x="1078" y="-333.1" font-family="Times New Roman,serif" font-size="8.00">parseField</text>
-<text text-anchor="middle" x="1078" y="-324.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N26 -->
-<g id="node26" class="node"><title>N26</title>
-<g id="a_node26"><a xlink:title="encoding/asn1.parseSequenceOf (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1069.5,-262 966.5,-262 966.5,-226 1069.5,-226 1069.5,-262"/>
-<text text-anchor="middle" x="1018" y="-251.1" font-family="Times New Roman,serif" font-size="8.00">asn1</text>
-<text text-anchor="middle" x="1018" y="-242.1" font-family="Times New Roman,serif" font-size="8.00">parseSequenceOf</text>
-<text text-anchor="middle" x="1018" y="-233.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N6&#45;&gt;N26 -->
-<g id="edge33" class="edge"><title>N6&#45;&gt;N26</title>
-<g id="a_edge33"><a xlink:title="encoding/asn1.parseField &#45;&gt; encoding/asn1.parseSequenceOf (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1026.38,-321.702C1015.2,-316.554 1004.72,-309.277 998,-299 992.501,-290.591 994.401,-280.462 998.74,-271.26"/>
-<polygon fill="#b26125" stroke="#b26125" points="1001.84,-272.893 1003.71,-262.464 995.742,-269.451 1001.84,-272.893"/>
-</a>
-</g>
-<g id="a_edge33&#45;label"><a xlink:title="encoding/asn1.parseField &#45;&gt; encoding/asn1.parseSequenceOf (512.01kB)">
-<text text-anchor="middle" x="1027" y="-287.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N35 -->
-<g id="node35" class="node"><title>N35</title>
-<g id="a_node35"><a xlink:title="reflect.(*rtype).Field (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1210.5,-266 1107.5,-266 1107.5,-222 1210.5,-222 1210.5,-266"/>
-<text text-anchor="middle" x="1159" y="-255.6" font-family="Times New Roman,serif" font-size="8.00">reflect</text>
-<text text-anchor="middle" x="1159" y="-246.6" font-family="Times New Roman,serif" font-size="8.00">(*rtype)</text>
-<text text-anchor="middle" x="1159" y="-237.6" font-family="Times New Roman,serif" font-size="8.00">Field</text>
-<text text-anchor="middle" x="1159" y="-228.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N6&#45;&gt;N35 -->
-<g id="edge34" class="edge"><title>N6&#45;&gt;N35</title>
-<g id="a_edge34"><a xlink:title="encoding/asn1.parseField &#45;&gt; reflect.(*rtype).Field (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1105.44,-316.824C1112.6,-311.612 1119.99,-305.522 1126,-299 1132.62,-291.821 1138.62,-283.12 1143.63,-274.818"/>
-<polygon fill="#b26125" stroke="#b26125" points="1146.72,-276.471 1148.66,-266.057 1140.65,-272.983 1146.72,-276.471"/>
-</a>
-</g>
-<g id="a_edge34&#45;label"><a xlink:title="encoding/asn1.parseField &#45;&gt; reflect.(*rtype).Field (512.01kB)">
-<text text-anchor="middle" x="1166" y="-287.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N7 -->
-<g id="node7" class="node"><title>N7</title>
-<g id="a_node7"><a xlink:title="reflect.(*structType).Field (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1234,-171 1084,-171 1084,-87 1234,-87 1234,-171"/>
-<text text-anchor="middle" x="1159" y="-153.4" font-family="Times New Roman,serif" font-size="17.00">reflect</text>
-<text text-anchor="middle" x="1159" y="-134.4" font-family="Times New Roman,serif" font-size="17.00">(*structType)</text>
-<text text-anchor="middle" x="1159" y="-115.4" font-family="Times New Roman,serif" font-size="17.00">Field</text>
-<text text-anchor="middle" x="1159" y="-96.4" font-family="Times New Roman,serif" font-size="17.00">512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- NN7_0 -->
-<g id="NN7_0" class="node"><title>NN7_0</title>
-<g id="a_NN7_0"><a xlink:title="512.01kB">
-<polygon fill="#f8f8f8" stroke="black" points="1186,-36 1136,-36 1132,-32 1132,-0 1182,-0 1186,-4 1186,-36"/>
-<polyline fill="none" stroke="black" points="1182,-32 1132,-32 "/>
-<polyline fill="none" stroke="black" points="1182,-32 1182,-0 "/>
-<polyline fill="none" stroke="black" points="1182,-32 1186,-36 "/>
-<text text-anchor="middle" x="1159" y="-16.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
-</a>
-</g>
-</g>
-<!-- N7&#45;&gt;NN7_0 -->
-<g id="edge5" class="edge"><title>N7&#45;&gt;NN7_0</title>
-<g id="a_edge5"><a xlink:title="512.01kB">
-<path fill="none" stroke="black" d="M1159,-86.7918C1159,-73.1764 1159,-58.3822 1159,-46.0984"/>
-<polygon fill="black" stroke="black" points="1162.5,-46.0424 1159,-36.0425 1155.5,-46.0425 1162.5,-46.0424"/>
-</a>
-</g>
-<g id="a_edge5&#45;label"><a xlink:title="512.01kB">
-<text text-anchor="middle" x="1188" y="-57.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N8 -->
-<g id="node8" class="node"><title>N8</title>
-<g id="a_node8"><a xlink:title="main.(*Spider).downloaderOnline (578.66kB)">
-<polygon fill="#ede0d7" stroke="#b25313" points="723.5,-1562 620.5,-1562 620.5,-1518 723.5,-1518 723.5,-1562"/>
-<text text-anchor="middle" x="672" y="-1551.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
-<text text-anchor="middle" x="672" y="-1542.6" font-family="Times New Roman,serif" font-size="8.00">(*Spider)</text>
-<text text-anchor="middle" x="672" y="-1533.6" font-family="Times New Roman,serif" font-size="8.00">downloaderOnline</text>
-<text text-anchor="middle" x="672" y="-1524.6" font-family="Times New Roman,serif" font-size="8.00">0 of 578.66kB (17.86%)</text>
-</a>
-</g>
-</g>
-<!-- N8&#45;&gt;N2 -->
-<g id="edge12" class="edge"><title>N8&#45;&gt;N2</title>
-<g id="a_edge12"><a xlink:title="main.(*Spider).downloaderOnline &#45;&gt; main.downloaders (578.66kB)">
-<path fill="none" stroke="#b25313" d="M653.699,-1517.93C642.245,-1505.23 626.882,-1489.04 612,-1476 601.41,-1466.72 589.151,-1457.41 577.982,-1449.41"/>
-<polygon fill="#b25313" stroke="#b25313" points="579.889,-1446.47 569.7,-1443.56 575.853,-1452.19 579.889,-1446.47"/>
-</a>
-</g>
-<g id="a_edge12&#45;label"><a xlink:title="main.(*Spider).downloaderOnline &#45;&gt; main.downloaders (578.66kB)">
-<text text-anchor="middle" x="657" y="-1479.8" font-family="Times New Roman,serif" font-size="14.00"> 578.66kB</text>
+<g id="a_node2"><a xlink:title="main.downloaders (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="597.5,-644 490.5,-644 490.5,-608 597.5,-608 597.5,-644"/>
+<text text-anchor="middle" x="544" y="-633.1" font-family="Times New Roman,serif" font-size="8.00">main</text>
+<text text-anchor="middle" x="544" y="-624.1" font-family="Times New Roman,serif" font-size="8.00">downloaders</text>
+<text text-anchor="middle" x="544" y="-615.1" font-family="Times New Roman,serif" font-size="8.00">0 of 2825.32kB (84.65%)</text>
 </a>
 </g>
 </g>
 <!-- N9 -->
 <g id="node9" class="node"><title>N9</title>
-<g id="a_node9"><a xlink:title="main.(*Spider).downloaderFollowOffline (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="846,-1562 742,-1562 742,-1518 846,-1518 846,-1562"/>
-<text text-anchor="middle" x="794" y="-1551.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
-<text text-anchor="middle" x="794" y="-1542.6" font-family="Times New Roman,serif" font-size="8.00">(*Spider)</text>
-<text text-anchor="middle" x="794" y="-1533.6" font-family="Times New Roman,serif" font-size="8.00">downloaderFollowOffline</text>
-<text text-anchor="middle" x="794" y="-1524.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
+<g id="a_node9"><a xlink:title="io/ioutil.ReadAll (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="597.5,-537 490.5,-537 490.5,-501 597.5,-501 597.5,-537"/>
+<text text-anchor="middle" x="544" y="-526.1" font-family="Times New Roman,serif" font-size="8.00">ioutil</text>
+<text text-anchor="middle" x="544" y="-517.1" font-family="Times New Roman,serif" font-size="8.00">ReadAll</text>
+<text text-anchor="middle" x="544" y="-508.1" font-family="Times New Roman,serif" font-size="8.00">0 of 2825.32kB (84.65%)</text>
 </a>
 </g>
 </g>
-<!-- N31 -->
-<g id="node31" class="node"><title>N31</title>
-<g id="a_node31"><a xlink:title="ikanzhibo/db/redis.GetConn (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-1443.5 748,-1443.5 748,-1407.5 840,-1407.5 840,-1443.5"/>
-<text text-anchor="middle" x="794" y="-1432.6" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-1423.6" font-family="Times New Roman,serif" font-size="8.00">GetConn</text>
-<text text-anchor="middle" x="794" y="-1414.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
+<!-- N2&#45;&gt;N9 -->
+<g id="edge8" class="edge"><title>N2&#45;&gt;N9</title>
+<g id="a_edge8"><a xlink:title="main.downloaders &#45;&gt; io/ioutil.ReadAll (2825.32kB)">
+<path fill="none" stroke="#b20800" stroke-width="5" d="M544,-607.661C544,-591.225 544,-566.278 544,-547.194"/>
+<polygon fill="#b20800" stroke="#b20800" stroke-width="5" points="548.375,-547.016 544,-537.016 539.625,-547.016 548.375,-547.016"/>
+</a>
+</g>
+<g id="a_edge8&#45;label"><a xlink:title="main.downloaders &#45;&gt; io/ioutil.ReadAll (2825.32kB)">
+<text text-anchor="middle" x="576" y="-558.8" font-family="Times New Roman,serif" font-size="14.00"> 2825.32kB</text>
 </a>
 </g>
 </g>
-<!-- N9&#45;&gt;N31 -->
-<g id="edge20" class="edge"><title>N9&#45;&gt;N31</title>
-<g id="a_edge20"><a xlink:title="main.(*Spider).downloaderFollowOffline &#45;&gt; ikanzhibo/db/redis.GetConn (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1517.84C794,-1499.69 794,-1473.42 794,-1453.71"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-1453.52 794,-1443.52 790.5,-1453.52 797.5,-1453.52"/>
+<!-- N3 -->
+<g id="node3" class="node"><title>N3</title>
+<g id="a_node3"><a xlink:title="main.(*Spider).downloaderNotFollowOffline (1701.99kB)">
+<polygon fill="#edd9d5" stroke="#b22000" points="602.5,-768 485.5,-768 485.5,-724 602.5,-724 602.5,-768"/>
+<text text-anchor="middle" x="544" y="-757.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
+<text text-anchor="middle" x="544" y="-748.6" font-family="Times New Roman,serif" font-size="8.00">(*Spider)</text>
+<text text-anchor="middle" x="544" y="-739.6" font-family="Times New Roman,serif" font-size="8.00">downloaderNotFollowOffline</text>
+<text text-anchor="middle" x="544" y="-730.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (50.99%)</text>
 </a>
 </g>
-<g id="a_edge20&#45;label"><a xlink:title="main.(*Spider).downloaderFollowOffline &#45;&gt; ikanzhibo/db/redis.GetConn (514kB)">
-<text text-anchor="middle" x="814" y="-1479.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
+</g>
+<!-- N3&#45;&gt;N2 -->
+<g id="edge9" class="edge"><title>N3&#45;&gt;N2</title>
+<g id="a_edge9"><a xlink:title="main.(*Spider).downloaderNotFollowOffline &#45;&gt; main.downloaders (1701.99kB)">
+<path fill="none" stroke="#b22000" stroke-width="3" d="M544,-723.904C544,-704.485 544,-675.565 544,-654.374"/>
+<polygon fill="#b22000" stroke="#b22000" stroke-width="3" points="547.5,-654.087 544,-644.087 540.5,-654.087 547.5,-654.087"/>
+</a>
+</g>
+<g id="a_edge9&#45;label"><a xlink:title="main.(*Spider).downloaderNotFollowOffline &#45;&gt; main.downloaders (1701.99kB)">
+<text text-anchor="middle" x="576" y="-685.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
+</a>
+</g>
+</g>
+<!-- N4 -->
+<g id="node4" class="node"><title>N4</title>
+<g id="a_node4"><a xlink:title="main.(*Spider).downloaderOnline (1123.33kB)">
+<polygon fill="#eddcd5" stroke="#b23100" points="727.5,-768 620.5,-768 620.5,-724 727.5,-724 727.5,-768"/>
+<text text-anchor="middle" x="674" y="-757.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
+<text text-anchor="middle" x="674" y="-748.6" font-family="Times New Roman,serif" font-size="8.00">(*Spider)</text>
+<text text-anchor="middle" x="674" y="-739.6" font-family="Times New Roman,serif" font-size="8.00">downloaderOnline</text>
+<text text-anchor="middle" x="674" y="-730.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1123.33kB (33.66%)</text>
+</a>
+</g>
+</g>
+<!-- N4&#45;&gt;N2 -->
+<g id="edge10" class="edge"><title>N4&#45;&gt;N2</title>
+<g id="a_edge10"><a xlink:title="main.(*Spider).downloaderOnline &#45;&gt; main.downloaders (1123.33kB)">
+<path fill="none" stroke="#b23100" stroke-width="2" d="M654.465,-723.979C642.533,-711.44 626.776,-695.404 612,-682 600.121,-671.224 586.469,-659.978 574.528,-650.483"/>
+<polygon fill="#b23100" stroke="#b23100" stroke-width="2" points="576.599,-647.659 566.578,-644.217 572.266,-653.156 576.599,-647.659"/>
+</a>
+</g>
+<g id="a_edge10&#45;label"><a xlink:title="main.(*Spider).downloaderOnline &#45;&gt; main.downloaders (1123.33kB)">
+<text text-anchor="middle" x="660" y="-685.8" font-family="Times New Roman,serif" font-size="14.00"> 1123.33kB</text>
+</a>
+</g>
+</g>
+<!-- N5 -->
+<g id="node5" class="node"><title>N5</title>
+<g id="a_node5"><a xlink:title="net/http/pprof.init.ializers (512.28kB)">
+<polygon fill="#ede2da" stroke="#b26429" points="864.5,-664 729.5,-664 729.5,-588 864.5,-588 864.5,-664"/>
+<text text-anchor="middle" x="797" y="-648" font-family="Times New Roman,serif" font-size="15.00">pprof</text>
+<text text-anchor="middle" x="797" y="-631" font-family="Times New Roman,serif" font-size="15.00">init</text>
+<text text-anchor="middle" x="797" y="-614" font-family="Times New Roman,serif" font-size="15.00">ializers</text>
+<text text-anchor="middle" x="797" y="-597" font-family="Times New Roman,serif" font-size="15.00">512.28kB (15.35%)</text>
+</a>
+</g>
+</g>
+<!-- NN5_0 -->
+<g id="NN5_0" class="node"><title>NN5_0</title>
+<g id="a_NN5_0"><a xlink:title="512.28kB">
+<polygon fill="#f8f8f8" stroke="black" points="824,-537 774,-537 770,-533 770,-501 820,-501 824,-505 824,-537"/>
+<polyline fill="none" stroke="black" points="820,-533 770,-533 "/>
+<polyline fill="none" stroke="black" points="820,-533 820,-501 "/>
+<polyline fill="none" stroke="black" points="820,-533 824,-537 "/>
+<text text-anchor="middle" x="797" y="-517.1" font-family="Times New Roman,serif" font-size="8.00">576B</text>
+</a>
+</g>
+</g>
+<!-- N5&#45;&gt;NN5_0 -->
+<g id="edge3" class="edge"><title>N5&#45;&gt;NN5_0</title>
+<g id="a_edge3"><a xlink:title="512.28kB">
+<path fill="none" stroke="black" d="M797,-587.981C797,-574.555 797,-559.646 797,-547.219"/>
+<polygon fill="black" stroke="black" points="800.5,-547.037 797,-537.037 793.5,-547.037 800.5,-547.037"/>
+</a>
+</g>
+<g id="a_edge3&#45;label"><a xlink:title="512.28kB">
+<text text-anchor="middle" x="826" y="-558.8" font-family="Times New Roman,serif" font-size="14.00"> 512.28kB</text>
+</a>
+</g>
+</g>
+<!-- N6 -->
+<g id="node6" class="node"><title>N6</title>
+<g id="a_node6"><a xlink:title="runtime.main (512.28kB)">
+<polygon fill="#ede2da" stroke="#b26429" points="848.5,-764 745.5,-764 745.5,-728 848.5,-728 848.5,-764"/>
+<text text-anchor="middle" x="797" y="-753.1" font-family="Times New Roman,serif" font-size="8.00">runtime</text>
+<text text-anchor="middle" x="797" y="-744.1" font-family="Times New Roman,serif" font-size="8.00">main</text>
+<text text-anchor="middle" x="797" y="-735.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.28kB (15.35%)</text>
+</a>
+</g>
+</g>
+<!-- N6&#45;&gt;N5 -->
+<g id="edge11" class="edge"><title>N6&#45;&gt;N5</title>
+<g id="a_edge11"><a xlink:title="runtime.main &#45;&gt; net/http/pprof.init.ializers (512.28kB)">
+<path fill="none" stroke="#b26429" d="M797,-727.842C797,-713.754 797,-693.11 797,-674.164"/>
+<polygon fill="#b26429" stroke="#b26429" points="800.5,-674.161 797,-664.161 793.5,-674.161 800.5,-674.161"/>
+</a>
+</g>
+<g id="a_edge11&#45;label"><a xlink:title="runtime.main &#45;&gt; net/http/pprof.init.ializers (512.28kB)">
+<text text-anchor="middle" x="826" y="-685.8" font-family="Times New Roman,serif" font-size="14.00"> 512.28kB</text>
+</a>
+</g>
+</g>
+<!-- N7 -->
+<g id="node7" class="node"><title>N7</title>
+<g id="a_node7"><a xlink:title="bytes.(*Buffer).ReadFrom (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="597.5,-363 490.5,-363 490.5,-319 597.5,-319 597.5,-363"/>
+<text text-anchor="middle" x="544" y="-352.6" font-family="Times New Roman,serif" font-size="8.00">bytes</text>
+<text text-anchor="middle" x="544" y="-343.6" font-family="Times New Roman,serif" font-size="8.00">(*Buffer)</text>
+<text text-anchor="middle" x="544" y="-334.6" font-family="Times New Roman,serif" font-size="8.00">ReadFrom</text>
+<text text-anchor="middle" x="544" y="-325.6" font-family="Times New Roman,serif" font-size="8.00">0 of 2825.32kB (84.65%)</text>
+</a>
+</g>
+</g>
+<!-- N8 -->
+<g id="node8" class="node"><title>N8</title>
+<g id="a_node8"><a xlink:title="bytes.(*Buffer).grow (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="597.5,-268 490.5,-268 490.5,-224 597.5,-224 597.5,-268"/>
+<text text-anchor="middle" x="544" y="-257.6" font-family="Times New Roman,serif" font-size="8.00">bytes</text>
+<text text-anchor="middle" x="544" y="-248.6" font-family="Times New Roman,serif" font-size="8.00">(*Buffer)</text>
+<text text-anchor="middle" x="544" y="-239.6" font-family="Times New Roman,serif" font-size="8.00">grow</text>
+<text text-anchor="middle" x="544" y="-230.6" font-family="Times New Roman,serif" font-size="8.00">0 of 2825.32kB (84.65%)</text>
+</a>
+</g>
+</g>
+<!-- N7&#45;&gt;N8 -->
+<g id="edge4" class="edge"><title>N7&#45;&gt;N8</title>
+<g id="a_edge4"><a xlink:title="bytes.(*Buffer).ReadFrom &#45;&gt; bytes.(*Buffer).grow (2825.32kB)">
+<path fill="none" stroke="#b20800" stroke-width="5" d="M544,-318.897C544,-306.887 544,-291.617 544,-278.242"/>
+<polygon fill="#b20800" stroke="#b20800" stroke-width="5" points="548.375,-278.02 544,-268.02 539.625,-278.02 548.375,-278.02"/>
+</a>
+</g>
+<g id="a_edge4&#45;label"><a xlink:title="bytes.(*Buffer).ReadFrom &#45;&gt; bytes.(*Buffer).grow (2825.32kB)">
+<text text-anchor="middle" x="576" y="-289.8" font-family="Times New Roman,serif" font-size="14.00"> 2825.32kB</text>
+</a>
+</g>
+</g>
+<!-- N8&#45;&gt;N1 -->
+<g id="edge5" class="edge"><title>N8&#45;&gt;N1</title>
+<g id="a_edge5"><a xlink:title="bytes.(*Buffer).grow &#45;&gt; bytes.makeSlice (2825.32kB)">
+<path fill="none" stroke="#b20800" stroke-width="5" d="M544,-223.825C544,-212.426 544,-197.812 544,-183.569"/>
+<polygon fill="#b20800" stroke="#b20800" stroke-width="5" points="548.375,-183.315 544,-173.315 539.625,-183.315 548.375,-183.315"/>
+</a>
+</g>
+<g id="a_edge5&#45;label"><a xlink:title="bytes.(*Buffer).grow &#45;&gt; bytes.makeSlice (2825.32kB)">
+<text text-anchor="middle" x="576" y="-194.8" font-family="Times New Roman,serif" font-size="14.00"> 2825.32kB</text>
 </a>
 </g>
 </g>
 <!-- N10 -->
 <g id="node10" class="node"><title>N10</title>
-<g id="a_node10"><a xlink:title="runtime.mstart (512.03kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="984.5,-1558 881.5,-1558 881.5,-1522 984.5,-1522 984.5,-1558"/>
-<text text-anchor="middle" x="933" y="-1547.1" font-family="Times New Roman,serif" font-size="8.00">runtime</text>
-<text text-anchor="middle" x="933" y="-1538.1" font-family="Times New Roman,serif" font-size="8.00">mstart</text>
-<text text-anchor="middle" x="933" y="-1529.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.03kB (15.80%)</text>
+<g id="a_node10"><a xlink:title="io/ioutil.readAll (2825.32kB)">
+<polygon fill="#edd6d5" stroke="#b20800" points="597.5,-450 490.5,-450 490.5,-414 597.5,-414 597.5,-450"/>
+<text text-anchor="middle" x="544" y="-439.1" font-family="Times New Roman,serif" font-size="8.00">ioutil</text>
+<text text-anchor="middle" x="544" y="-430.1" font-family="Times New Roman,serif" font-size="8.00">readAll</text>
+<text text-anchor="middle" x="544" y="-421.1" font-family="Times New Roman,serif" font-size="8.00">0 of 2825.32kB (84.65%)</text>
 </a>
 </g>
 </g>
-<!-- N10&#45;&gt;N5 -->
-<g id="edge21" class="edge"><title>N10&#45;&gt;N5</title>
-<g id="a_edge21"><a xlink:title="runtime.mstart &#45;&gt; runtime.systemstack (512.03kB)">
-<path fill="none" stroke="#b26125" d="M933,-1521.91C933,-1507.7 933,-1486.87 933,-1468.3"/>
-<polygon fill="#b26125" stroke="#b26125" points="936.5,-1468.27 933,-1458.27 929.5,-1468.27 936.5,-1468.27"/>
+<!-- N9&#45;&gt;N10 -->
+<g id="edge6" class="edge"><title>N9&#45;&gt;N10</title>
+<g id="a_edge6"><a xlink:title="io/ioutil.ReadAll &#45;&gt; io/ioutil.readAll (2825.32kB)">
+<path fill="none" stroke="#b20800" stroke-width="5" d="M544,-500.799C544,-489.163 544,-473.548 544,-460.237"/>
+<polygon fill="#b20800" stroke="#b20800" stroke-width="5" points="548.375,-460.175 544,-450.175 539.625,-460.175 548.375,-460.175"/>
 </a>
 </g>
-<g id="a_edge21&#45;label"><a xlink:title="runtime.mstart &#45;&gt; runtime.systemstack (512.03kB)">
-<text text-anchor="middle" x="962" y="-1479.8" font-family="Times New Roman,serif" font-size="14.00"> 512.03kB</text>
+<g id="a_edge6&#45;label"><a xlink:title="io/ioutil.ReadAll &#45;&gt; io/ioutil.readAll (2825.32kB)">
+<text text-anchor="middle" x="576" y="-471.8" font-family="Times New Roman,serif" font-size="14.00"> 2825.32kB</text>
 </a>
 </g>
 </g>
-<!-- N11 -->
-<g id="node11" class="node"><title>N11</title>
-<g id="a_node11"><a xlink:title="net/http.(*persistConn).addTLS.func2 (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1566.5 1026.5,-1566.5 1026.5,-1513.5 1129.5,-1513.5 1129.5,-1566.5"/>
-<text text-anchor="middle" x="1078" y="-1556.1" font-family="Times New Roman,serif" font-size="8.00">http</text>
-<text text-anchor="middle" x="1078" y="-1547.1" font-family="Times New Roman,serif" font-size="8.00">(*persistConn)</text>
-<text text-anchor="middle" x="1078" y="-1538.1" font-family="Times New Roman,serif" font-size="8.00">addTLS</text>
-<text text-anchor="middle" x="1078" y="-1529.1" font-family="Times New Roman,serif" font-size="8.00">func2</text>
-<text text-anchor="middle" x="1078" y="-1520.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
+<!-- N10&#45;&gt;N7 -->
+<g id="edge7" class="edge"><title>N10&#45;&gt;N7</title>
+<g id="a_edge7"><a xlink:title="io/ioutil.readAll &#45;&gt; bytes.(*Buffer).ReadFrom (2825.32kB)">
+<path fill="none" stroke="#b20800" stroke-width="5" d="M544,-413.84C544,-402.441 544,-387.134 544,-373.578"/>
+<polygon fill="#b20800" stroke="#b20800" stroke-width="5" points="548.375,-373.19 544,-363.191 539.625,-373.191 548.375,-373.19"/>
 </a>
 </g>
-</g>
-<!-- N15 -->
-<g id="node15" class="node"><title>N15</title>
-<g id="a_node15"><a xlink:title="crypto/tls.(*Conn).Handshake (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1447.5 1026.5,-1447.5 1026.5,-1403.5 1129.5,-1403.5 1129.5,-1447.5"/>
-<text text-anchor="middle" x="1078" y="-1437.1" font-family="Times New Roman,serif" font-size="8.00">tls</text>
-<text text-anchor="middle" x="1078" y="-1428.1" font-family="Times New Roman,serif" font-size="8.00">(*Conn)</text>
-<text text-anchor="middle" x="1078" y="-1419.1" font-family="Times New Roman,serif" font-size="8.00">Handshake</text>
-<text text-anchor="middle" x="1078" y="-1410.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N11&#45;&gt;N15 -->
-<g id="edge36" class="edge"><title>N11&#45;&gt;N15</title>
-<g id="a_edge36"><a xlink:title="net/http.(*persistConn).addTLS.func2 &#45;&gt; crypto/tls.(*Conn).Handshake (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1513.47C1078,-1497.04 1078,-1475.57 1078,-1458.07"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-1457.77 1078,-1447.77 1074.5,-1457.77 1081.5,-1457.77"/>
-</a>
-</g>
-<g id="a_edge36&#45;label"><a xlink:title="net/http.(*persistConn).addTLS.func2 &#45;&gt; crypto/tls.(*Conn).Handshake (512.01kB)">
-<text text-anchor="middle" x="1107" y="-1479.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N12 -->
-<g id="node12" class="node"><title>N12</title>
-<g id="a_node12"><a xlink:title="bufio.NewReader (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-821 748,-821 748,-785 840,-785 840,-821"/>
-<text text-anchor="middle" x="794" y="-810.1" font-family="Times New Roman,serif" font-size="8.00">bufio</text>
-<text text-anchor="middle" x="794" y="-801.1" font-family="Times New Roman,serif" font-size="8.00">NewReader</text>
-<text text-anchor="middle" x="794" y="-792.1" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N12&#45;&gt;N4 -->
-<g id="edge13" class="edge"><title>N12&#45;&gt;N4</title>
-<g id="a_edge13"><a xlink:title="bufio.NewReader &#45;&gt; bufio.NewReaderSize (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-784.909C794,-772.758 794,-755.887 794,-740.276"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-740.261 794,-730.261 790.5,-740.261 797.5,-740.261"/>
-</a>
-</g>
-<g id="a_edge13&#45;label"><a xlink:title="bufio.NewReader &#45;&gt; bufio.NewReaderSize (514kB)">
-<text text-anchor="middle" x="814" y="-751.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N13 -->
-<g id="node13" class="node"><title>N13</title>
-<g id="a_node13"><a xlink:title="bytes.(*Buffer).ReadFrom (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="597.5,-1152 490.5,-1152 490.5,-1108 597.5,-1108 597.5,-1152"/>
-<text text-anchor="middle" x="544" y="-1141.6" font-family="Times New Roman,serif" font-size="8.00">bytes</text>
-<text text-anchor="middle" x="544" y="-1132.6" font-family="Times New Roman,serif" font-size="8.00">(*Buffer)</text>
-<text text-anchor="middle" x="544" y="-1123.6" font-family="Times New Roman,serif" font-size="8.00">ReadFrom</text>
-<text text-anchor="middle" x="544" y="-1114.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (52.53%)</text>
-</a>
-</g>
-</g>
-<!-- N14 -->
-<g id="node14" class="node"><title>N14</title>
-<g id="a_node14"><a xlink:title="bytes.(*Buffer).grow (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="597.5,-1057 490.5,-1057 490.5,-1013 597.5,-1013 597.5,-1057"/>
-<text text-anchor="middle" x="544" y="-1046.6" font-family="Times New Roman,serif" font-size="8.00">bytes</text>
-<text text-anchor="middle" x="544" y="-1037.6" font-family="Times New Roman,serif" font-size="8.00">(*Buffer)</text>
-<text text-anchor="middle" x="544" y="-1028.6" font-family="Times New Roman,serif" font-size="8.00">grow</text>
-<text text-anchor="middle" x="544" y="-1019.6" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (52.53%)</text>
-</a>
-</g>
-</g>
-<!-- N13&#45;&gt;N14 -->
-<g id="edge6" class="edge"><title>N13&#45;&gt;N14</title>
-<g id="a_edge6"><a xlink:title="bytes.(*Buffer).ReadFrom &#45;&gt; bytes.(*Buffer).grow (1701.99kB)">
-<path fill="none" stroke="#b21f00" stroke-width="3" d="M544,-1107.9C544,-1095.89 544,-1080.62 544,-1067.24"/>
-<polygon fill="#b21f00" stroke="#b21f00" stroke-width="3" points="547.5,-1067.02 544,-1057.02 540.5,-1067.02 547.5,-1067.02"/>
-</a>
-</g>
-<g id="a_edge6&#45;label"><a xlink:title="bytes.(*Buffer).ReadFrom &#45;&gt; bytes.(*Buffer).grow (1701.99kB)">
-<text text-anchor="middle" x="576" y="-1078.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
-</a>
-</g>
-</g>
-<!-- N14&#45;&gt;N1 -->
-<g id="edge7" class="edge"><title>N14&#45;&gt;N1</title>
-<g id="a_edge7"><a xlink:title="bytes.(*Buffer).grow &#45;&gt; bytes.makeSlice (1701.99kB)">
-<path fill="none" stroke="#b21f00" stroke-width="3" d="M544,-1012.82C544,-1001.43 544,-986.812 544,-972.569"/>
-<polygon fill="#b21f00" stroke="#b21f00" stroke-width="3" points="547.5,-972.315 544,-962.315 540.5,-972.315 547.5,-972.315"/>
-</a>
-</g>
-<g id="a_edge7&#45;label"><a xlink:title="bytes.(*Buffer).grow &#45;&gt; bytes.makeSlice (1701.99kB)">
-<text text-anchor="middle" x="576" y="-983.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
-</a>
-</g>
-</g>
-<!-- N16 -->
-<g id="node16" class="node"><title>N16</title>
-<g id="a_node16"><a xlink:title="crypto/tls.(*Conn).clientHandshake (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1342 1026.5,-1342 1026.5,-1298 1129.5,-1298 1129.5,-1342"/>
-<text text-anchor="middle" x="1078" y="-1331.6" font-family="Times New Roman,serif" font-size="8.00">tls</text>
-<text text-anchor="middle" x="1078" y="-1322.6" font-family="Times New Roman,serif" font-size="8.00">(*Conn)</text>
-<text text-anchor="middle" x="1078" y="-1313.6" font-family="Times New Roman,serif" font-size="8.00">clientHandshake</text>
-<text text-anchor="middle" x="1078" y="-1304.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N15&#45;&gt;N16 -->
-<g id="edge22" class="edge"><title>N15&#45;&gt;N16</title>
-<g id="a_edge22"><a xlink:title="crypto/tls.(*Conn).Handshake &#45;&gt; crypto/tls.(*Conn).clientHandshake (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1403.31C1078,-1388.65 1078,-1368.91 1078,-1352.44"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-1352.17 1078,-1342.17 1074.5,-1352.17 1081.5,-1352.17"/>
-</a>
-</g>
-<g id="a_edge22&#45;label"><a xlink:title="crypto/tls.(*Conn).Handshake &#45;&gt; crypto/tls.(*Conn).clientHandshake (512.01kB)">
-<text text-anchor="middle" x="1107" y="-1363.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N19 -->
-<g id="node19" class="node"><title>N19</title>
-<g id="a_node19"><a xlink:title="crypto/tls.(*clientHandshakeState).handshake (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1247 1026.5,-1247 1026.5,-1203 1129.5,-1203 1129.5,-1247"/>
-<text text-anchor="middle" x="1078" y="-1236.6" font-family="Times New Roman,serif" font-size="8.00">tls</text>
-<text text-anchor="middle" x="1078" y="-1227.6" font-family="Times New Roman,serif" font-size="8.00">(*clientHandshakeState)</text>
-<text text-anchor="middle" x="1078" y="-1218.6" font-family="Times New Roman,serif" font-size="8.00">handshake</text>
-<text text-anchor="middle" x="1078" y="-1209.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N16&#45;&gt;N19 -->
-<g id="edge23" class="edge"><title>N16&#45;&gt;N19</title>
-<g id="a_edge23"><a xlink:title="crypto/tls.(*Conn).clientHandshake &#45;&gt; crypto/tls.(*clientHandshakeState).handshake (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1297.9C1078,-1285.89 1078,-1270.62 1078,-1257.24"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-1257.02 1078,-1247.02 1074.5,-1257.02 1081.5,-1257.02"/>
-</a>
-</g>
-<g id="a_edge23&#45;label"><a xlink:title="crypto/tls.(*Conn).clientHandshake &#45;&gt; crypto/tls.(*clientHandshakeState).handshake (512.01kB)">
-<text text-anchor="middle" x="1107" y="-1268.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N17 -->
-<g id="node17" class="node"><title>N17</title>
-<g id="a_node17"><a xlink:title="crypto/tls.(*Conn).verifyServerCertificate (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1057 1026.5,-1057 1026.5,-1013 1129.5,-1013 1129.5,-1057"/>
-<text text-anchor="middle" x="1078" y="-1046.6" font-family="Times New Roman,serif" font-size="8.00">tls</text>
-<text text-anchor="middle" x="1078" y="-1037.6" font-family="Times New Roman,serif" font-size="8.00">(*Conn)</text>
-<text text-anchor="middle" x="1078" y="-1028.6" font-family="Times New Roman,serif" font-size="8.00">verifyServerCertificate</text>
-<text text-anchor="middle" x="1078" y="-1019.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N20 -->
-<g id="node20" class="node"><title>N20</title>
-<g id="a_node20"><a xlink:title="crypto/x509.(*Certificate).Verify (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-941 1026.5,-941 1026.5,-897 1129.5,-897 1129.5,-941"/>
-<text text-anchor="middle" x="1078" y="-930.6" font-family="Times New Roman,serif" font-size="8.00">x509</text>
-<text text-anchor="middle" x="1078" y="-921.6" font-family="Times New Roman,serif" font-size="8.00">(*Certificate)</text>
-<text text-anchor="middle" x="1078" y="-912.6" font-family="Times New Roman,serif" font-size="8.00">Verify</text>
-<text text-anchor="middle" x="1078" y="-903.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N17&#45;&gt;N20 -->
-<g id="edge24" class="edge"><title>N17&#45;&gt;N20</title>
-<g id="a_edge24"><a xlink:title="crypto/tls.(*Conn).verifyServerCertificate &#45;&gt; crypto/x509.(*Certificate).Verify (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1012.82C1078,-995.548 1078,-970.887 1078,-951.325"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-951.062 1078,-941.062 1074.5,-951.062 1081.5,-951.062"/>
-</a>
-</g>
-<g id="a_edge24&#45;label"><a xlink:title="crypto/tls.(*Conn).verifyServerCertificate &#45;&gt; crypto/x509.(*Certificate).Verify (512.01kB)">
-<text text-anchor="middle" x="1107" y="-983.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N18 -->
-<g id="node18" class="node"><title>N18</title>
-<g id="a_node18"><a xlink:title="crypto/tls.(*clientHandshakeState).doFullHandshake (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-1152 1026.5,-1152 1026.5,-1108 1129.5,-1108 1129.5,-1152"/>
-<text text-anchor="middle" x="1078" y="-1141.6" font-family="Times New Roman,serif" font-size="8.00">tls</text>
-<text text-anchor="middle" x="1078" y="-1132.6" font-family="Times New Roman,serif" font-size="8.00">(*clientHandshakeState)</text>
-<text text-anchor="middle" x="1078" y="-1123.6" font-family="Times New Roman,serif" font-size="8.00">doFullHandshake</text>
-<text text-anchor="middle" x="1078" y="-1114.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N18&#45;&gt;N17 -->
-<g id="edge25" class="edge"><title>N18&#45;&gt;N17</title>
-<g id="a_edge25"><a xlink:title="crypto/tls.(*clientHandshakeState).doFullHandshake &#45;&gt; crypto/tls.(*Conn).verifyServerCertificate (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1107.9C1078,-1095.89 1078,-1080.62 1078,-1067.24"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-1067.02 1078,-1057.02 1074.5,-1067.02 1081.5,-1067.02"/>
-</a>
-</g>
-<g id="a_edge25&#45;label"><a xlink:title="crypto/tls.(*clientHandshakeState).doFullHandshake &#45;&gt; crypto/tls.(*Conn).verifyServerCertificate (512.01kB)">
-<text text-anchor="middle" x="1107" y="-1078.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N19&#45;&gt;N18 -->
-<g id="edge26" class="edge"><title>N19&#45;&gt;N18</title>
-<g id="a_edge26"><a xlink:title="crypto/tls.(*clientHandshakeState).handshake &#45;&gt; crypto/tls.(*clientHandshakeState).doFullHandshake (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-1202.9C1078,-1190.89 1078,-1175.62 1078,-1162.24"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-1162.02 1078,-1152.02 1074.5,-1162.02 1081.5,-1162.02"/>
-</a>
-</g>
-<g id="a_edge26&#45;label"><a xlink:title="crypto/tls.(*clientHandshakeState).handshake &#45;&gt; crypto/tls.(*clientHandshakeState).doFullHandshake (512.01kB)">
-<text text-anchor="middle" x="1107" y="-1173.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N21 -->
-<g id="node21" class="node"><title>N21</title>
-<g id="a_node21"><a xlink:title="crypto/x509.(*Certificate).systemVerify (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-825 1026.5,-825 1026.5,-781 1129.5,-781 1129.5,-825"/>
-<text text-anchor="middle" x="1078" y="-814.6" font-family="Times New Roman,serif" font-size="8.00">x509</text>
-<text text-anchor="middle" x="1078" y="-805.6" font-family="Times New Roman,serif" font-size="8.00">(*Certificate)</text>
-<text text-anchor="middle" x="1078" y="-796.6" font-family="Times New Roman,serif" font-size="8.00">systemVerify</text>
-<text text-anchor="middle" x="1078" y="-787.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N20&#45;&gt;N21 -->
-<g id="edge27" class="edge"><title>N20&#45;&gt;N21</title>
-<g id="a_edge27"><a xlink:title="crypto/x509.(*Certificate).Verify &#45;&gt; crypto/x509.(*Certificate).systemVerify (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-896.825C1078,-879.548 1078,-854.887 1078,-835.325"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-835.062 1078,-825.062 1074.5,-835.062 1081.5,-835.062"/>
-</a>
-</g>
-<g id="a_edge27&#45;label"><a xlink:title="crypto/x509.(*Certificate).Verify &#45;&gt; crypto/x509.(*Certificate).systemVerify (512.01kB)">
-<text text-anchor="middle" x="1107" y="-846.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N23 -->
-<g id="node23" class="node"><title>N23</title>
-<g id="a_node23"><a xlink:title="crypto/x509.extractSimpleChain (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-715.5 1026.5,-715.5 1026.5,-679.5 1129.5,-679.5 1129.5,-715.5"/>
-<text text-anchor="middle" x="1078" y="-704.6" font-family="Times New Roman,serif" font-size="8.00">x509</text>
-<text text-anchor="middle" x="1078" y="-695.6" font-family="Times New Roman,serif" font-size="8.00">extractSimpleChain</text>
-<text text-anchor="middle" x="1078" y="-686.6" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N21&#45;&gt;N23 -->
-<g id="edge28" class="edge"><title>N21&#45;&gt;N23</title>
-<g id="a_edge28"><a xlink:title="crypto/x509.(*Certificate).systemVerify &#45;&gt; crypto/x509.extractSimpleChain (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-780.805C1078,-764.839 1078,-742.827 1078,-725.584"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-725.561 1078,-715.561 1074.5,-725.561 1081.5,-725.561"/>
-</a>
-</g>
-<g id="a_edge28&#45;label"><a xlink:title="crypto/x509.(*Certificate).systemVerify &#45;&gt; crypto/x509.extractSimpleChain (512.01kB)">
-<text text-anchor="middle" x="1107" y="-751.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N22 -->
-<g id="node22" class="node"><title>N22</title>
-<g id="a_node22"><a xlink:title="crypto/x509.ParseCertificate (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-614 1026.5,-614 1026.5,-578 1129.5,-578 1129.5,-614"/>
-<text text-anchor="middle" x="1078" y="-603.1" font-family="Times New Roman,serif" font-size="8.00">x509</text>
-<text text-anchor="middle" x="1078" y="-594.1" font-family="Times New Roman,serif" font-size="8.00">ParseCertificate</text>
-<text text-anchor="middle" x="1078" y="-585.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N24 -->
-<g id="node24" class="node"><title>N24</title>
-<g id="a_node24"><a xlink:title="encoding/asn1.Unmarshal (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-527 1026.5,-527 1026.5,-491 1129.5,-491 1129.5,-527"/>
-<text text-anchor="middle" x="1078" y="-516.1" font-family="Times New Roman,serif" font-size="8.00">asn1</text>
-<text text-anchor="middle" x="1078" y="-507.1" font-family="Times New Roman,serif" font-size="8.00">Unmarshal</text>
-<text text-anchor="middle" x="1078" y="-498.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N22&#45;&gt;N24 -->
-<g id="edge29" class="edge"><title>N22&#45;&gt;N24</title>
-<g id="a_edge29"><a xlink:title="crypto/x509.ParseCertificate &#45;&gt; encoding/asn1.Unmarshal (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-577.799C1078,-566.163 1078,-550.548 1078,-537.237"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-537.175 1078,-527.175 1074.5,-537.175 1081.5,-537.175"/>
-</a>
-</g>
-<g id="a_edge29&#45;label"><a xlink:title="crypto/x509.ParseCertificate &#45;&gt; encoding/asn1.Unmarshal (512.01kB)">
-<text text-anchor="middle" x="1107" y="-548.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N23&#45;&gt;N22 -->
-<g id="edge30" class="edge"><title>N23&#45;&gt;N22</title>
-<g id="a_edge30"><a xlink:title="crypto/x509.extractSimpleChain &#45;&gt; crypto/x509.ParseCertificate (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-679.168C1078,-664.045 1078,-641.842 1078,-624.327"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-624.133 1078,-614.133 1074.5,-624.133 1081.5,-624.133"/>
-</a>
-</g>
-<g id="a_edge30&#45;label"><a xlink:title="crypto/x509.extractSimpleChain &#45;&gt; crypto/x509.ParseCertificate (512.01kB)">
-<text text-anchor="middle" x="1107" y="-635.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N25 -->
-<g id="node25" class="node"><title>N25</title>
-<g id="a_node25"><a xlink:title="encoding/asn1.UnmarshalWithParams (512.01kB)">
-<polygon fill="#ede2da" stroke="#b26125" points="1129.5,-440 1026.5,-440 1026.5,-404 1129.5,-404 1129.5,-440"/>
-<text text-anchor="middle" x="1078" y="-429.1" font-family="Times New Roman,serif" font-size="8.00">asn1</text>
-<text text-anchor="middle" x="1078" y="-420.1" font-family="Times New Roman,serif" font-size="8.00">UnmarshalWithParams</text>
-<text text-anchor="middle" x="1078" y="-411.1" font-family="Times New Roman,serif" font-size="8.00">0 of 512.01kB (15.80%)</text>
-</a>
-</g>
-</g>
-<!-- N24&#45;&gt;N25 -->
-<g id="edge31" class="edge"><title>N24&#45;&gt;N25</title>
-<g id="a_edge31"><a xlink:title="encoding/asn1.Unmarshal &#45;&gt; encoding/asn1.UnmarshalWithParams (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-490.799C1078,-479.163 1078,-463.548 1078,-450.237"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-450.175 1078,-440.175 1074.5,-450.175 1081.5,-450.175"/>
-</a>
-</g>
-<g id="a_edge31&#45;label"><a xlink:title="encoding/asn1.Unmarshal &#45;&gt; encoding/asn1.UnmarshalWithParams (512.01kB)">
-<text text-anchor="middle" x="1107" y="-461.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N25&#45;&gt;N6 -->
-<g id="edge32" class="edge"><title>N25&#45;&gt;N6</title>
-<g id="a_edge32"><a xlink:title="encoding/asn1.UnmarshalWithParams &#45;&gt; encoding/asn1.parseField (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1078,-403.799C1078,-392.163 1078,-376.548 1078,-363.237"/>
-<polygon fill="#b26125" stroke="#b26125" points="1081.5,-363.175 1078,-353.175 1074.5,-363.175 1081.5,-363.175"/>
-</a>
-</g>
-<g id="a_edge32&#45;label"><a xlink:title="encoding/asn1.UnmarshalWithParams &#45;&gt; encoding/asn1.parseField (512.01kB)">
-<text text-anchor="middle" x="1107" y="-374.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N26&#45;&gt;N6 -->
-<g id="edge35" class="edge"><title>N26&#45;&gt;N6</title>
-<g id="a_edge35"><a xlink:title="encoding/asn1.parseSequenceOf &#45;&gt; encoding/asn1.parseField (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1037.25,-262.066C1043.76,-268.498 1050.71,-276.163 1056,-284 1060.77,-291.076 1064.91,-299.356 1068.27,-307.12"/>
-<polygon fill="#b26125" stroke="#b26125" points="1065.09,-308.597 1072.09,-316.548 1071.58,-305.965 1065.09,-308.597"/>
-</a>
-</g>
-<g id="a_edge35&#45;label"><a xlink:title="encoding/asn1.parseSequenceOf &#45;&gt; encoding/asn1.parseField (512.01kB)">
-<text text-anchor="middle" x="1093" y="-287.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
-</a>
-</g>
-</g>
-<!-- N27 -->
-<g id="node27" class="node"><title>N27</title>
-<g id="a_node27"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).Get (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-1342 748,-1342 748,-1298 840,-1298 840,-1342"/>
-<text text-anchor="middle" x="794" y="-1331.6" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-1322.6" font-family="Times New Roman,serif" font-size="8.00">(*Pool)</text>
-<text text-anchor="middle" x="794" y="-1313.6" font-family="Times New Roman,serif" font-size="8.00">Get</text>
-<text text-anchor="middle" x="794" y="-1304.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N29 -->
-<g id="node29" class="node"><title>N29</title>
-<g id="a_node29"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).get (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-1247 748,-1247 748,-1203 840,-1203 840,-1247"/>
-<text text-anchor="middle" x="794" y="-1236.6" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-1227.6" font-family="Times New Roman,serif" font-size="8.00">(*Pool)</text>
-<text text-anchor="middle" x="794" y="-1218.6" font-family="Times New Roman,serif" font-size="8.00">get</text>
-<text text-anchor="middle" x="794" y="-1209.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N27&#45;&gt;N29 -->
-<g id="edge14" class="edge"><title>N27&#45;&gt;N29</title>
-<g id="a_edge14"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).Get &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).get (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1297.9C794,-1285.89 794,-1270.62 794,-1257.24"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-1257.02 794,-1247.02 790.5,-1257.02 797.5,-1257.02"/>
-</a>
-</g>
-<g id="a_edge14&#45;label"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).Get &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).get (514kB)">
-<text text-anchor="middle" x="814" y="-1268.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N28 -->
-<g id="node28" class="node"><title>N28</title>
-<g id="a_node28"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).dial (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-1152 748,-1152 748,-1108 840,-1108 840,-1152"/>
-<text text-anchor="middle" x="794" y="-1141.6" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-1132.6" font-family="Times New Roman,serif" font-size="8.00">(*Pool)</text>
-<text text-anchor="middle" x="794" y="-1123.6" font-family="Times New Roman,serif" font-size="8.00">dial</text>
-<text text-anchor="middle" x="794" y="-1114.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N32 -->
-<g id="node32" class="node"><title>N32</title>
-<g id="a_node32"><a xlink:title="ikanzhibo/db/redis.newPool.func1 (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-1057 748,-1057 748,-1013 840,-1013 840,-1057"/>
-<text text-anchor="middle" x="794" y="-1046.6" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-1037.6" font-family="Times New Roman,serif" font-size="8.00">newPool</text>
-<text text-anchor="middle" x="794" y="-1028.6" font-family="Times New Roman,serif" font-size="8.00">func1</text>
-<text text-anchor="middle" x="794" y="-1019.6" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N28&#45;&gt;N32 -->
-<g id="edge15" class="edge"><title>N28&#45;&gt;N32</title>
-<g id="a_edge15"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).dial &#45;&gt; ikanzhibo/db/redis.newPool.func1 (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1107.9C794,-1095.89 794,-1080.62 794,-1067.24"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-1067.02 794,-1057.02 790.5,-1067.02 797.5,-1067.02"/>
-</a>
-</g>
-<g id="a_edge15&#45;label"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).dial &#45;&gt; ikanzhibo/db/redis.newPool.func1 (514kB)">
-<text text-anchor="middle" x="814" y="-1078.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N29&#45;&gt;N28 -->
-<g id="edge16" class="edge"><title>N29&#45;&gt;N28</title>
-<g id="a_edge16"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).get &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).dial (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1202.9C794,-1190.89 794,-1175.62 794,-1162.24"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-1162.02 794,-1152.02 790.5,-1162.02 797.5,-1162.02"/>
-</a>
-</g>
-<g id="a_edge16&#45;label"><a xlink:title="github.com/gomodule/redigo/redis.(*Pool).get &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).dial (514kB)">
-<text text-anchor="middle" x="814" y="-1173.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N30 -->
-<g id="node30" class="node"><title>N30</title>
-<g id="a_node30"><a xlink:title="github.com/gomodule/redigo/redis.Dial (514kB)">
-<polygon fill="#ede2da" stroke="#b26124" points="840,-937 748,-937 748,-901 840,-901 840,-937"/>
-<text text-anchor="middle" x="794" y="-926.1" font-family="Times New Roman,serif" font-size="8.00">redis</text>
-<text text-anchor="middle" x="794" y="-917.1" font-family="Times New Roman,serif" font-size="8.00">Dial</text>
-<text text-anchor="middle" x="794" y="-908.1" font-family="Times New Roman,serif" font-size="8.00">0 of 514kB (15.86%)</text>
-</a>
-</g>
-</g>
-<!-- N30&#45;&gt;N12 -->
-<g id="edge17" class="edge"><title>N30&#45;&gt;N12</title>
-<g id="a_edge17"><a xlink:title="github.com/gomodule/redigo/redis.Dial &#45;&gt; bufio.NewReader (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-900.686C794,-882.249 794,-852.816 794,-831.262"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-831.104 794,-821.104 790.5,-831.104 797.5,-831.104"/>
-</a>
-</g>
-<g id="a_edge17&#45;label"><a xlink:title="github.com/gomodule/redigo/redis.Dial &#45;&gt; bufio.NewReader (514kB)">
-<text text-anchor="middle" x="814" y="-846.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N31&#45;&gt;N27 -->
-<g id="edge18" class="edge"><title>N31&#45;&gt;N27</title>
-<g id="a_edge18"><a xlink:title="ikanzhibo/db/redis.GetConn &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).Get (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1407.41C794,-1392.43 794,-1370.29 794,-1352.17"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-1352.05 794,-1342.05 790.5,-1352.05 797.5,-1352.05"/>
-</a>
-</g>
-<g id="a_edge18&#45;label"><a xlink:title="ikanzhibo/db/redis.GetConn &#45;&gt; github.com/gomodule/redigo/redis.(*Pool).Get (514kB)">
-<text text-anchor="middle" x="814" y="-1363.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N32&#45;&gt;N30 -->
-<g id="edge19" class="edge"><title>N32&#45;&gt;N30</title>
-<g id="a_edge19"><a xlink:title="ikanzhibo/db/redis.newPool.func1 &#45;&gt; github.com/gomodule/redigo/redis.Dial (514kB)">
-<path fill="none" stroke="#b26124" d="M794,-1012.82C794,-994.376 794,-967.508 794,-947.42"/>
-<polygon fill="#b26124" stroke="#b26124" points="797.5,-947.334 794,-937.334 790.5,-947.335 797.5,-947.334"/>
-</a>
-</g>
-<g id="a_edge19&#45;label"><a xlink:title="ikanzhibo/db/redis.newPool.func1 &#45;&gt; github.com/gomodule/redigo/redis.Dial (514kB)">
-<text text-anchor="middle" x="814" y="-983.8" font-family="Times New Roman,serif" font-size="14.00"> 514kB</text>
-</a>
-</g>
-</g>
-<!-- N34 -->
-<g id="node34" class="node"><title>N34</title>
-<g id="a_node34"><a xlink:title="io/ioutil.readAll (1701.99kB)">
-<polygon fill="#edd9d5" stroke="#b21f00" points="597.5,-1243 490.5,-1243 490.5,-1207 597.5,-1207 597.5,-1243"/>
-<text text-anchor="middle" x="544" y="-1232.1" font-family="Times New Roman,serif" font-size="8.00">ioutil</text>
-<text text-anchor="middle" x="544" y="-1223.1" font-family="Times New Roman,serif" font-size="8.00">readAll</text>
-<text text-anchor="middle" x="544" y="-1214.1" font-family="Times New Roman,serif" font-size="8.00">0 of 1701.99kB (52.53%)</text>
-</a>
-</g>
-</g>
-<!-- N33&#45;&gt;N34 -->
-<g id="edge8" class="edge"><title>N33&#45;&gt;N34</title>
-<g id="a_edge8"><a xlink:title="io/ioutil.ReadAll &#45;&gt; io/ioutil.readAll (1701.99kB)">
-<path fill="none" stroke="#b21f00" stroke-width="3" d="M544,-1301.94C544,-1288.39 544,-1269.18 544,-1253.47"/>
-<polygon fill="#b21f00" stroke="#b21f00" stroke-width="3" points="547.5,-1253.26 544,-1243.26 540.5,-1253.26 547.5,-1253.26"/>
-</a>
-</g>
-<g id="a_edge8&#45;label"><a xlink:title="io/ioutil.ReadAll &#45;&gt; io/ioutil.readAll (1701.99kB)">
-<text text-anchor="middle" x="576" y="-1268.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
-</a>
-</g>
-</g>
-<!-- N34&#45;&gt;N13 -->
-<g id="edge9" class="edge"><title>N34&#45;&gt;N13</title>
-<g id="a_edge9"><a xlink:title="io/ioutil.readAll &#45;&gt; bytes.(*Buffer).ReadFrom (1701.99kB)">
-<path fill="none" stroke="#b21f00" stroke-width="3" d="M544,-1206.94C544,-1194.54 544,-1177.38 544,-1162.51"/>
-<polygon fill="#b21f00" stroke="#b21f00" stroke-width="3" points="547.5,-1162.19 544,-1152.19 540.5,-1162.19 547.5,-1162.19"/>
-</a>
-</g>
-<g id="a_edge9&#45;label"><a xlink:title="io/ioutil.readAll &#45;&gt; bytes.(*Buffer).ReadFrom (1701.99kB)">
-<text text-anchor="middle" x="576" y="-1173.8" font-family="Times New Roman,serif" font-size="14.00"> 1701.99kB</text>
-</a>
-</g>
-</g>
-<!-- N35&#45;&gt;N7 -->
-<g id="edge37" class="edge"><title>N35&#45;&gt;N7</title>
-<g id="a_edge37"><a xlink:title="reflect.(*rtype).Field &#45;&gt; reflect.(*structType).Field (512.01kB)">
-<path fill="none" stroke="#b26125" d="M1159,-221.746C1159,-210.325 1159,-195.705 1159,-181.508"/>
-<polygon fill="#b26125" stroke="#b26125" points="1162.5,-181.298 1159,-171.298 1155.5,-181.298 1162.5,-181.298"/>
-</a>
-</g>
-<g id="a_edge37&#45;label"><a xlink:title="reflect.(*rtype).Field &#45;&gt; reflect.(*structType).Field (512.01kB)">
-<text text-anchor="middle" x="1188" y="-192.8" font-family="Times New Roman,serif" font-size="14.00"> 512.01kB</text>
+<g id="a_edge7&#45;label"><a xlink:title="io/ioutil.readAll &#45;&gt; bytes.(*Buffer).ReadFrom (2825.32kB)">
+<text text-anchor="middle" x="576" y="-384.8" font-family="Times New Roman,serif" font-size="14.00"> 2825.32kB</text>
 </a>
 </g>
 </g>

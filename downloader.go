@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
 	"io/ioutil"
@@ -23,7 +22,7 @@ func (spider *Spider) downloaderFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
-	ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 5)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisFollowOfflineList)
 		if err != nil {
@@ -58,7 +57,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
-	ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 5)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
@@ -93,7 +92,7 @@ func (spider *Spider) downloaderOnline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
-	ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 5)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisOnlineList)
 		if err != nil {
@@ -128,7 +127,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	queue := db.Queue{}
-	ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 5)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisListList)
 		if err != nil {
@@ -189,7 +188,7 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 		return body, err
 	}
 	// 可以不回收 close , 因为在for里 所以连接还在被使用?
-	//defer response.Body.Close()
+	defer response.Body.Close()
 	body, err = ioutil.ReadAll(response.Body)
 	//response.Body.Close()
 
@@ -197,6 +196,6 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 		return body, err
 	}
 
-	fmt.Println(queue.QueueSet.Request.Url)
+	//fmt.Println(queue.QueueSet.Request.Url)
 	return body, err
 }
