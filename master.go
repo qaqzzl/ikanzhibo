@@ -59,9 +59,10 @@ func (spider *Spider) handlerFollowOffline() {
 	//控制抓取频率
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 5;
+	ticker := time.NewTicker(time.Second * 2)
 	for {
-		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
-
+		//<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
+		<-ticker.C
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
@@ -104,8 +105,10 @@ func (Spider *Spider) handlerNotFollowOffline() {
 	//控制抓取频率
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 5;
+	ticker := time.NewTicker(time.Second * 2)
 	for {
-		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
+		//<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
+		<-ticker.C
 
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
@@ -149,9 +152,10 @@ func (Spider *Spider) handlerOnline() {
 	//控制抓取频率
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 5;
+	ticker := time.NewTicker(time.Second * 2)
 	for {
-		<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
-
+		//<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
+		<-ticker.C
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
@@ -196,9 +200,10 @@ func (spider *Spider) handlerTotalPlatforms() {
 	//控制抓取频率
 	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 	endTime := initTime + 5;
+	ticker := time.NewTicker(time.Second * 2)
 	for {
-		<-time.Tick(time.Second * 1)	//暂停, 单位 / 秒
-
+		//<-time.Tick(time.Second * 1)	//暂停, 单位 / 秒
+		<-ticker.C
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
 			continue
@@ -251,15 +256,19 @@ func Crontab()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	go func() {		//关注 && 不在线
+		ticker := time.NewTicker(time.Second * 60)
 		for true {
-			<-time.Tick(time.Second * 60)	//60秒清除一次 被关注&&不在线直播间集合,定时跟数据库做一致性同步
+			//<-time.Tick(time.Second * 60)	//60秒清除一次 被关注&&不在线直播间集合,定时跟数据库做一致性同步
+			<-ticker.C
 			rconn.Do("del", db.RedisFollowOfflineSet)	//清空
 		}
 	}()
 
 	go func() {		//未关注 && 不在线
+		ticker := time.NewTicker(time.Second * 6000)
 		for true {
-			<-time.Tick(time.Second * 6000)	//60秒清除一次未关注 && 不在线直播间集合,定时跟数据库做一致性同步
+			//<-time.Tick(time.Second * 6000)	//60秒清除一次未关注 && 不在线直播间集合,定时跟数据库做一致性同步
+			<-ticker.C
 			rconn.Do("del", db.RedisNotFollowOfflineSet)	//清空
 		}
 	}()

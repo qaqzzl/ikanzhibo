@@ -72,11 +72,11 @@ func (m *Monitor) StatusRta(s *Spider) {
 	}()
 
 	// 应用 Tps
-	//ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 1)
 	go func() { //协程
 		for {
-			<-time.Tick(time.Second * 1)
-			//<-ticker.C
+			//<-time.Tick(time.Second * 1)
+			<-ticker.C
 			//tps
 			m.TpsSli = append(m.TpsSli, m.Data.TotalRequestNum)
 			if len(m.TpsSli) > 2 {
@@ -89,7 +89,8 @@ func (m *Monitor) StatusRta(s *Spider) {
 		rconn := redis.GetConn()
 		defer rconn.Close()
 		for {
-			<-time.Tick(time.Second * 1)
+			//<-time.Tick(time.Second * 1)
+			<-ticker.C
 			RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
 			m.Data.RedisOnlineList = RedisOnlineList.(int64);					//在线队列数量
 

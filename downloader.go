@@ -23,6 +23,7 @@ func (spider *Spider) downloaderFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
+	ticker := time.NewTicker(time.Second * 1)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisFollowOfflineList)
 		if err != nil {
@@ -31,7 +32,8 @@ func (spider *Spider) downloaderFollowOffline() {
 		}
 		if v == nil {
 			//暂停 5 秒
-			<-time.Tick(time.Second * 5)
+			//<-time.Tick(time.Second * 5)
+			<-ticker.C
 			continue
 		}
 		body, err := downloaders(v, &queue)
@@ -56,6 +58,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
+	ticker := time.NewTicker(time.Second * 1)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
@@ -64,7 +67,8 @@ func (spider *Spider) downloaderNotFollowOffline() {
 		}
 		if v == nil {
 			//暂停 5 秒
-			<-time.Tick(time.Second * 5)
+			//<-time.Tick(time.Second * 5)
+			<-ticker.C
 			continue
 		}
 		body, err := downloaders(v, &queue)
@@ -89,6 +93,7 @@ func (spider *Spider) downloaderOnline() {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	var queue db.Queue
+	ticker := time.NewTicker(time.Second * 1)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisOnlineList)
 		if err != nil {
@@ -97,7 +102,8 @@ func (spider *Spider) downloaderOnline() {
 		}
 		if v == nil {
 			//暂停 5 秒
-			<-time.Tick(time.Second * 5)
+			//<-time.Tick(time.Second * 5)
+			<-ticker.C
 			continue
 		}
 		body, err := downloaders(v, &queue)
@@ -122,6 +128,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 	queue := db.Queue{}
+	ticker := time.NewTicker(time.Second * 1)
 	for {
 		v, err := rconn.Do("LPOP", db.RedisListList)
 		if err != nil {
@@ -130,16 +137,17 @@ func (spider *Spider) downloaderTotalPlatform()  {
 		}
 		if v == nil {
 			//暂停 5 秒
-			<-time.Tick(time.Second * 5)
+			//<-time.Tick(time.Second * 5)
+			<-ticker.C
 			continue
 		}
 
 		body, err := downloaders(v, &queue)
-		if body == nil {
-			continue
-		}
 		if err != nil {
 			log.Println(err.Error())
+			continue
+		}
+		if body == nil {
 			continue
 		}
 		spider.ChanParsers <- &Parser{
