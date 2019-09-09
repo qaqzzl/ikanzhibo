@@ -288,7 +288,7 @@ func (spider *Spider) douYuLiveInfo(p *Parser) {
 
 	//.Live_type_id
 	//.Live_type_name
-	p.Queue.LiveData.Live_type_id,p.Queue.LiveData.Live_type_name = liveGetMyTypeId(p.Queue.LiveData.Live_class)
+	p.Queue.LiveData.Live_type_id,p.Queue.LiveData.Live_type_name = platformTypeToLocal(p.Queue.LiveData.Live_class)
 
 	p.Queue.LiveData.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	p.Queue.LiveData.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
@@ -377,7 +377,7 @@ func (spider *Spider) douYuLiveList(p *Parser)  {
 					Url: "https://www.douyu.com/gapi/rkc/directory/0_0/"+strconv.Itoa(i),
 				},
 				QueueType: "live_list",
-				Live_platform: "douyu",
+				Platform: "douyu",
 			},
 		}
 	}
@@ -389,7 +389,7 @@ func (spider *Spider) douYuLiveList(p *Parser)  {
 					Url: "https://www.douyu.com/betard/"+strconv.Itoa(v.Rid),
 				},
 				QueueType: "live_info",
-				Live_platform: "douyu",
+				Platform: "douyu",
 			},
 		}
 	}

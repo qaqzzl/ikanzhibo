@@ -24,7 +24,9 @@ var (
 	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 列表 - 已爬取 , 防止当前启动发现任务抓取重复列表数据
 	RedisInfoOnceSet				= "live_info_once_set"						//生产任务集合 - 直播间详情 - 已爬取 , 防止每次发现任务重复爬取系统已经存在的直播间
 
-	RedisOnlineNotice				= "event_online_notice_list"				//事件 - 开播通知
+	RedisFollowSet					= "live_follow_set"							//被关注的直播间
+
+	RedisOnlineNoticeList			= "event_online_notice_list"				//事件 - 开播通知
 
 )
 
@@ -35,7 +37,7 @@ type Platform struct {
 	Name			string
 	Domain			string
 	PullUrl			string
-	Status			int
+	Status			string
 	DomainUrl		string
 }
 var platforms []Platform
@@ -51,14 +53,14 @@ type Request struct {
 type Queue struct {
 	QueueSet	QueueSet
 	LiveData	TableLive
-	WriteEvent	string						//写入时触发事件, online_notice:开播通知, send_barrage:发送弹幕 , listener_barrage:监听弹幕 多个事件用逗号隔开
+	WriteEvent	string							//写入时触发事件, online_notice:开播通知, send_barrage:发送弹幕 , listener_barrage:监听弹幕 多个事件用逗号隔开
 	//ParserEvent	string		`json:"-"`		//解析时触发事件, offline_to_online:离线to在线, online_to_offline:在线to离线 多个事件用逗号隔开
 }
 //任务集合结构体 , 要保证每条数据结构体json后数据是唯一的
 type QueueSet struct {
 	Request		Request
 	QueueType	string						//任务类型 , live_info:直播间数据, live_list:直播列表
-	Live_platform string
+	Platform string
 }
 
 ////任务队列结构体 v1
@@ -96,6 +98,7 @@ type TableLive struct {
 	Live_play_end_time		string			//最近关播时间 #v1.1
 	Created_at				string
 	Updated_at				string
+	Dynamic_weight			string			//动态权重, 根据其他值计算
 }
 
 
@@ -138,12 +141,11 @@ func GetFollowOffline() (l []Queue, err error) {
 					Url: v["spider_pull_url"],
 				},
 				QueueType: "live_info",
-				Live_platform: v["live_platform"],
+				Platform: v["live_platform"],
 			},
 			LiveData:TableLive{
 				LiveId: v["live_id"],
 			},
-			WriteEvent: "online_notice",
 		}
 		l = append(l, vo)
 
@@ -204,7 +206,7 @@ func GetNotFollowOffline() (l []Queue, err error) {
 					Url: v["spider_pull_url"],
 				},
 				QueueType: "live_info",
-				Live_platform: v["live_platform"],
+				Platform: v["live_platform"],
 			},
 		}
 		l = append(l, val)
@@ -252,7 +254,7 @@ func GetPlatforms() (p []Platform, err error) {
 				Name:       v["name"],
 				Domain:     v["domain"],
 				PullUrl:    v["pull_url"],
-				Status:     0,
+				Status:     "1",
 				DomainUrl:  v["domain_url"],
 			}
 			p = append(p, vs)

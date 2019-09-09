@@ -30,6 +30,7 @@ type Spider struct {
 //调度器
 func Master(spider *Spider)  {
 	InitLive()		//初始化数据
+	initLiveFollow()
 
 	go spider.handlerTotalPlatforms()				//发现任务
 
@@ -88,6 +89,7 @@ func (spider *Spider) handlerFollowOffline() {
 		}
 
 		for _, v := range l {
+			v.WriteEvent = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisFollowOfflineList, str); err != nil {
@@ -135,6 +137,7 @@ func (Spider *Spider) handlerNotFollowOffline() {
 		}
 
 		for _, v := range l {
+			v.WriteEvent = "online_notice"
 			str,_ := json.Marshal(v)
 			//加入任务到redis队列
 			if _, err := rconn.Do("RPUSH", db.RedisNotFollowOfflineList, str); err != nil {
@@ -235,7 +238,7 @@ func (spider *Spider) handlerTotalPlatforms() {
 						Url: v.PullUrl,
 					},
 					QueueType: "live_list",
-					Live_platform: v.Mark,
+					Platform: v.Mark,
 				},
 			}
 			rconn.Do("SADD", db.RedisListOnceSet, v.PullUrl)
@@ -290,9 +293,37 @@ func InitLive() {
 var	LiveMyTypeData []map[string]string
 func initLiveMyType() (err error) {
 	fmt.Println("init type data")
-	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset").Order("`order` asc").Get(); err != nil {
+	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset,weight").Order("`order` asc").Get(); err != nil {
 		panic("初始化失败 . 分类映射数据出错 ,"+err.Error())
 	}
+	return err
+}
+
+
+//被关注主播数据
+func initLiveFollow() (err error) {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	fmt.Println("init live follow data")
+
+	list, err := mysql.Conn().QueryAll("select l.live_id,l.spider_pull_url,l.live_platform from live as l JOIN live_user_follow as luf ON luf.live_id = l.live_id WHERE luf.`status`=1 AND luf.is_notice=1")
+	var l []db.Queue
+	for _, v := range list {
+		vo := db.Queue{
+			QueueSet: db.QueueSet{
+				Request:     db.Request{
+					Url: v["spider_pull_url"],
+				},
+				QueueType: "live_info",
+				Platform: v["live_platform"],
+			},
+		}
+		l = append(l, vo)
+
+		str,_ := json.Marshal(vo.QueueSet)
+		rconn.Do("SADD", db.RedisFollowSet, str)
+	}
+
 	return err
 }
 

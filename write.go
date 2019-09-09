@@ -21,6 +21,14 @@ func (spider *Spider) WriteLiveInfo()  {
 	offline_endTime := initTime + 30;	//控制更新数据库写入频率
 	online_endTime := initTime + 30;	//控制更新数据库写入频率
 	for v := range spider.ChanWriteInfo {
+		//计算权重
+		Live_follow, _ := strconv.Atoi(v.LiveData.Live_follow)
+		follow_weight := platformFollowToWeight(Live_follow, v.LiveData.Live_platform)
+		type_weight,_ := getLocalTypeIdWeight(v.LiveData.Live_type_id)
+		dynamic_weight := follow_weight + type_weight
+		v.LiveData.Dynamic_weight = strconv.Itoa(dynamic_weight)
+
+
 		//30秒 || 数据大于20 -> 更新数据 , 在线
 		onlineCurrentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if online_endTime <= onlineCurrentTime || len(online_data) > 20 {
@@ -67,11 +75,12 @@ func (spider *Spider) WriteLiveInfo()  {
 		setStr,_ := json.Marshal(v.QueueSet)
 		switch v.LiveData.Live_is_online {
 		case "yes":
-			rconn.Do("SADD", db.RedisOnlineSet, setStr)		//在线直播间集合
+			rconn.Do("SADD", db.RedisOnlineSet, setStr)				//在线直播间集合
 			rconn.Do("SREM", db.RedisNotFollowOfflineSet, setStr)	//未关注&&不在线直播间集合
-			rconn.Do("SREM", db.RedisFollowOfflineSet, setStr)	//关注&&不在线直播间集合
+			rconn.Do("SREM", db.RedisFollowOfflineSet, setStr)		//关注&&不在线直播间集合
 		case "no":
-			rconn.Do("SREM", db.RedisOnlineSet, setStr)		//在线直播间集合
+			rconn.Do("SREM", db.RedisOnlineSet, setStr)					//在线直播间集合
+			rconn.Do("SADD", db.RedisNotFollowOfflineSet, setStr)		//未关注&&不在线直播间集合
 		case "vio":
 		case "del":
 		}
@@ -83,7 +92,7 @@ func writeOnlineLiveInfos(info []*db.Queue)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
-		"spider_pull_url,platform_room_id,spider_pull_time,live_play_time,live_play_end_time,created_at,updated_at) VALUES "
+		"spider_pull_url,platform_room_id,spider_pull_time,live_play_time,live_play_end_time,dynamic_weight,created_at,updated_at) VALUES "
 	for i:=0; i<len(info); i++ {
 		data := info[i].LiveData
 		//sql
@@ -108,6 +117,7 @@ func writeOnlineLiveInfos(info []*db.Queue)  {
 			data.Spider_pull_time+"','" +
 			data.Live_play_time+"','" +
 			data.Live_play_end_time+"','" +
+			data.Dynamic_weight+"','" +
 			data.Created_at+"','" +
 			data.Updated_at+
 			"'),"
@@ -133,6 +143,7 @@ func writeOnlineLiveInfos(info []*db.Queue)  {
 		"spider_pull_time=VALUES(spider_pull_time)," +
 		"live_play_time=VALUES(live_play_time)," +
 		"live_play_end_time=VALUES(live_play_end_time)," +
+		"dynamic_weight=VALUES(dynamic_weight)," +
 		"updated_at=VALUES(updated_at);"
 
 	err := mysql.Conn().InsertSql(sql);
@@ -146,7 +157,7 @@ func writeOfflineLiveInfos(info []*db.Queue)  {
 	//var mysqls string
 	sql := "INSERT INTO `live` (live_title,live_anchortv_name,live_anchortv_photo,live_anchortv_sex,live_cover,live_play,live_class,live_tag,live_introduction," +
 		"live_online_user,live_follow,live_uri,live_type_id,live_type_name,live_platform,live_is_online," +
-		"spider_pull_url,platform_room_id,spider_pull_time,live_play_time,live_play_end_time,created_at,updated_at) VALUES "
+		"spider_pull_url,platform_room_id,spider_pull_time,live_play_time,live_play_end_time,dynamic_weight,created_at,updated_at) VALUES "
 	for i:=0; i<len(info); i++ {
 		data := info[i].LiveData
 		//sql
@@ -171,6 +182,7 @@ func writeOfflineLiveInfos(info []*db.Queue)  {
 			data.Spider_pull_time+"','" +
 			data.Live_play_time+"','" +
 			data.Live_play_end_time+"','" +
+			data.Dynamic_weight+"','" +
 			data.Created_at+"','" +
 			data.Updated_at+
 			"'),"

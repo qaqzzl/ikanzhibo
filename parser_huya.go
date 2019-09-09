@@ -266,7 +266,7 @@ func (spider *Spider) huYaLiveInfo(p *Parser) {
 
 	//.Live_type_id
 	//.Live_type_name
-	p.Queue.LiveData.Live_type_id,p.Queue.LiveData.Live_type_name = liveGetMyTypeId(p.Queue.LiveData.Live_class)
+	p.Queue.LiveData.Live_type_id,p.Queue.LiveData.Live_type_name = platformTypeToLocal(p.Queue.LiveData.Live_class)
 
 	p.Queue.LiveData.Created_at = strconv.FormatInt(time.Now().Unix(),10)
 	p.Queue.LiveData.Updated_at = strconv.FormatInt(time.Now().Unix(),10)
@@ -403,7 +403,7 @@ func (spider *Spider) huYaLiveList(p *Parser)  {
 					Url: "https://www.huya.com/cache.php?m=LiveList&do=getLiveListByPage&tagAll=0&page="+strconv.Itoa(i),
 				},
 				QueueType: "live_list",
-				Live_platform: "huya",
+				Platform: "huya",
 			},
 		}
 
@@ -416,50 +416,8 @@ func (spider *Spider) huYaLiveList(p *Parser)  {
 					Url: "https://www.huya.com/"+v.ProfileRoom,
 				},
 				QueueType: "live_info",
-				Live_platform: "huya",
+				Platform: "huya",
 			},
 		}
 	}
-}
-
-
-/**
- * 通过url获取uri
- *
- */
-func urlGetUri(url string) string {
-	regexpUrl := regexp.MustCompile(`[a-zA-z]+://[^\s]*/(.+)`)
-	uris := regexpUrl.FindSubmatch([]byte(url))
-	return string(uris[1])
-}
-
-/**
- * 过滤字符串 , 防止sql注入跟其他错误
- */
-func liveReplaceSql(data string) (ret string) {
-	ret = strings.Replace(data, "'", "\"", -1)
-	ret = strings.Replace(ret, "\\", "\\\\", -1)
-	//ret = strings.Replace(ret, " ", "_", -1)
-
-	return ret
-}
-
-
-/**
- * 获取自定义直播分类
- * @param string 平台分类
- * @return string 自定义分类ID string
- */
-func liveGetMyTypeId(live_class string) (live_type_id string,live_type_name string) {
-	live_type_id = "0"
-	live_type_name = ""
-	for i := 0; i<len(LiveMyTypeData); i++ {
-		if strings.Contains(LiveMyTypeData[i]["subset"],"#"+live_class+"#") {
-			live_type_id = LiveMyTypeData[i]["type_id"]
-			live_type_name = LiveMyTypeData[i]["name"]
-			break
-		}
-	}
-
-	return live_type_id,live_type_name
 }

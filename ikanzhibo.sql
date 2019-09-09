@@ -82,12 +82,16 @@ create table if not exists `live`(
     `updated_at` int not null DEFAULT 0 comment '修改时间',
     `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
     `platform_room_id` varchar(255) not null default '' comment '平台房间ID',
+    `platform_room_id` varchar(255) not null default '' comment '平台房间ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
     UNIQUE KEY `platform_room_id_live_platform` (`platform_room_id`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
 
 alter table live add platform_room_id varchar(255) not null default '' comment '平台房间ID';
+alter table `live` add `dynamic_weight` int not null default 0 comment '动态权重, 根据其他值计算';
+alter table `live` add `static_weight` int not null default 0 comment '静态权重, 人工设置';
+dynamic_weight = live_follow * platform_weight + type_weight
 --
 -- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
@@ -111,7 +115,7 @@ create table if not exists `live_type`(
   `description` varchar(255) DEFAULT NULL comment '网站说明',
   `subset` text DEFAULT NULL comment '分类子分类 关系映射 ##分割'
 )engine=innodb default charset=utf8 comment '分类表';
-
+alter table `live_type` add `weight` int not null default 0 comment '分类权重, 人工设置';
 -- 平台表
 create table if not exists `live_platform`(
   `platform_id` int unsigned auto_increment primary key,

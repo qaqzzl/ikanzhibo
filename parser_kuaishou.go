@@ -165,7 +165,7 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 					Url: "https://live.kuaishou.com"+string(t[i][1]),
 				},
 				QueueType: "live_list",
-				Live_platform: "kuaishou",
+				Platform: "kuaishou",
 			},
 		}
 	}
@@ -180,7 +180,7 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 					Url: "https://live.kuaishou.com"+url,
 				},
 				QueueType: "live_info",
-				Live_platform: "kuaishou",
+				Platform: "kuaishou",
 			},
 		}
 	}
@@ -212,7 +212,7 @@ func (spider *Spider) kuaiShouLiveList(p *Parser) {
 						Url: "https://live.kuaishou.com"+string(uri[1])+"/?page="+strconv.Itoa(i),
 					},
 					QueueType: "live_list",
-					Live_platform: "kuaishou",
+					Platform: "kuaishou",
 				},
 			}
 		}
