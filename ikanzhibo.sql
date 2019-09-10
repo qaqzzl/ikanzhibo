@@ -91,7 +91,11 @@ create table if not exists `live`(
 alter table live add platform_room_id varchar(255) not null default '' comment '平台房间ID';
 alter table `live` add `dynamic_weight` int not null default 0 comment '动态权重, 根据其他值计算';
 alter table `live` add `static_weight` int not null default 0 comment '静态权重, 人工设置';
-dynamic_weight = live_follow * platform_weight + type_weight
+
+dynamic_weight = 关注人数 * 分类权重 + 关注人数 * 平台权重 + (开播时间权重) + 分类权重 + 静态权重
+
+开播时间 < 1小时 = 1000
+开播时间 < 30分钟 = 2000
 --
 -- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

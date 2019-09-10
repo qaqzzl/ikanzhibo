@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/mem"
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
 	"io"
@@ -14,6 +16,8 @@ type SystemMonitor struct {
 	CurrentTime						int64	`json:"current_time"`
 	TotalRequestNum   				int     `json:"total_request_num"`   		// 总处理请求数
 	Tps          					float64 `json:"tps"`          				// 系统吞出量
+	CpuUsedPercent					float64	`json:"cpu_used_percent"`				//cpu 使用百分比
+	MemUsedPercent					float64	`json:"mem_used_percent"`				//内存 使用百分比
 
 	RedisOnlineList   				int64     `json:"redis_online_list"`   				// 在线队列数量
 	RedisOnlineSet   				int64     `json:"redis_online_set"`   				// 在线集合数量
@@ -22,8 +26,9 @@ type SystemMonitor struct {
 	RedisFollowOfflineList   		int64     `json:"redis_follow_offline_list"`   		// 未关注不在线队列数量
 	RedisFollowOfflineSet   		int64     `json:"redis_follow_offline_set"`   		// 未关注不在线集合数量
 	RedisListList   				int64     `json:"redis_list_list"`   					// 发现任务队列数量
-	RedisListOnceSet   				int64     `json:"redis_list_once_set"`   				// 发现任务集合数量
-	RedisInfoOnceSet   				int64     `json:"redis_info_once_set"`   				// 开播通知队列数量
+	RedisListOnceSet   				int64     `json:"redis_list_once_set"`   				// 发现任务列表集合数量
+	RedisInfoOnceSet   				int64     `json:"redis_info_once_set"`   				// 发现任务info队列数量
+	RedisOnlineNoticeList   		int64     `json:"redis_online_notice_list"`   			// 开播通知队列数量
 
 	UsedMemoryHuman          		string	`json:"used_memory_human"`          // 应用使用内存, 20.00M
 
@@ -114,10 +119,13 @@ func (m *Monitor) StatusRta(s *Spider) {
 			m.Data.RedisListList = RedisListList.(int64);					//发现任务队列数量
 
 			RedisListOnceSet,_ := rconn.Do("SCARD", db.RedisListOnceSet)
-			m.Data.RedisListOnceSet = RedisListOnceSet.(int64);				//发现任务集合数量
+			m.Data.RedisListOnceSet = RedisListOnceSet.(int64);				//发现任务列表集合数量
 
 			RedisInfoOnceSet,_ := rconn.Do("SCARD", db.RedisInfoOnceSet)
-			m.Data.RedisInfoOnceSet = RedisInfoOnceSet.(int64);				//开播通知队列数量
+			m.Data.RedisInfoOnceSet = RedisInfoOnceSet.(int64);				//发现任务info队列数量
+
+			RedisOnlineNoticeList,_ := rconn.Do("SCARD", db.RedisOnlineNoticeList)
+			m.Data.RedisOnlineNoticeList = RedisOnlineNoticeList.(int64);				//开播通知队列数量
 
 			m.Data.ChanParsersNum	= len(s.ChanParsers);				//等待解析 channel 数量
 			m.Data.ChanProduceListNum = len(s.ChanProduceList);				//发现任务 channel 数量
@@ -136,13 +144,21 @@ func (m *Monitor) Start(s *Spider) {
 		writer.Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
 		writer.Header().Set("content-type", "application/json")             //返回数据格式是json
 
+		//运行时间
 		m.Data.UptimeInSeconds = time.Now().Sub(m.StartTime).String()
 		if len(m.TpsSli) >= 2 {
 			m.Data.Tps = float64(m.TpsSli[1]-m.TpsSli[0])
 		}
+		//当前时间
 		m.Data.CurrentTime = time.Now().Unix()
-		ret, _ := json.MarshalIndent(m.Data, "", "\t")
+		//cup使用使用率
+		CpuUsedPercent, _ := cpu.Percent(time.Second * 0, false)
+		m.Data.CpuUsedPercent = CpuUsedPercent[0]
+		//内存使用率
+		memRes, _ := mem.VirtualMemory()
+		m.Data.MemUsedPercent = memRes.UsedPercent
 
+		ret, _ := json.MarshalIndent(m.Data, "", "\t")
 		io.WriteString(writer, string(ret))
 	})
 	err := http.ListenAndServe(":1415", nil)

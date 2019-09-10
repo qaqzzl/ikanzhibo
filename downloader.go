@@ -11,10 +11,14 @@ import (
 )
 
 func (spider *Spider) Downloader()  {
-	go spider.downloaderFollowOffline()
-	go spider.downloaderNotFollowOffline()
-	go spider.downloaderOnline()
-	go spider.downloaderTotalPlatform()
+	for i := 0; i < 10; i++ {
+		go spider.downloaderFollowOffline()
+		go spider.downloaderTotalPlatform()
+	}
+	for i := 0; i < 20; i++  {
+		go spider.downloaderNotFollowOffline()
+		go spider.downloaderOnline()
+	}
 }
 
 //被关注&&不在线 下载器

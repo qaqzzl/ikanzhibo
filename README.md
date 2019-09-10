@@ -27,20 +27,13 @@
 
     
 
-#### 住控制器
-    任务调度器
-        分配任务,去重
-        
-        
-        
-        
-        
-        
-        
 
 
-#### Redis队列
-    * 关注不在线
-    未关注不在线
-    在线
-    全平台
+vendor     --depth=1
+```text
+    git clone https://github.com/shirou/gopsutil.git
+
+    git clone https://github.com/golang/sys.git
+    https://github.com/golang/net.git
+    https://github.com/golang/text.git
+```    

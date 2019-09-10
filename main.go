@@ -27,6 +27,7 @@ func init() {
 
 
 func main() {
+
 	//rconn := redis.GetConn()
 	//defer rconn.Close()
 	//RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)

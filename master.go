@@ -29,8 +29,8 @@ type Spider struct {
 
 //调度器
 func Master(spider *Spider)  {
-	InitLive()		//初始化数据
-	initLiveFollow()
+	//初始化数据
+	InitLive()
 
 	go spider.handlerTotalPlatforms()				//发现任务
 
@@ -40,9 +40,7 @@ func Master(spider *Spider)  {
 
 	go spider.handlerOnline()						//在线直播间
 
-	for i := 0; i < 5; i++ {
-		go spider.Downloader()						//下载器
-	}
+	go spider.Downloader()						//下载器
 
 	go spider.Parsers() //解析器
 
@@ -128,7 +126,7 @@ func (Spider *Spider) handlerNotFollowOffline() {
 		}
 		//初始化抓取频率时间
 		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime = currentTime + 300;	//300秒-> 5分
+		endTime = currentTime + 3000;	//300秒-> 5分
 
 		//获取被关注过但不在线的直播间
 		l, err := db.GetNotFollowOffline();
@@ -175,7 +173,7 @@ func (Spider *Spider) handlerOnline() {
 		}
 		//初始化抓取频率时间
 		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime = currentTime + 600;	//600秒-> 10分
+		endTime = currentTime + 6000;	//600秒-> 10分
 
 		//获取在线直播间
 		l, err := db.GetOnline();
@@ -287,6 +285,7 @@ func Crontab()  {
 
 func InitLive() {
 	initLiveMyType()
+	initLiveFollow()
 }
 
 //初始化分类映射数据
