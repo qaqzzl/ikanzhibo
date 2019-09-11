@@ -41,6 +41,7 @@ func Master(spider *Spider)  {
 	go spider.handlerOnline()						//在线直播间
 
 	go spider.Downloader()						//下载器
+	go spider.Downloader()						//下载器
 
 	go spider.Parsers() //解析器
 
