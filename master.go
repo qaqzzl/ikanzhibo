@@ -292,7 +292,7 @@ func InitLive() {
 var	LiveMyTypeData []map[string]string
 func initLiveMyType() (err error) {
 	fmt.Println("init type data")
-	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset,weight").Order("`order` asc").Get(); err != nil {
+	if LiveMyTypeData, err = mysql.Table("live_type").Select("type_id,name,subset,weight,weight_addition").Order("`order` asc").Get(); err != nil {
 		panic("初始化失败 . 分类映射数据出错 ,"+err.Error())
 	}
 	return err

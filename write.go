@@ -23,7 +23,7 @@ func (spider *Spider) WriteLiveInfo()  {
 	for v := range spider.ChanWriteInfo {
 		//计算权重
 		Live_follow, _ := strconv.Atoi(v.LiveData.Live_follow)
-		follow_weight := platformFollowToWeight(Live_follow, v.LiveData.Live_platform)
+		follow_weight := platformFollowToWeight(getLocalTypeIdAndFollowToNewFollow(v.LiveData.Live_type_id,Live_follow), v.LiveData.Live_platform)
 		type_weight,_ := getLocalTypeIdWeight(v.LiveData.Live_type_id)
 		dynamic_weight := follow_weight + type_weight
 		v.LiveData.Dynamic_weight = strconv.Itoa(dynamic_weight)

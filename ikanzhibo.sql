@@ -92,7 +92,7 @@ alter table live add platform_room_id varchar(255) not null default '' comment '
 alter table `live` add `dynamic_weight` int not null default 0 comment '动态权重, 根据其他值计算';
 alter table `live` add `static_weight` int not null default 0 comment '静态权重, 人工设置';
 
-dynamic_weight = 关注人数 * 分类权重 + 关注人数 * 平台权重 + (开播时间权重) + 分类权重 + 静态权重
+dynamic_weight = 关注人数 * 分类权重比例 + 关注人数 * 平台权重比例 + (开播时间权重) + 分类权重 + 静态权重
 
 开播时间 < 1小时 = 1000
 开播时间 < 30分钟 = 2000
@@ -120,6 +120,7 @@ create table if not exists `live_type`(
   `subset` text DEFAULT NULL comment '分类子分类 关系映射 ##分割'
 )engine=innodb default charset=utf8 comment '分类表';
 alter table `live_type` add `weight` int not null default 0 comment '分类权重, 人工设置';
+alter table `live_type` add `weight_addition` int(5) not null default 100 comment '分类权重提成比例';
 -- 平台表
 create table if not exists `live_platform`(
   `platform_id` int unsigned auto_increment primary key,

@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"strings"
 )
 var MysqlConn	 	*sql.DB
@@ -95,7 +94,6 @@ func (DB *Db) Get() ([]map[string]string,error) {
 	//查询多条
 	select_rows,err := MysqlConn.Query(select_sql)
 	if err != nil {
-		log.Println("MySql执行错误 [error:"+err.Error()+"]")
 		return data,err
 	}
 	for select_rows.Next() {
@@ -140,7 +138,6 @@ func (DB *Db) GetInterface() (data []interface{},err error) {
 	//查询多条
 	select_rows,err := MysqlConn.Query(select_sql)
 	if err != nil {
-		log.Println("MySql执行错误 [error:"+err.Error()+"]")
 		return data,err
 	}
 	for select_rows.Next() {
@@ -187,11 +184,9 @@ func (DB *Db) First(selects string) (data map[string]string) {
 	}
 
 	if select_err != nil { //如果没有查询到任何数据就进入if中err：no rows in result set
-		log.Println(select_err)
 		return record
 	}
 
-	//log.Println(data)
 	return record
 }
 
@@ -210,7 +205,6 @@ func (DB *Db) Insert(data map[string]string) {
 func (DB *Db) InsertSql(sql string) (err error) {
 	_,err = MysqlConn.Exec(sql)
 	if err != nil {
-		log.Println("MySql执行错误 [error:"+err.Error()+"]")
 		return err
 	}
 
@@ -226,7 +220,6 @@ func (DB *Db) Count() (int,error) {
 	var count int
 	err := MysqlConn.QueryRow(sql).Scan(&count)
 	if err != nil {
-		log.Println("MySql执行错误 [error:"+err.Error()+"]")
 		return 0,err
 	}
 	//MysqlConn.Close()	 | 不需要关闭
@@ -243,7 +236,6 @@ func (DB *Db) QueryAll(sql string) ([]map[string]string,error) {
 	var data []map[string]string
 	select_rows,err := MysqlConn.Query(sql)
 	if err != nil {
-		log.Println("MySql执行错误 [error:"+err.Error()+"]")
 		return data,err
 	}
 	for select_rows.Next() {

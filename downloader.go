@@ -5,20 +5,15 @@ import (
 	"ikanzhibo/db"
 	"ikanzhibo/db/redis"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
 
 func (spider *Spider) Downloader()  {
-	for i := 0; i < 10; i++ {
-		go spider.downloaderFollowOffline()
-		go spider.downloaderTotalPlatform()
-	}
-	for i := 0; i < 20; i++  {
-		go spider.downloaderNotFollowOffline()
-		go spider.downloaderOnline()
-	}
+	go spider.downloaderFollowOffline()
+	go spider.downloaderTotalPlatform()
+	go spider.downloaderNotFollowOffline()
+	go spider.downloaderOnline()
 }
 
 //被关注&&不在线 下载器
@@ -30,7 +25,7 @@ func (spider *Spider) downloaderFollowOffline() {
 	for {
 		v, err := rconn.Do("LPOP", db.RedisFollowOfflineList)
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 		if v == nil {
@@ -44,7 +39,7 @@ func (spider *Spider) downloaderFollowOffline() {
 			continue
 		}
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 
@@ -65,7 +60,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 	for {
 		v, err := rconn.Do("LPOP", db.RedisNotFollowOfflineList)
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 		if v == nil {
@@ -79,7 +74,7 @@ func (spider *Spider) downloaderNotFollowOffline() {
 			continue
 		}
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 
@@ -100,7 +95,7 @@ func (spider *Spider) downloaderOnline() {
 	for {
 		v, err := rconn.Do("LPOP", db.RedisOnlineList)
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 		if v == nil {
@@ -111,10 +106,11 @@ func (spider *Spider) downloaderOnline() {
 		}
 		body, err := downloaders(v, &queue)
 		if body == nil {
+			ErrLog("download body nil")
 			continue
 		}
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 
@@ -135,7 +131,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 	for {
 		v, err := rconn.Do("LPOP", db.RedisListList)
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 		if v == nil {
@@ -147,7 +143,7 @@ func (spider *Spider) downloaderTotalPlatform()  {
 
 		body, err := downloaders(v, &queue)
 		if err != nil {
-			log.Println(err.Error())
+			ErrLog(err.Error())
 			continue
 		}
 		if body == nil {
@@ -184,17 +180,17 @@ func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	response, err := client.Do(request)
 	//response,err := http.Get( queue.QueueSet.Request.Url)
 	if err != nil {
-		log.Println(err.Error()+"\n"+queue.QueueSet.Request.Url)
+		ErrLog(err.Error()+"\n"+queue.QueueSet.Request.Url)
 		return body, err
 	}
 	if response == nil {
-		log.Println("err response")
+		ErrLog("err response")
 		return body, err
 	}
-	// 可以不回收 close , 因为在for里 所以连接还在被使用?
-	defer response.Body.Close()
+	// 可以不回收 close , 因为在for里 所以资源还在被使用?
+	//defer response.Body.Close()
 	body, err = ioutil.ReadAll(response.Body)
-	//response.Body.Close()
+	response.Body.Close()
 
 	if err != nil {
 		return body, err

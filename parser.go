@@ -77,16 +77,39 @@ func getLocalTypeIdWeight(live_id string) (weight int, err error) {
 }
 
 /**
+ * 通过分类跟关注人数计算权重
+ */
+func getLocalTypeIdAndFollowToNewFollow(live_id string, followSum int) (NewFollow int) {
+	for i := 0; i<len(LiveMyTypeData); i++ {
+		if LiveMyTypeData[i]["type_id"] == live_id {
+			weight_addition,_ := strconv.Atoi(LiveMyTypeData[i]["weight_addition"])
+			NewFollow = weight_addition * followSum / 100
+			break
+		}
+	}
+	return NewFollow
+}
+
+/**
  * 通过平台关注人数计算权重
 */
 func platformFollowToWeight(followSum int, platform string) (weight int) {
+	switch {
+	case followSum > 10000000 :
+		weight = 100000 + followSum / 1000
+	case followSum > 1000000 :
+		weight = 95000 + followSum / 100
+	case followSum > 100000 :
+		weight = 90000 + followSum / 10
+	default:
+		weight = 85000 + followSum / 10
+	}
+
 	if platform == "huya" {
-		platform_weight := 50;
-		weight = (followSum * platform_weight / 100)
+		weight += 0
 	}
 	if platform == "douyu" {
-		platform_weight := 100;
-		weight = (followSum * platform_weight / 100)
+		weight += 0
 	}
 	return weight
 }
