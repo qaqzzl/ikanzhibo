@@ -27,20 +27,7 @@ func init() {
 
 
 func main() {
-
-	//rconn := redis.GetConn()
-	//defer rconn.Close()
-	//RedisOnlineList,_ := rconn.Do("LLEN", db.RedisOnlineList)
-	//fmt.Println(int(RedisOnlineList.(int64)))
-	//test()
-
 	go func() {
-		//mux := http.NewServeMux()
-		//mux.HandleFunc("/go", func(w http.ResponseWriter, r *http.Request) {
-		//	num := strconv.FormatInt(int64(runtime.NumGoroutine()), 10)
-		//	w.Write([]byte(num))
-		//})
-		//http.ListenAndServe("127.0.0.1:6061", mux)
 		http.ListenAndServe("127.0.0.1:6060", nil)
 	}()
 
@@ -55,7 +42,6 @@ func main() {
 		StartTime: time.Now(),
 	}
 	Monitor.Start(&spider)
-	//<-time.Tick(time.Second * 60000)
 
 }
 

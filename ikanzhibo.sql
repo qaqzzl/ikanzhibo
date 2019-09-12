@@ -24,11 +24,11 @@ create table if not exists `user_auths`(
     `id` int unsigned auto_increment primary key,
     `member_id` int not null comment '会员ID',
     `identity_type` char(20) not null comment '类型,wechat_applet,qq,wb,phone,number,email',
-    `identifier` varchar(255) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
-    `credential` varchar(255) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
+    `identifier` varchar(64) not null default '' comment '微信,QQ,微博opendid | 手机号,邮箱,账号',
+    `credential` varchar(64) not null default '' comment '密码凭证（站内的保存密码，站外的不保存或保存access_token）',
     KEY `member_id` (`member_id`),
     UNIQUE KEY `identity_type_identifier` (`identity_type`,`identifier`) USING BTREE
-)engine=innodb default charset=utf8mb4 comment '会员授权账号表';
+)engine=innodb default charset=utf8 comment '会员授权账号表';
 
 -- 用户授权 token 表 ,这个表用redis比较好 , 也可以使用JWS
 create table if not exists `user_auths_token`(
@@ -81,21 +81,20 @@ create table if not exists `live`(
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
     `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
-    `platform_room_id` varchar(255) not null default '' comment '平台房间ID',
-    `platform_room_id` varchar(255) not null default '' comment '平台房间ID',
+    `spider_pull_time` int(11) NOT NULL DEFAULT 0 COMMENT '上次抓取时间',
+    `platform_room_id` varchar(64) not null default '' comment '平台房间ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
     UNIQUE KEY `platform_room_id_live_platform` (`platform_room_id`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
 
-alter table live add platform_room_id varchar(255) not null default '' comment '平台房间ID';
 alter table `live` add `dynamic_weight` int not null default 0 comment '动态权重, 根据其他值计算';
 alter table `live` add `static_weight` int not null default 0 comment '静态权重, 人工设置';
 
-dynamic_weight = 关注人数 * 分类权重比例 + 关注人数 * 平台权重比例 + (开播时间权重) + 分类权重 + 静态权重
+-- dynamic_weight = 关注人数 * 分类权重比例 + 关注人数 * 平台权重比例 + (开播时间权重) + 分类权重 + 静态权重
 
-开播时间 < 1小时 = 1000
-开播时间 < 30分钟 = 2000
+-- 开播时间 < 1小时 = 1000
+-- 开播时间 < 30分钟 = 2000
 --
 -- ALTER TABLE `live` MODIFY COLUMN `live_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE `live` MODIFY COLUMN `live_anchortv_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

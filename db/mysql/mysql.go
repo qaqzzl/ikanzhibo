@@ -17,7 +17,7 @@ type Db struct {
 
 func (DB *Db) MysqlConnect() *Db {
 	if MysqlConn == nil {
-		MysqlConn, _ = sql.Open("mysql", "root:mysql336699m@tcp(101.132.107.212:3306)/ikanzhibo?charset=utf8mb4")
+		MysqlConn, _ = sql.Open("mysql", "root:mysql336699@tcp(127.0.0.1:3306)/ikanzhibo?charset=utf8mb4")
 		MysqlConn.SetMaxOpenConns(100)		//最大连接数
 		MysqlConn.SetMaxIdleConns(50)		//空闲连接数
 	}

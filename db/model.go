@@ -156,6 +156,7 @@ func GetFollowOffline() (l []Queue, err error) {
 }
 
 //获取未开播 && 未关注
+var NotFollowOfflineEmpty = 0
 func GetNotFollowOffline() (l []Queue, err error) {
 	rconn := redis.GetConn()
 	defer rconn.Close()
@@ -170,7 +171,8 @@ func GetNotFollowOffline() (l []Queue, err error) {
 		panic("toslice arr not slice")
 	}
 	len := v.Len()
-	if len != 0 {
+	if len != 0 && NotFollowOfflineEmpty == 1 {
+		NotFollowOfflineEmpty = 1
 		for i := 0; i < len; i++ {
 			queue := Queue{}
 			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
@@ -217,6 +219,8 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	return l,err
 }
 
+
+var OnlineEmpty = 0
 func GetOnline() (l []Queue, err error)  {
 	rconn := redis.GetConn()
 	rlist, err := rconn.Do("SMEMBERS", RedisOnlineSet)
@@ -229,14 +233,36 @@ func GetOnline() (l []Queue, err error)  {
 		panic("toslice arr not slice")
 	}
 	len := v.Len()
-	if len != 0 {
+	if len != 0 && OnlineEmpty == 1 {
 		for i := 0; i < len; i++ {
 			queue := Queue{}
 			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
 			l = append(l, queue)
 		}
+		return l,err
 	}
 
+	list, err := mysql.Conn().QueryAll(`select l.spider_pull_url,l.live_platform from live as l
+	where l.live_is_online = 'yes' `)
+	if err != nil {
+		log.Println("MySql error", RedisOnlineSet)
+		return l, err
+	}
+	for _, v := range list {
+		val := Queue{
+			QueueSet:QueueSet{
+				Request:     Request{
+					Url: v["spider_pull_url"],
+				},
+				QueueType: "live_info",
+				Platform: v["live_platform"],
+			},
+		}
+		l = append(l, val)
+
+		str,_ := json.Marshal(val.QueueSet)
+		rconn.Do("SADD", RedisOnlineSet, str)
+	}
 	return l,err
 }
 

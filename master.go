@@ -61,7 +61,6 @@ func (spider *Spider) handlerFollowOffline() {
 	endTime := initTime + 5;
 	ticker := time.NewTicker(time.Second * 2)
 	for {
-		//<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
 		<-ticker.C
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
 		if endTime > currentTime {
@@ -108,7 +107,6 @@ func (Spider *Spider) handlerNotFollowOffline() {
 	endTime := initTime + 5;
 	ticker := time.NewTicker(time.Second * 2)
 	for {
-		//<-time.Tick(time.Second * 1)		//暂停, 单位 / 秒
 		<-ticker.C
 
 		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
@@ -267,26 +265,55 @@ func Crontab()  {
 	}()
 
 	go func() {		//未关注 && 不在线
-		ticker := time.NewTicker(time.Second * 6000)
+		newtime := time.Now().Unix()
+		//获取本地location
+		timeStr := time.Now().Format("2006-01-02")
+		t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 03:00:00", time.Local)
+		time3hour := t.Unix() + 86400
+		tickertime := time3hour - newtime
+		ticker := time.NewTicker(time.Second * time.Duration(tickertime))
 		for true {
-			//<-time.Tick(time.Second * 6000)	//60秒清除一次未关注 && 不在线直播间集合,定时跟数据库做一致性同步
 			<-ticker.C
 			rconn.Do("del", db.RedisNotFollowOfflineSet)	//清空
+			db.NotFollowOfflineEmpty = 0
+			db.GetNotFollowOffline()	//初始化直播未关注,不在播数据
 		}
 	}()
 
 	go func() {		//在线 3点同步 , 策略,删除并读取数据库在线直播间进行同步
-
+		newtime := time.Now().Unix()
+		//获取本地location
+		timeStr := time.Now().Format("2006-01-02")
+		t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 03:00:00", time.Local)
+		time3hour := t.Unix() + 86400
+		tickertime := time3hour - newtime
+		ticker := time.NewTicker(time.Second * time.Duration(tickertime))
+		for true {
+			<-ticker.C
+			db.OnlineEmpty = 0
+			rconn.Do("del", db.RedisOnlineSet)	//清空
+		}
 	}()
 
 	go func() {		//全任务发现 3点清除
-
+		newtime := time.Now().Unix()
+		//获取本地location
+		timeStr := time.Now().Format("2006-01-02")
+		t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 03:00:00", time.Local)
+		time3hour := t.Unix() + 86400
+		tickertime := time3hour - newtime
+		ticker := time.NewTicker(time.Second * time.Duration(tickertime))
+		for true {
+			<-ticker.C
+			rconn.Do("del", db.RedisInfoOnceSet)	//清空
+			rconn.Do("del", db.RedisListOnceSet)	//清空
+		}
 	}()
 }
 
 func InitLive() {
-	initLiveMyType()
-	initLiveFollow()
+	initLiveMyType()		//初始化分类数据
+	initLiveFollow()		//初始化直播关注数据
 }
 
 //初始化分类映射数据
