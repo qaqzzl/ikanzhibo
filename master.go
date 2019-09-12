@@ -173,7 +173,7 @@ func (Spider *Spider) handlerOnline() {
 		}
 		//初始化抓取频率时间
 		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
-		endTime = currentTime + 6000;	//600秒-> 10分
+		endTime = currentTime + 600;	//600秒-> 10分
 
 		//获取在线直播间
 		l, err := db.GetOnline();
