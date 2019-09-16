@@ -32,9 +32,9 @@ func main() {
 	}()
 
 	spider := Spider{
-		ChanParsers: make(chan *Parser, 1000),
-		ChanProduceList: make(chan *db.Queue, 1000),
-		ChanWriteInfo: make(chan *db.Queue, 1000),
+		ChanParsers: make(chan *Parser, 100),
+		ChanProduceList: make(chan *db.Queue, 100),
+		ChanWriteInfo: make(chan *db.Queue, 100),
 	}
 	go Master(&spider)
 
