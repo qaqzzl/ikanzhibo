@@ -40,6 +40,8 @@ func Master(spider *Spider)  {
 
 	go spider.handlerOnline()						//在线直播间
 
+	go spider.handlerRecommend()					//推荐直播间
+
 	for i:=0; i<15; i++ {
 		go spider.Downloader()						//下载器
 	}
@@ -129,7 +131,9 @@ func (Spider *Spider) handlerNotFollowOffline() {
 		endTime = currentTime + 3000;	//300秒-> 5分
 
 		//获取被关注过但不在线的直播间
-		l, err := db.GetNotFollowOffline();
+		page := 0
+		limit := 1000
+		l, err := db.GetNotFollowOffline(page, limit)
 		if err != nil {
 			log.Panicln(err)
 		}
@@ -252,6 +256,53 @@ func (spider *Spider) handlerTotalPlatforms() {
 }
 
 
+//推荐直播间
+func (Spider *Spider) handlerhandlerRecommend() {
+	rconn := redis.GetConn()
+	defer rconn.Close()
+	//控制抓取频率
+	initTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+	endTime := initTime + 5;
+	ticker := time.NewTicker(time.Second * 2)
+	for {
+		<-ticker.C
+		currentTime, _ := strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		if endTime > currentTime {
+			continue
+		}
+
+		//判断队列是否空
+		if queueCounts, err := rconn.Do("LLEN", db.RedisRecommendList); err == nil {
+			if queueCounts.(int64) != 0 {
+				continue
+			}
+		} else {
+			log.Println(err.Error())
+			continue
+		}
+		//初始化抓取频率时间
+		currentTime, _ = strconv.Atoi(strconv.FormatInt(time.Now().Unix(), 10))
+		endTime = currentTime + 600;	//600秒-> 10分
+
+		//获取在线直播间
+		l, err := db.GetOnline();
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		for _, v := range l {
+			str,_ := json.Marshal(v)
+			//加入任务到redis队列
+			if _, err := rconn.Do("RPUSH", db.RedisRecommendList, str); err != nil {
+				log.Println(err.Error())
+			}
+
+		}
+	}
+}
+
+
 //定时任务
 func Crontab()  {
 	rconn := redis.GetConn()
@@ -277,7 +328,6 @@ func Crontab()  {
 			<-ticker.C
 			rconn.Do("del", db.RedisNotFollowOfflineSet)	//清空
 			db.NotFollowOfflineEmpty = 0
-			db.GetNotFollowOffline()	//初始化直播未关注,不在播数据
 		}
 	}()
 
@@ -293,6 +343,22 @@ func Crontab()  {
 			<-ticker.C
 			db.OnlineEmpty = 0
 			rconn.Do("del", db.RedisOnlineSet)	//清空
+		}
+	}()
+
+
+	go func() {		//推荐 3点同步 , 策略,删除并读取数据库推荐直播间进行同步
+		newtime := time.Now().Unix()
+		//获取本地location
+		timeStr := time.Now().Format("2006-01-02")
+		t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 03:00:00", time.Local)
+		time3hour := t.Unix() + 86400
+		tickertime := time3hour - newtime
+		ticker := time.NewTicker(time.Second * time.Duration(tickertime))
+		for true {
+			<-ticker.C
+			db.RecommendEmpty = 0
+			rconn.Do("del", db.RedisRecommendSet)	//清空
 		}
 	}()
 

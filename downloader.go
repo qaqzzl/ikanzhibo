@@ -14,6 +14,7 @@ func (spider *Spider) Downloader()  {
 	go spider.downloaderTotalPlatform()
 	go spider.downloaderNotFollowOffline()
 	go spider.downloaderOnline()
+	go spider.downloaderRecommend()
 }
 
 //被关注&&不在线 下载器
@@ -155,6 +156,12 @@ func (spider *Spider) downloaderTotalPlatform()  {
 		}
 	}
 }
+
+//推荐直播间
+func (spider *Spider) downloaderRecommend()  {
+
+}
+
 //var client = &http.Client{}
 func downloaders(v interface{}, queue *db.Queue) (body []byte, err error)  {
 	if err = json.Unmarshal(v.([]byte), &queue); err != nil {

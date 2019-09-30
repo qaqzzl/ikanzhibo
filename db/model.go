@@ -10,6 +10,7 @@ import (
 )
 
 //redis表名
+//sorted set
 var (
 	RedisFollowOfflineList			= "live_follow_offline_list"				//被关注&&不在线直播间队列
 	RedisFollowOfflineSet			= "live_follow_offline_set"					//被关注&&不在线直播间集合, 可能因为解析错误,导致跟数据库不一致 - 策略,定时跟数据库做一致性同步
@@ -19,6 +20,9 @@ var (
 
 	RedisOnlineList					= "live_online_list"						//在线直播间队列
 	RedisOnlineSet					= "live_online_set"							//在线直播间集合, 定时跟数据库做一次性同步
+
+	RedisRecommendList				= "live_recommend_list"						//推荐直播间队列
+	RedisRecommendSet				= "live_recommend_set"						//推荐直播间集合, 定时跟数据库做一次性同步
 
 	RedisListList		 			= "live_list_list"							//生产任务队列 - 未爬取
 	RedisListOnceSet				= "live_list_once_set"						//生产任务集合 - 列表 - 已爬取 , 防止当前启动发现任务抓取重复列表数据
@@ -155,9 +159,22 @@ func GetFollowOffline() (l []Queue, err error) {
 	return l,err
 }
 
-//获取未开播 && 未关注
+//获取未开播 && 未关注 && 未推进
+//page 页码
+//limit 每页数量
 var NotFollowOfflineEmpty = 0
-func GetNotFollowOffline() (l []Queue, err error) {
+func GetNotFollowOffline(page int, limit int) (l []Queue, err error) {
+	if NotFollowOfflineEmpty == 1 {
+		l, err = redisNotFollowOffline(page, limit)
+	} else {
+		l, err = mysqlNotFollowOffline(page, limit)
+	}
+
+	return l, err
+}
+
+//redis 未关注不在线
+func redisNotFollowOffline(page int, limit int) (l []Queue, err error) {
 	rconn := redis.GetConn()
 	defer rconn.Close()
 
@@ -172,31 +189,22 @@ func GetNotFollowOffline() (l []Queue, err error) {
 	}
 	len := v.Len()
 	if len != 0 && NotFollowOfflineEmpty == 1 {
-		NotFollowOfflineEmpty = 1
 		for i := 0; i < len; i++ {
 			queue := Queue{}
 			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
 			l = append(l, queue)
 		}
-		return l,err
 	}
+	return l,err
+}
 
-	//redis不存在 , 查询mysql
-
-	/**
-	select l.live_id,l.live_uri,l.live_platform from live as l
-	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
-	where l.live_is_online = 'no' and  luf.live_id is null
-	*/
-
-	/**
-	select live_id,live_uri,live_platform from live
-	WHERE live_is_online = 'no' and live_id not in ( select live_id from live_user_follow)
-	*/
-
+//mysql 未关注不限制
+func mysqlNotFollowOffline(page int, limit int) (l []Queue, err error) {
+	rconn := redis.GetConn()
+	defer rconn.Close()
 	list, err := mysql.Conn().QueryAll(`select l.spider_pull_url,l.live_platform from live as l
 	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
-	where l.live_is_online = 'no' and  luf.live_id is null`)
+	where l.live_is_online = 'no' and  luf.live_id is null and l.is_recommend = 0`)
 	if err != nil {
 		log.Println("MySql error", RedisNotFollowOfflineSet)
 		return l, err
@@ -216,7 +224,21 @@ func GetNotFollowOffline() (l []Queue, err error) {
 		str,_ := json.Marshal(val.QueueSet)
 		rconn.Do("SADD", RedisNotFollowOfflineSet, str)
 	}
+	NotFollowOfflineEmpty = 1
 	return l,err
+}
+func NotFollowOfflineCount() (total int, err error) {
+	if NotFollowOfflineEmpty == 1 {
+		rconn := redis.GetConn()
+		defer rconn.Close()
+		rtotal, _ := rconn.Do("ZCARD", RedisFollowOfflineSet)
+		total = rtotal.(int)
+	} else {
+		err = mysql.MysqlConn.QueryRow(`select count(*) from live as l
+	LEFT JOIN (select * from live_user_follow) as luf ON l.live_id=luf.live_id
+	where l.live_is_online = 'no' and  luf.live_id is null and l.is_recommend = 0`).Scan(&total)
+	}
+	return total, err
 }
 
 
@@ -263,6 +285,56 @@ func GetOnline() (l []Queue, err error)  {
 		str,_ := json.Marshal(val.QueueSet)
 		rconn.Do("SADD", RedisOnlineSet, str)
 	}
+	OnlineEmpty = 1
+	return l,err
+}
+
+
+//推荐直播间
+var RecommendEmpty = 0
+func GetRecommend() (l []Queue, err error)  {
+	rconn := redis.GetConn()
+	rlist, err := rconn.Do("SMEMBERS", RedisRecommendSet)
+	if err != nil {
+		log.Println("Redis SMEMBERS error",RedisRecommendSet)
+		return l, err
+	}
+	v := reflect.ValueOf(rlist)
+	if v.Kind() != reflect.Slice {
+		panic("toslice arr not slice")
+	}
+	len := v.Len()
+	if len != 0 && RecommendEmpty == 1 {
+		for i := 0; i < len; i++ {
+			queue := Queue{}
+			json.Unmarshal(v.Index(i).Interface().([]byte), &queue.QueueSet)
+			l = append(l, queue)
+		}
+		return l,err
+	}
+
+	list, err := mysql.Conn().QueryAll(`select spider_pull_url,live_platform from live
+	where is_recommend = 1 `)
+	if err != nil {
+		log.Println("MySql error", RedisOnlineSet)
+		return l, err
+	}
+	for _, v := range list {
+		val := Queue{
+			QueueSet:QueueSet{
+				Request:     Request{
+					Url: v["spider_pull_url"],
+				},
+				QueueType: "live_info",
+				Platform: v["live_platform"],
+			},
+		}
+		l = append(l, val)
+
+		str,_ := json.Marshal(val.QueueSet)
+		rconn.Do("SADD", RedisOnlineSet, str)
+	}
+	RecommendEmpty = 1
 	return l,err
 }
 

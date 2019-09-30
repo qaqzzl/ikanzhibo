@@ -81,13 +81,13 @@ create table if not exists `live`(
     `created_at` int not null DEFAULT 0 comment '添加时间',
     `updated_at` int not null DEFAULT 0 comment '修改时间',
     `spider_pull_url` varchar(255) not null default '' comment '爬虫拉取URL',
-    `spider_pull_time` int(11) NOT NULL DEFAULT 0 COMMENT '上次抓取时间',
+    `is_recommend` tinyint(1) NOT NULL DEFAULT 0 COMMENT '推荐直播间',
     `platform_room_id` varchar(64) not null default '' comment '平台房间ID',
     key `live_anchortv_name` (live_anchortv_name),
     PRIMARY KEY (`live_id`),
     UNIQUE KEY `platform_room_id_live_platform` (`platform_room_id`,`live_platform`) USING BTREE
 )engine=innodb default charset=utf8mb4 comment '直播间表';
-
+alter table `live` add `is_recommend` tinyint(1) not null default 0 comment '推荐直播间';
 alter table `live` add `dynamic_weight` int not null default 0 comment '动态权重, 根据其他值计算';
 alter table `live` add `static_weight` int not null default 0 comment '静态权重, 人工设置';
 
