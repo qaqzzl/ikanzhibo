@@ -43,7 +43,7 @@ func newPool(server, password string) *redis.Pool {
 	}
 }
 
-func GetConn() (conn redis.Conn) {
+func New() (conn redis.Conn) {
 	pool := newPool("127.0.0.1:6379", "")
 	conn = pool.Get()
 	//defer conn.Close()
